@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import StepProcess from "@/components/landingcomponent/step";
 import KeyFeatures from "@/components/landingcomponent/features";
@@ -8,11 +8,14 @@ import SubscribeSection from "@/components/landingcomponent/newsletter";
 import Footer from "@/components/footer";
 import Image from "next/image";
 import BackgroundImage from "../../public/Hero.svg";
+import ConnectWallet from "@/components/landingcomponent/connectwallet";
 
 const Home: React.FC = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="min-h-screen text-white bg-cover bg-center">
-      <Navbar />
+    <div className="min-h-screen text-white bg-cover bg-center ">
+      <Navbar setOpen={setOpen} />
       {/* Home Section */}
       <header className="relative w-full h-screen">
         {/* Background Image */}
@@ -34,7 +37,7 @@ const Home: React.FC = () => {
             Find, report, and fix smart contract vulnerabilities with complete
             transparency and trustlessness.
           </p>
-          <button className="rounded bg-[#0000FF] px-6 py-3 text-white hover:bg-blue-700">
+          <button className="rounded bg-[#0000FF] px-6 py-3 text-white hover:bg-blue-700" onClick={() => setOpen(true)}>
             Connect Wallet
           </button>
         </div>
@@ -59,6 +62,8 @@ const Home: React.FC = () => {
       <main>
         <Footer />
       </main>
+
+      <ConnectWallet open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };
