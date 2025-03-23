@@ -5,17 +5,29 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Logo from "../../public/brandlogo.svg";
+import ConnectWallet from "./landingcomponent/connectwallet";
 
 interface NavbarProps {
-  setOpen: (open: boolean) => void;
+  setOpen?: (open: boolean) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ setOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
   const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleWalletConnect = () => {
+    setShowWalletModal(true);
+    setOpen?.(true);
+  };
+
+  const handleWalletConnected = () => {
+    // Handle wallet connected event
+    setOpen?.(true);
   };
 
   // Check if the current path matches the given path
@@ -74,7 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({ setOpen }) => {
             <div className="hidden md:block">
               <button 
                 className="rounded bg-[#0000FF] px-4 py-2 text-white hover:bg-blue-700"
-                onClick={() => setOpen(true)}
+                onClick={handleWalletConnect}
               >
                 Connect Wallet
               </button>
@@ -157,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({ setOpen }) => {
               </Link>
               <button 
                 className="w-full rounded bg-[#0000FF] px-4 py-2 text-white hover:bg-blue-700"
-                onClick={() => setOpen(true)}
+                onClick={handleWalletConnect}
               >
                 Connect Wallet
               </button>
@@ -166,6 +178,12 @@ const Navbar: React.FC<NavbarProps> = ({ setOpen }) => {
         )}
       </nav>
 
+      {/* Wallet Connection Modal */}
+      {/* <ConnectWallet 
+        open={showWalletModal} 
+        onClose={() => setShowWalletModal(false)} 
+        onConnected={handleWalletConnected}
+      /> */}
     </>
   );
 };
