@@ -20,7 +20,7 @@ const StepProcess = () => {
       {/* Steps Container */}
       <div className="max-w-6xl mx-auto space-y-10">
       
-        <div className="bg-gray-900 p-6 rounded-2xl shadow-lg md:flex md:justify-between md:items-center">
+        <div className="bg-gradient-to-b from-[#6b6464] to-[#343232] p-6 rounded-2xl shadow-lg md:flex md:justify-between md:items-center">
           <div className="md:w-2/3">
             <span className="mr-2 flex items-center justify-center w-8 h-8 bg-white text-black font-bold rounded-full mb-3">
               1
@@ -39,16 +39,16 @@ const StepProcess = () => {
           </div>
 
           {/* Project Form */}
-          <div className="bg-gray-800 p-4 rounded-lg mt-6 md:mt-0 md:w-1/3">
+          <div className="bg-[#FFFFFF33] p-4 rounded-lg mt-6 md:mt-0 md:w-1/3">
             <input
               type="text"
               placeholder="Project Name"
-              className="w-full mb-3 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
+              className="w-full mb-3 p-2 rounded bg-[#1E1E1E80] text-white placeholder-gray-400"
             />
             <input
               type="text"
               placeholder="Category"
-              className="w-full mb-3 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
+              className="w-full mb-3 p-2 rounded bg-[#1E1E1E80] text-white placeholder-gray-400"
             />
             <button className="w-full py-2 bg-[#0000FF] rounded-md font-medium hover:bg-blue-700 transition">
               <span className="flex gap-2 text-[20px] justify-center">
@@ -61,7 +61,7 @@ const StepProcess = () => {
         </div>
 
         {/* Step 2 */}
-        <div className="bg-gray-900 p-6 rounded-2xl shadow-lg md:flex md:justify-between md:items-center">
+        <div className="bg-gradient-to-b from-[#6b6464] to-[#343232]  p-6 rounded-2xl shadow-lg md:flex md:justify-between md:items-center">
           <div className="md:w-2/3">
             <span className="mr-2 flex items-center justify-center w-8 h-8 bg-white text-black font-bold rounded-full mb-4">
               2
@@ -80,19 +80,19 @@ const StepProcess = () => {
           </div>
 
           {/* Report Vulnerability Box */}
-          <div className="bg-gray-800 p-4 rounded-lg mt-6 md:mt-0 md:w-1/3">
+          <div className="bg-gray-800 p-4 rounded-lg mt-6 md:mt-0 md:w-1/3 bg-[#FFFFFF33]">
             <h4 className="text-lg font-semibold mb-3 sm:text-xl">
               Report Vulnerability
             </h4>
-            <div className="flex items-center mb-2">
+            <div className="bg-gradient-to-r p-3 rounded-md from-[#1E1E1E99] to-[#343232] flex items-center mb-2">
               <input type="checkbox" className="mr-2" checked readOnly />
               <span>Private Key Leakage</span>
             </div>
-            <div className="flex items-center mb-2">
+            <div className="flex items-center mb-2 bg-gradient-to-r p-3 rounded-md from-[#1E1E1E99] to-[#343232]">
               <input type="checkbox" className="mr-2" checked readOnly />
               <span>Private Key Leakage</span>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center bg-gradient-to-r p-3 rounded-md from-[#1E1E1E99] to-[#343232]">
               <input type="checkbox" className="mr-2" />
               <span>Gas Optimization Concerns</span>
             </div>
@@ -100,7 +100,7 @@ const StepProcess = () => {
         </div>
 
         {/* Step 3 - Community-Driven Assessment */}
-        <div className="bg-gray-900 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="bg-gradient-to-b from-[#6b6464] to-[#343232]  p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="md:w-2/3">
             <span className="mr-2 flex items-center justify-center w-8 h-8 bg-white text-black mb-3 font-bold rounded-full">
               3
@@ -128,7 +128,7 @@ const StepProcess = () => {
         </div>
 
         {/* Step 4 - Automated Rewards & Security Insights */}
-        <div className="bg-gray-900 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="bg-gradient-to-b from-[#6b6464] to-[#343232]  p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="md:w-2/3">
             <span className="mr-2 flex items-center justify-center w-8 h-8 bg-white text-black font-bold rounded-full mb-3">
               4

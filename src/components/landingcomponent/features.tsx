@@ -36,7 +36,7 @@ const KeyFeatures = () => {
 
   return (
     <section className="text-white py-16 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto text-center">
+      <div className="mx-auto text-center md:px-10">
         {/* Title */}
         <h2 className="text-3xl font-semibold mb-8 sm:text-4xl md:text-5xl">
           Key Features
