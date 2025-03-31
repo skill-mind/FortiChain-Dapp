@@ -8,6 +8,7 @@ import SubscribeSection from "@/components/landingcomponent/newsletter";
 import Footer from "@/components/footer";
 import Image from "next/image";
 import BackgroundImage from "../../public/Hero.svg";
+import { ConnectButton } from "@/components/connect-button";
 
 const Home: React.FC = () => {
   return (
@@ -46,14 +47,15 @@ const Home: React.FC = () => {
           </p>
 
           {/* Responsive Button */}
-          <div>
+          {/* <div>
             <button
               className="rounded-lg bg-[#0000FF] px-6 py-3 text-white hover:bg-blue-700 transition-colors duration-300 
         sm:px-8 sm:py-4 md:px-10 md:py-5 text-base sm:text-lg md:text-xl font-semibold"
             >
               Connect Wallet
             </button>
-          </div>
+          </div> */}
+          <ConnectButton variant="default" />
         </div>
       </section>
 
