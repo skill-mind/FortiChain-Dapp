@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Logo from "../../public/brandlogo.svg";
+import { ConnectButton } from "./connect-button";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,11 +67,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Connect Wallet Button (Desktop) */}
-          <div className="hidden md:block">
-            <button className="rounded bg-[#0000FF] px-4 py-2 text-white hover:bg-blue-700">
-              Connect Wallet
-            </button>
-          </div>
+          <ConnectButton variant="navbar" />
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden">
@@ -147,9 +144,7 @@ const Navbar: React.FC = () => {
                 Contact Us
               </span>
             </Link>
-            <button className="w-full rounded bg-[#0000FF] px-4 py-2 text-white hover:bg-blue-700">
-              Connect Wallet
-            </button>
+          <ConnectButton variant="navbar" />
           </div>
         </div>
       )}
