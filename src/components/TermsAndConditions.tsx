@@ -1,5 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import BackgroundImage from "../../public/Hero.svg";
+import { motion } from "framer-motion";
+import Footer from "@/components/footer";
+import Navbar from "@/components/Navbar";
 
 const termsAndConditions = [
   {
@@ -108,33 +113,68 @@ export default function TermsAndConditions() {
         alt="Background"
         className="absolute object-cover inset-0 h-[200px] w-full -z-10"
       />
-      <div className="text-center space-y-4">
-        <h1 className="font-semibold text-4xl lg:text-6xl">
+      <motion.div
+        className="text-center space-y-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h1 
+          className="font-semibold text-4xl lg:text-6xl"
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           Terms and Conditions
-        </h1>
-        <p className="font-light max-w-xl">
+        </motion.h1>
+        <motion.p 
+          className="font-light max-w-xl"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           The FortiChain Terms & Conditions outline the rights and
           responsibilities of all platform users. By using FortiChain, users
           agree to the following:
-        </p>
-      </div>
-      <div className="bg-[#211A1D] rounded-[30px] border border-[#908C8E] space-y-4 py-5 px-7 mt-10 md:max-w-2xl lg:max-w-3xl divide-y divide-[#464043]">
+        </motion.p>
+      </motion.div>
+      <motion.div 
+        className="bg-[#211A1D] rounded-[30px] border border-[#908C8E] space-y-4 py-5 px-7 mt-10 md:max-w-2xl lg:max-w-3xl divide-y divide-[#464043]"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         {termsAndConditions.map((data) => (
-          <div className="space-y-3 py-5" key={data.id}>
+          <motion.div 
+            className="space-y-3 py-5"
+            key={data.id}
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+          >
             <h2 className="font-bold text-xl lg:text-3xl">
               {data.id}. {data.title}
             </h2>
             {data.points.map((point, index) => (
-              <div className="space-y-1" key={index}>
+              <motion.div 
+                className="space-y-1"
+                key={index}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
                 <p className="font-semibold text-lg lg:text-xl">
                   {point.title}
                 </p>
                 <p className="font-light">{point.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

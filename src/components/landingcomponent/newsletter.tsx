@@ -1,52 +1,83 @@
-
 import React from "react";
 import Image from "next/image";
 import BackgroundImage from "../../../public/Newsletter.svg";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const SubscribeSection = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.2
+  });
+
   return (
-    <div className="mb-20 md:px-10 px-4 mx-auto w-full"> {/* Remove flex here */}
-    <section className="relative w-full h-[435px] flex justify-center items-center text-white">
-      <Image
-        src={BackgroundImage}
-        alt="Subscribe Background"
-        layout="fill"
-        objectFit="cover"
-        className="absolute object-cover inset-0"
-      />
-  
-      {/* Overlay for better readability */}
-      <div className="absolute inset-0 bg-black/50"></div>
-  
-      {/* Content Box */}
-      <div className="relative max-w-3xl w-full px-4 text-center">
-        {/* Floating Button */}
-        <button className="mb-5 left-1/2 transform bg-gray-700 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-600 transition">
-          Get Updates
-        </button>
-  
-        {/* Text Content */}
-        <h2 className="text-2xl font-bold mb-3 sm:text-3xl md:text-4xl">
-          Ready to Join the Web3 Evolution?
-        </h2>
-        <p className="text-gray-400 mb-6 sm:text-lg">
-          Get regular updates directly in your mailbox by subscribing.
-        </p>
-  
-        {/* Input and Button */}
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <input
-            type="email"
-            placeholder="Your Email"
-            className="w-full sm:w-auto flex-1 px-4 py-3 bg-gray-800 text-white border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-base"
-          />
-          <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition sm:text-base">
-            Subscribe
-          </button>
-        </div>
+    <section className="relative py-20 px-4 overflow-hidden" ref={ref}>
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={BackgroundImage}
+          alt="Newsletter Background"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </div>
+  
+      <div className="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
+  
+      <motion.div 
+        className="relative z-20 max-w-4xl mx-auto flex flex-col items-center text-white text-center"
+        initial={{ opacity: 0, y: 50 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.7 }}
+      >
+        <motion.button 
+          className="mb-6 px-4 py-2 text-sm font-semibold bg-[#1F1E1E] rounded-md"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Get Updates
+        </motion.button>
+  
+        <motion.h2 
+          className="text-3xl font-bold mb-4 sm:text-4xl md:text-5xl"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          Ready to Join the Web3 Evolution?
+        </motion.h2>
+
+        <motion.p 
+          className="text-lg mb-8 text-gray-300 max-w-2xl"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 0.5, duration: 0.7 }}
+        >
+          Get regular updates directly in your mailbox by subscribing.
+        </motion.p>
+  
+        <motion.div 
+          className="w-full max-w-md flex flex-col sm:flex-row gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.7, duration: 0.7 }}
+        >
+          <motion.input
+            type="email"
+            placeholder="Your email address"
+            className="flex-grow px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white bg-opacity-20 text-white placeholder-gray-300"
+            whileFocus={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 0.25)" }}
+          />
+          <motion.button
+            className="px-6 py-3 bg-[#0000FF] text-white rounded-md font-medium hover:bg-blue-700 transition sm:text-lg whitespace-nowrap"
+            whileHover={{ scale: 1.05, backgroundColor: "#0000AA" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Subscribe
+          </motion.button>
+        </motion.div>
+      </motion.div>
     </section>
-  </div>
   );
 };
 
