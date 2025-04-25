@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import StepProcess from "@/components/landingcomponent/step";
 import KeyFeatures from "@/components/landingcomponent/features";
@@ -9,72 +9,88 @@ import Footer from "@/components/footer";
 import Image from "next/image";
 import BackgroundImage from "../../public/Hero.svg";
 import { ConnectButton } from "@/components/connect-button";
+import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  };
+
   return (
-    <div className="relative min-h-screen text-white">
-      {/* Full-page background image */}
-      <div className="fixed inset-0 z-[-1]">
-        <Image
-          src={BackgroundImage}
-          alt="Background"
-          layout="fill"
-          objectFit="cover"
-          priority
-          className="w-full h-full"
-        />
-        {/* Optional overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/50"></div>
+    <div className="min-h-screen bg-black text-white">
+      <div className="relative">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={BackgroundImage}
+            alt="Background"
+            layout="fill"
+            objectFit="cover"
+            priority
+            className="opacity-70"
+          />
+        </div>
+        
+        <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+
+        <div className="relative z-20">
+          <Navbar />
+        </div>
+
+        <div className="relative z-20 py-24 md:py-32 lg:py-40 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h1 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              initial="hidden"
+              animate="visible"
+              variants={fadeIn}
+            >
+              Decentralized Bug Bounty and Smart Contract Security
+            </motion.h1>
+
+            <motion.p 
+              className="text-lg md:text-xl lg:text-2xl mb-8 text-gray-300"
+              initial="hidden"
+              animate="visible"
+              variants={fadeIn}
+              transition={{ delay: 0.2 }}
+            >
+              Find, report, and fix smart contract vulnerabilities with complete
+              transparency and trustlessness.
+            </motion.p>
+
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeIn}
+              transition={{ delay: 0.4 }}
+            >
+              <ConnectButton variant="default"/>
+            </motion.div>
+          </div>
+        </div>
       </div>
 
-      {/* Navbar remains at the top */}
-      <Navbar />
-
-      {/* Header with centered content */}
-      <section className="relative flex items-center justify-center min-h-screen px-4 py-16">
-        <div className="max-w-8xl text-center  space-y-6">
-          {/* Responsive Heading */}
-          <h1
-            className="text-3xl font-bold  text-white sm:text-4xl md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-7xl 
-      leading-tight max-w-7xl mx-auto"
-          >
-            Decentralized Bug Bounty and Smart Contract Security
-          </h1>
-          {/* Responsive Paragraph */}
-          <p className="mx-auto text-base text-white sm:text-lg md:text-xl lg:text-2xl max-w-3xl leading-relaxed">
-            Find, report, and fix smart contract vulnerabilities with complete
-            transparency and trustlessness.
-          </p>
-
-          {/* Responsive Button */}
-          {/* <div>
-            <button
-              className="rounded-lg bg-[#0000FF] px-6 py-3 text-white hover:bg-blue-700 transition-colors duration-300 
-        sm:px-8 sm:py-4 md:px-10 md:py-5 text-base sm:text-lg md:text-xl font-semibold"
-            >
-              Connect Wallet
-            </button>
-          </div> */}
-          <ConnectButton variant="default" />
-        </div>
+      <section>
+        <StepProcess />
       </section>
 
-      {/* Subsequent Sections */}
-      <main>
-        <StepProcess />
-      </main>
-
-      <main>
+      <section>
         <KeyFeatures />
-      </main>
+      </section>
 
-      <main>
+     
+      <section>
         <SubscribeSection />
-      </main>
+      </section>
 
-      <main>
+      <section>
         <Footer />
-      </main>
+      </section>
     </div>
   );
 };

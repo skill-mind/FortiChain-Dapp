@@ -1,71 +1,132 @@
 import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const KeyFeatures = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
   const features = [
     {
       title: "On-Chain Project Registration & Verification",
       description:
         "Register and verify smart contracts on a tamper-proof blockchain ledger, ensuring full transparency, security, and ownership authentication.",
-      icon: "/fluent-mdl2_open-enrollment.png", 
+      icon: "/fluent-mdl2_open-enrollment (2).svg", 
+
     },
     {
       title: "Decentralized Review & Voting System",
       description:
         "Security researchers can report vulnerabilities confidentially with encrypted submissions, ensuring data integrity and protection.",
-      icon: "/fluent-mdl2_open-enrollment (1).png", 
+      icon: "/fluent-mdl2_open-enrollment (4).svg", 
+
     },
     {
       title: "Automated Smart Contract Bounty Escrow",
       description:
         "Smart contracts manage bounty funds, securely holding and releasing payouts only when validated vulnerabilities meet pre-set resolution criteria.",
-      icon: "/fluent-mdl2_open-enrollment (2).png", 
-    },
+        icon: "/fluent-mdl2_open-enrollment (3).svg",
+      },
     {
       title: "Secure Vulnerability Reporting with Encrypted Submissions",
       description:
         "Security researchers can report vulnerabilities confidentially with encrypted submissions, ensuring data integrity and protection.",
-      icon: "/fluent-mdl2_open-enrollment (3).png", 
+      icon: "/fluent-mdl2_open-enrollment.svg", 
+
     },
     {
       title: "Reputation-Based Incentives & Governance",
       description:
         "Earn reputation points and token rewards for accurate reporting, validation, and governance participation within the ecosystem.",
-      icon: "/fluent-mdl2_open-enrollment (4).png", 
-    },
+        icon: "/fluent-mdl2_open-enrollment (1).svg", 
+      },
   ];
 
   return (
-    <section className="text-white py-16 px-4 sm:px-6">
-      <div className="mx-auto text-center md:px-10">
+    <section className="py-16 px-4">
+      <div className="max-w-6xl mx-auto">
         {/* Title */}
-        <h2 className="text-3xl font-semibold mb-8 sm:text-4xl md:text-5xl">
-          Key Features
-        </h2>
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <motion.h2 
+            className="text-3xl font-bold sm:text-4xl md:text-5xl"
+            whileHover={{ scale: 1.02 }}
+          >
+            Key Features
+          </motion.h2>
+        </motion.div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
-              className="bg-gray-900 p-6 rounded-xl shadow-lg flex flex-col items-start space-y-4"
+              className="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center text-center"
+              variants={itemVariants}
+              whileHover={{ 
+                scale: 1.03, 
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)" 
+              }}
+              transition={{ duration: 0.3 }}
             >
-              {/* Icon */}
-              <img
-                src={feature.icon} 
-                alt={feature.title} 
-                className="w-12 h-12" 
-              />
+              <motion.div
+                className="mb-4"
+                whileHover={{ rotate: 360, transition: { duration: 0.8 } }}
+              >
+                <Image 
+                  src={feature.icon} 
+                  alt={feature.title} 
+                  width={48} 
+                  height={48} 
+                />
+              </motion.div>
 
-              {/* Title */}
-              <h3 className="text-xl font-semibold sm:text-2xl">
+              <motion.h3 
+                className="text-xl font-bold mb-3"
+              >
                 {feature.title}
-              </h3>
+              </motion.h3>
 
-              {/* Description */}
-              <p className="text-gray-300 sm:text-lg">{feature.description}</p>
-            </div>
+              <motion.p className="text-gray-400">
+                {feature.description}
+              </motion.p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
