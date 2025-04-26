@@ -25,7 +25,7 @@ const Header = () => {
     <header className="w-full flex flex-row md:flex-row items-start md:items-center justify-between px-0 py-3 md:px-0 md:pb-8 md:pt-1 gap-4 relative">
       <Animation delay={0.2} animationType="slide-up">
         <h1 className="text-white text-[24px] md:text-[40px] font-bold">
-          {capitalizedTitle}
+          {capitalizedTitle.replace("-", " ")}
         </h1>
       </Animation>
       <Animation delay={0.2} animationType="slide-up">
