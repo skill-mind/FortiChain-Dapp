@@ -227,7 +227,7 @@ export default function Page() {
               </div>
             </div>
             {errors.document && (
-              <p className="mt-1 text-red-600">{errors.document.message}</p>
+              <p className="mt-1 text-red-600">{errors?.document?.message}</p>
             )}
           </div>
 
