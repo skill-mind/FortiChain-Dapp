@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useState } from "react";
 import { Bell, Copy, ChevronUp, ChevronDown } from "lucide-react";
 import { Animation } from "@/motion/Animation";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+
 const Header = () => {
   const pathname = usePathname();
   const [isBellActive, setIsBellActive] = useState(false);
@@ -75,6 +77,19 @@ const Header = () => {
     },
   ];
 
+  // --- Animation Variants ---
+
+  const dropdownVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.95, y: -10 },
+    visible: { opacity: 1, scale: 1, y: 0 },
+    exit: { opacity: 0, scale: 0.95, y: -10, transition: { duration: 0.15 } },
+  };
+
+  const notificationItemVariants: Variants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 },
+  };
+
   return (
     <header className="flex relative flex-row gap-4 justify-between items-start px-0 py-3 w-full md:flex-row md:items-center md:px-0 md:pb-8 md:pt-1">
       <Animation delay={0.2} animationType="slide-up">
@@ -98,15 +113,25 @@ const Header = () => {
           </button>
 
           {isBellActive && (
-            <div className="fixed top-24 right-8 w-full max-w-[400px] z-10 bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden">
+            <motion.div
+              key="notification-dropdown"
+              variants={dropdownVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="fixed top-24 right-8 w-full max-w-[400px] z-10 bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden"
+            >
               <div className="p-3">
                 <div className="py-[22px] flex items-center justify-between border-b border-[#464043]">
                   <h2 className="text-2xl font-semibold text-white">
                     Notifications
                   </h2>
-                  <button
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
                     onClick={() => setIsBellActive(false)}
                     className="flex items-center p-2 bg-gray-600 rounded-full"
+                    aria-label="Close notifications panel"
                   >
                     <svg
                       width="18"
@@ -120,14 +145,16 @@ const Header = () => {
                         fill="#D3D1D2"
                       />
                     </svg>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
               <ScrollArea className="bg-[#211A1D] p-3 text-white h-[calc(70vh-100px)]">
-                {notifications.map((notification) => (
-                  <div
+                {notifications.map((notification, index) => (
+                  <motion.div
                     key={notification.id}
+                    variants={notificationItemVariants}
+                    transition={{ delay: index * 0.05 }}
                     className="py-6 border-b border-gray-700"
                   >
                     <div className="flex gap-1 items-center mb-2">
@@ -164,7 +191,7 @@ const Header = () => {
                         {notification.timeAgo}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
                 <div className="py-2">
                   <div className="flex gap-2 justify-center items-center">
@@ -177,7 +204,7 @@ const Header = () => {
                   </div>
                 </div>
               </ScrollArea>
-            </div>
+            </motion.div>
           )}
 
           {/* Wallet Button */}
