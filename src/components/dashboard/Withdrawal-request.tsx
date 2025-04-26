@@ -61,7 +61,7 @@ export const WithdrawalRequest: React.FC<WithdrawalRequestProps> = ({
       </Animation>
 
       <Animation delay={0.3} animationType="slide-up">
-        <div className="bg-[#161113] rounded-[20px] border border-[#464043] overflow-hidden px-10 py-5">
+        <div className="bg-[#161113] rounded-[20px] border border-[#464043] overflow-hidden md:px-10 py-5">
           <div className="pb-5">
             <h2 className="text-xl font-semibold text-white text-center">
               Withdrawal Request
@@ -71,7 +71,7 @@ export const WithdrawalRequest: React.FC<WithdrawalRequestProps> = ({
 
           <form
             onSubmit={handleSubmit}
-            className="px-5 pb-5 w-full max-w-2xl mx-auto"
+            className="px-5 pb-5 w-full md:max-w-2xl md:mx-auto"
           >
             <div className="mb-6">
               <div className="bg-[#110D0F] rounded-[20px] p-6 border border-[#464043]">
@@ -102,7 +102,7 @@ export const WithdrawalRequest: React.FC<WithdrawalRequestProps> = ({
               <label className="block text-white text-sm mb-2">
                 Enter Withdrawal Amount:
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-2">
                 <div className="relative bg-[#161113] border border-[#D3D1D2] px-1.5 py-1.5 rounded-lg flex items-center">
                   <Image
                     src={Starknet}
@@ -112,7 +112,7 @@ export const WithdrawalRequest: React.FC<WithdrawalRequestProps> = ({
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 "
                   />
                   <select
-                    className="appearance-none bg-white text-black rounded-lg py-0.5 pl-9 pr-6  outline-none w-28"
+                    className="appearance-none bg-white text-black rounded-lg py-0.5 pl-9 pr-6  outline-none w-full md:w-28"
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
                   >
