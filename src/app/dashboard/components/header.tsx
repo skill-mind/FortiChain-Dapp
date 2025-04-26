@@ -120,7 +120,7 @@ const Header = () => {
               animate="visible"
               exit="exit"
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed top-24 right-8 w-full max-w-[400px] z-10 bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden"
+              className="fixed top-24 left-0 right-0 mx-auto md:mx-0 md:left-auto  md:right-8 w-[80vw]  md:max-w-[400px] z-10 bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden"
             >
               <div className="p-3">
                 <div className="py-[22px] flex items-center justify-between border-b border-[#464043]">

@@ -130,12 +130,12 @@ export default function Page() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="border border-[#464043] rounded-[20px] bg-[#1C1618]"
+      className="border border-[#464043] rounded-[20px] bg-[#1C1618] max-w-[750px] mx-auto"
     >
-      <div className="w-full p-[30px]">
+      <div className="w-full lg:p-[30px] p-4">
         <motion.h2
           variants={itemVariants}
-          className="mb-6 text-4xl font-semibold"
+          className="mb-6 text-2xl font-semibold lg:text-4xl"
         >
           Submit a Request
         </motion.h2>
@@ -149,7 +149,7 @@ export default function Page() {
               type="email"
               placeholder="Your Email Address"
               {...register("email")}
-              className="w-full placeholder:text-[#B5B3B4] border text-[13px] placeholder:text-[13px] !border-[#d3d1d2] px-[8px] py-[20px] bg-[#161113] rounded-[8px] text-white"
+              className="w-full placeholder:text-[#B5B3B4] border text-[13px] placeholder:text-[13px] !border-[#d3d1d2] px-[8px] py-[14px] lg:py-[20px] bg-[#161113] rounded-[8px] text-white"
             />
             <AnimatePresence mode="wait" initial={false}>
               {errors.email && (
@@ -179,7 +179,7 @@ export default function Page() {
               render={({ field }) => (
                 <motion.div className="relative text-[13px]">
                   <div
-                    className="border !border-[#d3d1d2] bg-[#161113] rounded-[8px] px-[8px] py-[20px] cursor-pointer flex justify-between items-center w-full"
+                    className="border !border-[#d3d1d2] bg-[#161113] rounded-[8px] px-[8px] py-[14px] lg:py-[20px] cursor-pointer flex justify-between items-center w-full"
                     onClick={() => setOpen(!open)}
                     aria-haspopup="listbox"
                     aria-expanded={open}
@@ -292,9 +292,9 @@ export default function Page() {
             <label className="block mb-1 text-[14px] font-semibold">
               Support Document
             </label>
-            <div className="bg-[#161113] rounded-[8px] border !border-[#d3d1d2] py-[15px] px-[10px] flex items-center justify-between">
+            <div className="bg-[#161113] rounded-[8px] border !border-[#d3d1d2] py-[10px] lg:py-[15px] px-[10px] flex items-center justify-center md:justify-between flex-wrap gap-4">
               <div className="flex gap-4 items-center">
-                <div className="flex items-center justify-center bg-[#464043] h-[50px] w-[50px] rounded-full shrink-0">
+                <div className="flex items-center justify-center bg-[#464043] w-[30px] h-[30px] [_&_svg]:h-[14px] lg:[_&_svg]:h-auto lg:h-[50px] lg:w-[50px] rounded-full shrink-0">
                   <svg
                     width="22"
                     height="21"
@@ -313,10 +313,10 @@ export default function Page() {
                   </svg>
                 </div>
                 <div className="">
-                  <p className="text-[16px] text-[#B5B3B4] font-semibold">
+                  <p className="lg:text-[16px] text-[13px] text-[#B5B3B4] font-semibold">
                     Upload your document
                   </p>
-                  <div className="flex gap-2 items-center text-sm text-[#98A2B3]">
+                  <div className="flex gap-2 items-center text-xs lg:text-sm text-[#98A2B3]">
                     <span>PDF format </span>
                     <svg
                       width="4"
