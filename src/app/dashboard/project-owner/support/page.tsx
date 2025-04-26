@@ -1,3 +1,9 @@
 export default function page() {
-  return <div>goo gaga</div>;
+  return (
+    <div>
+        <div className="card">
+            
+        </div>
+    </div>
+  );
 }
