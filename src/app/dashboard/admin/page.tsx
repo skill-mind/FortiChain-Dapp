@@ -1,7 +1,10 @@
 import React from "react";
+import AdminDashboard from "./overview/page";
 
 const page = () => {
-  return <div className="text-white">hello page</div>;
+  return <div >
+    <AdminDashboard/>
+  </div>;
 };
 
 export default page;
