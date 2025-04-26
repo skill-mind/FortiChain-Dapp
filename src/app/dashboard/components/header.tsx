@@ -63,18 +63,10 @@ const Header = () => {
 
           {/* Wallet Dropdown */}
           {walletOpen && (
-            <div className="absolute right-0 top-[110%] bg-[#1E1E1E] border border-[#6B6668] text-white text-sm px-4 py-3 rounded-lg w-[280px] z-10 shadow-md">
-              <div className="flex justify-between items-center">
-                <span className="break-all">{walletAddress}</span>
-                <button onClick={handleCopy} className="ml-2 text-white">
-                  <Copy size={16} />
-                </button>
-              </div>
-              {copied && (
-                <span className="text-green-400 text-xs mt-1 block">
-                  Copied!
-                </span>
-              )}
+            <div className="absolute right-0 top-[110%] bg-none z-10 shadow-md">
+              <button className="px-6 py-3 bg-[#FF3737] hover:bg-red-600 text-white rounded-md text-sm transition-colors">
+                Disconnect Wallet
+              </button>
             </div>
           )}
         </div>
