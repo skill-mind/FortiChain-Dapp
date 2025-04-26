@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import * as z from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 const ACCEPTED_FILE_TYPES = [
@@ -66,13 +67,81 @@ export default function Page() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // --- Animation Variants ---
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1, // Stagger animation of children
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const dropdownVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.95, y: -10 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.2, ease: "easeOut" },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      y: -10,
+      transition: { duration: 0.15, ease: "easeIn" },
+    },
+  };
+
+  const errorVariants: Variants = {
+    hidden: { opacity: 0, height: 0, y: -10, marginTop: 0 },
+    visible: {
+      opacity: 1,
+      height: "auto",
+      y: 0,
+      marginTop: "0.25rem",
+      transition: { duration: 0.2 },
+    },
+    exit: {
+      opacity: 0,
+      height: 0,
+      y: -5,
+      marginTop: 0,
+      transition: { duration: 0.15 },
+    },
+  };
+
   return (
-    <div className="border border-[#464043] rounded-[20px] bg-[#1C1618]">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="border border-[#464043] rounded-[20px] bg-[#1C1618]"
+    >
       <div className="w-full p-[30px]">
-        <h2 className="mb-6 text-4xl font-semibold">Submit a Request</h2>
+        <motion.h2
+          variants={itemVariants}
+          className="mb-6 text-4xl font-semibold"
+        >
+          Submit a Request
+        </motion.h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-full">
           {/* Email */}
-          <div>
+          <motion.div variants={itemVariants}>
             <label className="block mb-1 text-[14px] font-semibold">
               Email
             </label>
@@ -82,13 +151,25 @@ export default function Page() {
               {...register("email")}
               className="w-full placeholder:text-[#B5B3B4] border text-[13px] placeholder:text-[13px] !border-[#d3d1d2] px-[8px] py-[20px] bg-[#161113] rounded-[8px] text-white"
             />
-            {errors.email && (
-              <p className="mt-1 text-red-600">{errors.email.message}</p>
-            )}
-          </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {errors.email && (
+                <motion.p
+                  key="email-error"
+                  variants={errorVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="text-xs text-red-600"
+                  role="alert"
+                >
+                  {errors.email.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
           {/* Subject (div-based dropdown) */}
-          <div ref={ref}>
+          <motion.div variants={itemVariants} ref={ref}>
             <label className="block mb-1 text-[14px] font-semibold">
               Subject
             </label>
@@ -96,7 +177,7 @@ export default function Page() {
               name="subject"
               control={control}
               render={({ field }) => (
-                <div className="relative text-[13px]">
+                <motion.div className="relative text-[13px]">
                   <div
                     className="border !border-[#d3d1d2] bg-[#161113] rounded-[8px] px-[8px] py-[20px] cursor-pointer flex justify-between items-center w-full"
                     onClick={() => setOpen(!open)}
@@ -130,36 +211,57 @@ export default function Page() {
                       />
                     </svg>
                   </div>
-                  {open && (
-                    <div
-                      role="listbox"
-                      className="absolute z-10 mt-1 w-full bg-white rounded border shadow"
-                    >
-                      {options.map((opt) => (
-                        <div
-                          key={opt.value}
-                          role="option"
-                          className="px-3 py-2 text-black cursor-pointer hover:bg-gray-100"
-                          onClick={() => {
-                            field.onChange(opt.value);
-                            setOpen(false);
-                          }}
-                        >
-                          {opt.label}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  <AnimatePresence>
+                    {open && (
+                      <motion.div
+                        id="subject-listbox"
+                        role="listbox"
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="absolute z-10 mt-1 w-full bg-[#2a2426] border border-[#464043] rounded shadow-lg max-h-60 overflow-y-auto"
+                      >
+                        {options.map((opt) => (
+                          <motion.div
+                            key={opt.value}
+                            role="option"
+                            aria-selected={field.value === opt.value}
+                            className="px-3 py-2 text-white cursor-pointer hover:bg-[#464043]"
+                            onClick={() => {
+                              field.onChange(opt.value);
+                              setOpen(false);
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            {opt.label}
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               )}
             />
-            {errors.subject && (
-              <p className="mt-1 text-red-600">{errors.subject.message}</p>
-            )}
-          </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {errors.subject && (
+                <motion.p
+                  key="subject-error"
+                  variants={errorVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="text-xs text-red-600"
+                  role="alert"
+                >
+                  {errors.subject.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
           {/* message */}
-          <div>
+          <motion.div variants={itemVariants}>
             <label className="block mb-1 text-[14px] font-semibold">
               Message
             </label>
@@ -168,13 +270,25 @@ export default function Page() {
               placeholder="Write a Message"
               className="w-full min-h-[165px] text-[13px] border px-[8px] py-[14px] bg-[#161113] !border-[#d3d1d2]  rounded-[8px] text-white"
             ></textarea>
-            {errors.message && (
-              <p className="mt-1 text-red-600">{errors.message.message}</p>
-            )}
-          </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {errors.message && (
+                <motion.p
+                  key="message-error"
+                  variants={errorVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="text-xs text-red-600"
+                  role="alert"
+                >
+                  {errors.message.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
           {/* Document Upload */}
-          <div>
+          <motion.div variants={itemVariants}>
             <label className="block mb-1 text-[14px] font-semibold">
               Support Document
             </label>
@@ -226,21 +340,48 @@ export default function Page() {
                 />
               </div>
             </div>
-            {errors.document && (
-              <p className="mt-1 text-red-600">{errors?.document?.message}</p>
-            )}
-          </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {errors.document && (
+                <motion.p
+                  id="document-error" // Match aria-describedby
+                  key="document-error"
+                  variants={errorVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="text-xs text-red-600"
+                  role="alert"
+                >
+                  {errors.document.message as string} {/* Cast message type */}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex justify-center items-center  w-full max-w-[182px] py-[16px] text-white bg-[#0000FF] rounded hover:bg-blue-700 disabled:opacity-50"
-          >
-            <div>{isSubmitting ? "Submitting…" : "Submit"}</div>
-          </button>
+          <motion.div variants={itemVariants} className="pt-3"> {/* Added padding-top */}
+            <motion.button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex justify-center items-center w-full max-w-[182px] py-[16px] text-white bg-[#0000FF] rounded disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-300"
+              whileHover={!isSubmitting ? { scale: 1.03, backgroundColor: "#0000DD" } : {}} // Conditional hover
+              whileTap={!isSubmitting ? { scale: 0.97 } : {}} // Conditional tap
+            >
+                <AnimatePresence mode="wait">
+                    <motion.span
+                        key={isSubmitting ? 'submitting' : 'submit'}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10}}
+                        transition={{ duration: 0.15 }}
+                    >
+                         {isSubmitting ? "Submitting…" : "Submit"}
+                    </motion.span>
+                </AnimatePresence>
+            </motion.button>
+          </motion.div>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }
