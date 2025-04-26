@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useState } from "react";
 import { Bell, Copy, ChevronUp, ChevronDown } from "lucide-react";
 import { Animation } from "@/motion/Animation";
@@ -122,7 +123,8 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-              <div className="bg-[#211A1D] p-3 text-white max-h-[calc(70vh-100px)] overflow-y-auto">
+
+              <ScrollArea className="bg-[#211A1D] p-3 text-white h-[calc(70vh-100px)]">
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
@@ -174,7 +176,7 @@ const Header = () => {
                     <div className="text-sm text-[#0000FF]">Load More</div>
                   </div>
                 </div>
-              </div>
+              </ScrollArea>
             </div>
           )}
 
