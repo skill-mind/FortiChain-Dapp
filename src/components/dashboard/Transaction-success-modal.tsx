@@ -18,9 +18,9 @@ export const TransactionSuccessModal: React.FC<
   const usdValue = (amount * 0.07).toFixed(2);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 p-4 md:ml-60">
       <Animation animationType="scale-up">
-        <div className="bg-[#161113] rounded-[20px] border border-neutral-800 w-full mx-auto mt-32 max-w-[600px] p-8 text-center">
+        <div className="bg-[#161113] rounded-[20px] border border-neutral-800 w-full mx-auto mt-32 md:mt-40 max-w-[600px] p-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-4">
             Transaction Successful
           </h2>
@@ -34,7 +34,7 @@ export const TransactionSuccessModal: React.FC<
             Funds will be sent to your wallet shortly.
           </p>
 
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center my-8">
             <Animation animationType="scale-up" delay={0.3}>
               <Image src={Check} alt="check" width={80} height={100} />
             </Animation>

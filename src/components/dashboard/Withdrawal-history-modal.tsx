@@ -113,7 +113,7 @@ export const WithdrawalHistoryModal: React.FC<WithdrawalHistoryModalProps> = ({
   }, [searchTerm, sortOrder, statusFilter]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 md:ml-60">
       <Animation animationType="scale-up">
         <div className="bg-[#110D0F] rounded-[20px] border border-neutral-800 w-full max-w-5xl mt-10 md:mt-32 mx-auto max-h-[90vh] overflow-hidden p-5">
           <div className="flex justify-between items-center p-5">
