@@ -2,7 +2,7 @@ export type Project = {
     id: number;
     logo: {
         text: string;
-        bgColor: string; // new: background color for logo
+        bgColor: string; 
     };
     title: string;
     description: string;
@@ -11,10 +11,10 @@ export type Project = {
     tags: string[];
     progress: {
         firstIcon: string;
-        firstColor: string; // new: dynamic color
+        firstColor: string; 
         firstPercentage: number;
         secondIcon: string;
-        secondColor: string; // new: dynamic color
+        secondColor: string; 
         secondPercentage: number;
     };
     repository?:{

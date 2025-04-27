@@ -6,7 +6,8 @@ import Image from "next/image";
 import { Bookmark, SquarePen } from "lucide-react";
 import { useState } from "react";
 import CardGrid from "@/app/dashboard/components/resuables/ReportCard";
-import { motion } from "framer-motion"; // ADD THIS
+import { motion } from "framer-motion";
+import WriteAReport from "@/app/dashboard/components/resuables/WriteAReport";
 
 type Props = {
   params: {
@@ -23,11 +24,15 @@ export default function ProjectDetailsPage({ params }: Props) {
   }
 
   const [bookmark, setBookmark] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const handleBookmark = () => setBookmark(!bookmark);
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenWriteModal = () => setIsWriteModalOpen(true);
+  const handleCloseWriteModal = () => setIsWriteModalOpen(false);
+
+  const handleOpenViewModal = () => setIsViewModalOpen(true);
+  const handleCloseViewModal = () => setIsViewModalOpen(false);
 
   const bookmarkIcon = bookmark ? (
     <Bookmark size={35} color="white" onClick={handleBookmark} />
@@ -42,7 +47,7 @@ export default function ProjectDetailsPage({ params }: Props) {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen text-white p-8"
+      className="min-h-screen relative text-white p-8"
     >
       <a
         href="/dashboard/researcher/projects"
@@ -51,12 +56,14 @@ export default function ProjectDetailsPage({ params }: Props) {
         &larr; Go Back
       </a>
 
+      {/* Main project details */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
         className="bg-[#161113] flex flex-col gap-[35px] rounded-[20px] border border-[#464043] py-[40px] px-[28px]"
       >
+        {/* Project header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -74,6 +81,7 @@ export default function ProjectDetailsPage({ params }: Props) {
           <button type="button">{bookmarkIcon}</button>
         </motion.div>
 
+        {/* Project description */}
         <motion.p
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,6 +91,7 @@ export default function ProjectDetailsPage({ params }: Props) {
           {project.description}
         </motion.p>
 
+        {/* Tags, Prize Pool, Deadline, Repository */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -122,6 +131,7 @@ export default function ProjectDetailsPage({ params }: Props) {
             </div>
           </div>
 
+          {/* Repository */}
           <div className="flex items-center gap-[13px] text-sm">
             {project.repository?.map((repo) => (
               <div
@@ -175,34 +185,39 @@ export default function ProjectDetailsPage({ params }: Props) {
           </div>
         </motion.div>
 
-        {/* Buttons */}
+        {/* Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.3 }}
           className="mt-8 flex items-center gap-4"
         >
+          {/* Write a Report */}
           <button
+            onClick={handleOpenWriteModal}
             type="button"
             className="bg-[#0000FF] rounded-[10px] px-[16px] py-[10px] hover:bg-blue-700 text-white flex items-center gap-2"
           >
-            <span className="text-[16px] font-[400px]">Write a Report</span>
+            <span className="text-[16px] font-[400]">Write a Report</span>
             <SquarePen />
           </button>
 
+          {/* View Report */}
           {report.length > 0 && (
             <button
-              onClick={handleOpenModal}
+              onClick={handleOpenViewModal}
               type="button"
               className="bg-transparent rounded-[10px] px-[16px] py-[10px] hover:bg-blue-700 border border-[#0000FF] text-white flex items-center gap-2"
             >
-              <span className="text-[16px] font-[400px]">View Report</span>
+              <span className="text-[16px] font-[400]">View Report</span>
             </button>
           )}
         </motion.div>
       </motion.div>
 
-      <CardGrid isOpen={isModalOpen} onClose={handleCloseModal} />
+      {/* Modals */}
+      <WriteAReport isOpen={isWriteModalOpen} onClose={handleCloseWriteModal} />
+      <CardGrid isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
     </motion.div>
   );
 }

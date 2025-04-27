@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion"; // import framer motion
+import { motion } from "framer-motion"; 
 import type { Project } from "../../researcher/projects/mockData";
 import Image from "next/image";
 import Link from "next/link";
