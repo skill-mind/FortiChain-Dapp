@@ -6,6 +6,7 @@ interface StatCardProps {
   value: string | number;
   label: string;
   iconBgColor?: string;
+  className?: string;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
