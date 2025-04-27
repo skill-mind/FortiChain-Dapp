@@ -1,7 +1,8 @@
 import React from "react";
+import WriteAReport from "../../components/resuables/WriteAReport";
 
 const Reports = () => {
-  return <div>Reports content goes here</div>;
+  return <WriteAReport />;
 };
 
 export default Reports;
