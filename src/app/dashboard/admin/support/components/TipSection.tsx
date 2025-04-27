@@ -33,14 +33,16 @@ export default function TipsSection() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-[#211A1D] text-white p-8 rounded-lg w-full max-w-[600px]"
+              className="bg-[#110D0F] border border-neutral-800 text-white p-8 rounded-lg w-full max-w-[600px]"
               variants={modalVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
             >
-              <h2 className="text-2xl font-bold mb-4">Add tip</h2>
-              <p className="mb-6 text-gray-300 text-lg">Write a tip or advice for project owners.</p>
+              <h2 className="text-2xl font-bold text-center mb-4">Add tip</h2>
+              <p className="mb-6 text-gray-300 text-center text-lg">Write a tip or advice for project owners.</p>
+              <hr className='border-neutral-800 mb-5'/>
+              <p className='pt-5 pb-2'>Tip</p>
               <textarea
                 className="w-full h-40 bg-[#110D0F] text-white p-3 rounded mb-4 border border-neutral-800 text-base"
                 value={tipText}
@@ -86,12 +88,16 @@ export default function TipsSection() {
               exit="exit"
             >
               <h2 className="text-2xl font-bold mb-4">Edit Tip</h2>
+
+              <hr className='border border-neutral-800 mb-4'/>
+              <p className='pt-5 pb-2'>Tip</p>
               <textarea
                 className="w-full h-40 bg-[#110D0F] text-white p-3 rounded mb-4 border border-neutral-800 text-base"
                 value={tipText}
                 onChange={(e) => setTipText(e.target.value)}
                 maxLength={258}
               />
+        
               <div className="text-right text-sm text-gray-400 mb-6">{tipText.length}/258</div>
               <div className="flex justify-end space-x-3">
                 <button className="bg-gray-500 text-white px-5 py-2 rounded text-base" onClick={onClose}>
@@ -119,19 +125,19 @@ export default function TipsSection() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-[#211A1D] text-white p-8 rounded-lg w-full max-w-[600px] text-left"
+              className="bg-[#110D0F] border border-neutral-800 text-white p-8 rounded-lg w-full max-w-[600px] text-left"
               variants={modalVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
             >
-              <h2 className="text-2xl font-bold mb-4">Are you sure you want to delete this tip?</h2>
-              <p className="mb-6 text-gray-300 text-lg">Changes made cannot be undone</p>
-              <div className="flex justify-end space-x-3">
-                <button className="bg-gray-500 text-white px-5 py-2 rounded text-base" onClick={onClose}>
+              <h2 className="text-4xl font-bold text-center mb-4">Are you sure you want to delete this tip?</h2>
+              <p className="mb-6 text-gray-300 text-center text-lg mb-5">Changes made cannot be undone</p>
+              <div className="flex justify-center space-x-3 mt-10">
+                <button className="bg-[#110D0F] border border-neutral-800 text-white px-8 py-2 rounded text-base" onClick={onClose}>
                   No, Cancel
                 </button>
-                <button className="bg-red-500 text-white px-5 py-2 rounded text-base" onClick={onDelete}>
+                <button className="bg-red-500 text-white px-8 py-2 rounded text-base" onClick={onDelete}>
                   Yes, Delete
                 </button>
               </div>
@@ -161,7 +167,8 @@ export default function TipsSection() {
             >
               <h2 className="text-2xl font-bold mb-4">{title}</h2>
               <p className="mb-6 text-gray-300 text-lg">{message}</p>
-              <div className="mb-6">
+              <hr className='border border-neutral-800 mb-4'/>
+              <div className="mb-6 mt-10">
                 <svg className="w-14 h-14 mx-auto" viewBox="0 0 50 50">
                   <circle cx="25" cy="25" r="25" fill="#28a745" />
                   <path d="M10 25 L20 35 L40 15" stroke="white" strokeWidth="4" fill="none" />
