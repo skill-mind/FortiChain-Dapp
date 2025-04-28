@@ -94,8 +94,8 @@ export const RewardsPage = () => {
           <Animation animationType="fade-in" key="main-view">
             <div className="mt-8">
               <RewardsStats
-                totalEarnings="$525.11"
-                availableForWithdrawal="$25.11"
+                totalEarnings="$5250.11"
+                availableForWithdrawal="$250.11"
                 onClaimRewards={handleClaimRewards}
               />
             </div>

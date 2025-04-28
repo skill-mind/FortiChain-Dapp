@@ -36,7 +36,7 @@ export function RewardsStats({
       <Animation delay={0.6} animationType="slide-up">
         <button
           onClick={onClaimRewards}
-          className="h-full w-full bg-blue-600 hover:bg-blue-700 transition-colors rounded-[20px] flex items-center justify-center gap-2 text-white font-medium p-5"
+          className="h-full w-full bg-[#0000FF] border border-white transition-colors rounded-[20px] flex items-center justify-center gap-2 text-white font-medium p-5"
         >
           <span>Claim Rewards</span>
           <ArrowRight size={20} />
