@@ -1,9 +1,6 @@
 "use client";
-
-import type React from "react";
 import { useState } from "react";
-import { Animation } from "@/motion/Animation";
-import { ArrowLeft, User, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, Check, Loader2, User2 } from "lucide-react";
 
 interface ConfirmClaimViewProps {
   amount: string;
@@ -13,13 +10,13 @@ interface ConfirmClaimViewProps {
   onConfirm: () => void;
 }
 
-export const ConfirmClaimView: React.FC<ConfirmClaimViewProps> = ({
+export function ConfirmClaimView({
   amount,
   tokenAmount,
   recipientAddress,
   onBack,
   onConfirm,
-}) => {
+}: ConfirmClaimViewProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleTransfer = () => {
@@ -33,38 +30,40 @@ export const ConfirmClaimView: React.FC<ConfirmClaimViewProps> = ({
   };
 
   return (
-    <Animation animationType="fade-in">
-      <div className="flex items-center mb-6">
+    <div className="">
+      <div className="flex items-center mb-8 ">
         <button
           onClick={onBack}
           className="flex items-center text-sm text-neutral-400 hover:text-white transition-colors"
         >
           <ArrowLeft size={16} className="mr-1" />
-          Back to Project Overview
+          Back to Rewards{" "}
         </button>
       </div>
+      <div className="max-w-2xl mx-auto bg-[#1C1618] border border-[#464043] rounded-[20px] p-6 ">
+        <div className=" rounded-xl p-10">
+          <h2 className="text-2xl font-semibold text-center mb-8">
+            Claim Reward
+          </h2>
 
-      <div className="max-w-2xl mx-auto bg-[#1A1618] rounded-[20px] p-6">
-        <h2 className="text-2xl font-bold text-center mb-6">Claim Reward</h2>
+          <div className="mb-8">
+            <h3 className="text-base font-medium mb-6">
+              Amount: {amount} ({tokenAmount})
+            </h3>
 
-        <div className="mb-6">
-          <h3 className="text-lg font-medium mb-4">
-            Amount: {amount} ({tokenAmount})
-          </h3>
-
-          <div className="mt-6">
-            <h4 className="text-sm text-neutral-400 mb-2">Recepient</h4>
-            <div className="bg-[#110D0F] rounded-md p-4 border border-neutral-800">
-              <div className="flex items-center gap-3">
-                <User size={20} />
-                <div>
+            <div className="bg-[#121212] border border-[#464043]   rounded-2xl p-5">
+              <h4 className="text-sm mb-3">Recepient</h4>
+              <div className="flex items-center gap-2 mb-2">
+                <User2 />
+                <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span>{recipientAddress}</span>
+                    <span className="text-sm">{recipientAddress}</span>
                     <span className="text-xs text-neutral-400">
                       Account Address
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 mt-1">
+
+                  <div className="flex items-center gap-1 mt-2">
                     <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
                       <Check size={12} />
                     </div>
@@ -76,32 +75,32 @@ export const ConfirmClaimView: React.FC<ConfirmClaimViewProps> = ({
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            onClick={onBack}
-            disabled={isLoading}
-            className="py-3 rounded-md font-medium bg-white/10 hover:bg-white/20 transition-colors text-center disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Back
-          </button>
-          <button
-            onClick={handleTransfer}
-            disabled={isLoading}
-            className="py-3 rounded-md font-medium bg-blue-600 hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-80 disabled:cursor-not-allowed"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 size={18} className="animate-spin" />
-                <span>Sending...</span>
-              </>
-            ) : (
-              "Transfer to Wallet"
-            )}
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={onBack}
+              disabled={isLoading}
+              className="py-3 px-10 text-black rounded-md font-medium bg-white  transition-colors text-center disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Back
+            </button>
+            <button
+              onClick={handleTransfer}
+              disabled={isLoading}
+              className="py-3 px-10 rounded-md font-medium bg-[#0000FF] hover:bg-[#0052FF]/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-80 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  <span>Sending...</span>
+                </>
+              ) : (
+                "Transfer to Wallet"
+              )}
+            </button>
+          </div>
         </div>
       </div>
-    </Animation>
+    </div>
   );
-};
+}

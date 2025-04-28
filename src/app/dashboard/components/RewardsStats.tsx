@@ -14,11 +14,11 @@ interface RewardsStatsProps {
   onClaimRewards: () => void;
 }
 
-export const RewardsStats: React.FC<RewardsStatsProps> = ({
+export function RewardsStats({
   totalEarnings,
   availableForWithdrawal,
   onClaimRewards,
-}) => {
+}: RewardsStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <StatCard
@@ -44,4 +44,4 @@ export const RewardsStats: React.FC<RewardsStatsProps> = ({
       </Animation>
     </div>
   );
-};
+}

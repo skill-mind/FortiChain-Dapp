@@ -45,6 +45,14 @@ export const RewardsPage = () => {
     {
       id: "#243553",
       projectName: "FortiChain Security",
+      severity: "High",
+      validationDate: "29-03-2025",
+      reward: "$400.56",
+      status: "Pending",
+    },
+    {
+      id: "#243553",
+      projectName: "FortiChain Security",
       severity: "Low",
       validationDate: "29-02-2025",
       reward: "$13.12",
@@ -123,7 +131,7 @@ export const RewardsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0B0C] text-white p-4 md:p-6">
+    <div className="min-h-screen  text-white p-4 md:p-6">
       {renderView()}
 
       {showSuccessModal && (

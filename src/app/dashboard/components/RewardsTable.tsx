@@ -12,10 +12,7 @@ interface RewardsTableProps {
   onViewClick: (id: string) => void;
 }
 
-export const RewardsTable: React.FC<RewardsTableProps> = ({
-  rewards,
-  onViewClick,
-}) => {
+export function RewardsTable({ rewards, onViewClick }: RewardsTableProps) {
   const [securityFilter, setSecurityFilter] = useState("All Security");
   const [statusFilter, setStatusFilter] = useState("All Payment Status");
 
@@ -45,7 +42,7 @@ export const RewardsTable: React.FC<RewardsTableProps> = ({
 
   return (
     <Animation delay={0.8} animationType="fade-in">
-      <div className="bg-[#110D0F] rounded-[20px] border border-neutral-800 overflow-hidden">
+      <div className="bg-[#110D0F] rounded-[20px] border border-[#464043] overflow-hidden">
         <div className="p-4 flex justify-between items-center">
           <h2 className="text-xl font-bold">Rewards</h2>
           <div className="flex gap-3">
@@ -121,4 +118,4 @@ export const RewardsTable: React.FC<RewardsTableProps> = ({
       </div>
     </Animation>
   );
-};
+}

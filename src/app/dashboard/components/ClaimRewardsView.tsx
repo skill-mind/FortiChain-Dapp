@@ -1,11 +1,10 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
-import { Animation } from "@/motion/Animation";
 import { ArrowLeft } from "lucide-react";
 import type { RewardItem } from "./RewardsPage";
+import { Animation } from "@/motion/Animation";
 
 interface ClaimRewardsViewProps {
   rewards: RewardItem[];
@@ -13,11 +12,11 @@ interface ClaimRewardsViewProps {
   onContinue: (selectedRewards: RewardItem[]) => void;
 }
 
-export const ClaimRewardsView: React.FC<ClaimRewardsViewProps> = ({
+export function ClaimRewardsView({
   rewards,
   onBack,
   onContinue,
-}) => {
+}: ClaimRewardsViewProps) {
   const [selectedRewards, setSelectedRewards] = useState<RewardItem[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -60,80 +59,97 @@ export const ClaimRewardsView: React.FC<ClaimRewardsViewProps> = ({
 
   return (
     <Animation animationType="fade-in">
-      <div className="flex items-center mb-6">
+      <div className="flex items-center ">
         <button
           onClick={onBack}
           className="flex items-center text-sm text-neutral-400 hover:text-white transition-colors"
         >
           <ArrowLeft size={16} className="mr-1" />
-          Back to Rewards
+          Back to Rewards{" "}
         </button>
       </div>
+      <div className="max-w-2xl mx-auto bg-[#1C1618] border border-[#464043] rounded-[20px] p-6 ">
+        <h2 className="text-2xl  font-semibold text-center mb-8">
+          Claim Reward
+        </h2>
 
-      <div className="max-w-2xl mx-auto bg-[#1A1618] rounded-[20px] p-6">
-        <h2 className="text-2xl font-bold text-center mb-6">Claim Reward</h2>
-
-        <div className="mb-6">
-          <h3 className="text-lg font-medium mb-4">Select Rewards</h3>
+        <div className="mb-8">
+          <h3 className="text-base font-medium mb-4">Select Rewards</h3>
           <div className="border-b border-neutral-800 mb-4"></div>
 
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="select-all"
-                checked={selectAll}
-                onChange={handleSelectAll}
-                className="w-5 h-5 rounded border-neutral-600 bg-transparent accent-blue-500"
-              />
-              <label htmlFor="select-all" className="ml-2">
-                Select All
-              </label>
-            </div>
-            <div className="text-right">Total: ${totalAmount}</div>
+          {/* Header row with Select All and Total */}
+          <div className="flex justify-between items-center mb-6">
+            <input
+              type="checkbox"
+              id="select-all"
+              checked={selectAll}
+              onChange={handleSelectAll}
+              className="w-5 h-5 rounded appearance-none border border-neutral-600 bg-transparent checked:bg-[#0000FF] checked:border-[#0000FF] relative flex-shrink-0"
+              style={{
+                backgroundImage: selectAll
+                  ? "url(\"data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e\")"
+                  : "",
+                backgroundSize: "100% 100%",
+              }}
+            />
+            <label htmlFor="select-all" className="text-sm w-[80px] ml-6">
+              Select All
+            </label>
+            <span className="text-sm flex-1"></span>
+            <span className="invisible px-3 py-1 rounded-full text-xs bg-transparent flex-shrink-0">
+              Critical
+            </span>
+            <span className="text-sm  text-right ml-8">
+              Total: ${totalAmount}
+            </span>
           </div>
-
+          {/* Reward items */}
           <div className="space-y-3 max-h-[300px] overflow-y-auto">
             {rewards.map((reward, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`reward-${index}`}
-                    checked={isSelected(reward)}
-                    onChange={() => handleSelectReward(reward)}
-                    className="w-5 h-5 rounded border-neutral-600 bg-transparent accent-blue-500"
-                  />
-                  <label htmlFor={`reward-${index}`} className="ml-2">
-                    <div className="flex items-center gap-4">
-                      <span>{reward.id}</span>
-                      <span>{reward.projectName}</span>
-                    </div>
-                  </label>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="px-3 py-1 rounded-full text-xs bg-red-500">
-                    Critical
-                  </span>
-                  <span>{reward.reward}</span>
-                </div>
+              <div
+                key={index}
+                className="flex justify-between items-center py-1 gap-3"
+              >
+                <input
+                  type="checkbox"
+                  id={`reward-${index}`}
+                  checked={isSelected(reward)}
+                  onChange={() => handleSelectReward(reward)}
+                  className="w-5 h-5 rounded appearance-none border border-neutral-600 bg-transparent checked:bg-[#0000FF] checked:border-[#0000FF] relative flex-shrink-0"
+                  style={{
+                    backgroundImage: isSelected(reward)
+                      ? "url(\"data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e\")"
+                      : "",
+                    backgroundSize: "100% 100%",
+                  }}
+                />
+                <span className="text-sm w-[80px] ml-3">{reward.id}</span>
+                <span className="text-sm flex-1">{reward.projectName}</span>
+                <span className="px-3 py-1 rounded-full text-xs bg-[#E53935] text-white flex-shrink-0">
+                  Critical
+                </span>
+                <span className="text-sm w-[60px] text-right sm:ml-8">
+                  {reward.reward}
+                </span>
               </div>
             ))}
           </div>
         </div>
 
-        <button
-          onClick={() => onContinue(selectedRewards)}
-          disabled={selectedRewards.length === 0}
-          className={`w-full py-3 rounded-md font-medium ${
-            selectedRewards.length === 0
-              ? "bg-blue-600/50 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 transition-colors"
-          }`}
-        >
-          Continue
-        </button>
+        <div className="flex">
+          <button
+            onClick={() => onContinue(selectedRewards)}
+            disabled={selectedRewards.length === 0}
+            className={`py-3 px-10 rounded-md font-medium text-sm ${
+              selectedRewards.length === 0
+                ? "bg-[#0000FF]/50 cursor-not-allowed"
+                : "bg-[#0000FF] hover:bg-[#0000FF]/90 transition-colors"
+            }`}
+          >
+            Continue
+          </button>
+        </div>
       </div>
     </Animation>
   );
-};
+}
