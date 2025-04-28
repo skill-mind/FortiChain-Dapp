@@ -1,0 +1,232 @@
+"use client";
+
+import React from "react";
+
+import { Animation } from "@/motion/Animation";
+import Link from "next/link";
+
+
+
+const projects = [
+  {
+    id: "1",
+    name: "SkillNet",
+    category: "DeFi",
+    bountyAllocated: "5,200.13",
+    bountyPaid: "5,124.11",
+    status: "Completed" as const,
+  },
+  {
+    id: "2",
+    name: "SkillNet",
+    category: "DeFi",
+    bountyAllocated: "5,200.44",
+    bountyPaid: "N/A",
+    status: "Ongoing" as const,
+  },
+  {
+    id: "3",
+    name: "SkillNet",
+    category: "DeFi",
+    bountyAllocated: "5,200.11",
+    bountyPaid: "2,600.23",
+    status: "Closed" as const,
+  },
+  {
+    id: "4",
+    name: "SkillNet",
+    category: "DeFi",
+    bountyAllocated: "5,200.11",
+    bountyPaid: "N/A",
+    status: "Ongoing" as const,
+  },
+];
+
+const TableHeaders = [
+  "Name",
+  "Category",
+  "Bounty Allocated",
+  "Bounty Paid",
+  "Status",
+  "Action",
+];
+
+const ProjectTable = () => {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Ongoing":
+        return "bg-[#2B2BFF]";
+      case "Completed":
+        return "bg-[#28A745]";
+      case "Closed":
+        return "bg-[#FF3737]";
+      default:
+        return "bg-[#6C757D]";
+    }
+  };
+  return (
+    <div className="bg-[#161113] rounded-[20px] p-6 mt-8">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-white text-[24px] font-[700]">Projects</h2>
+        <div className="flex gap-4">
+        <div className="relative">
+              <input
+                type="text"
+                placeholder="Search"
+                className="pl-4 pr-10 py-2 border border-[#464043] bg-transparent text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
+              />
+              <svg
+                className="w-5 h-5 text-gray-400 absolute right-3 top-2.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          <select className="px-4 py-2 border border-[#464043] bg-transparent text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="all">All</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="completed">Completed</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Desktop Table View (hidden on mobile) */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full">
+          <thead className="rounded-md p-5 pl-5">
+            <tr className="text-gray-400 text-[16px] border-b bg-[#211A1D] rounded-md h-[64px] border-gray-800">
+              {TableHeaders.map((header, idx) => (
+                <th key={header + idx} className="">
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((project, index) => {
+              const {
+                id,
+                name,
+                category,
+                bountyAllocated,
+                bountyPaid,
+                status,
+              } = project;
+              return (
+                <tr key={index} className="border-b font-thin border-gray-800 pl-5">
+                  <td className="py-4 text-white">
+                    <Animation delay={0.2} animationType="slide-up">
+                      {name}
+                    </Animation>
+                  </td>
+                  <td className="py-4 text-white text-center">
+                    <Animation delay={0.4} animationType="slide-up">
+                      {category}
+                    </Animation>
+                  </td>
+                  <td className="py-4 text-white text-center">
+                    <Animation delay={0.6} animationType="slide-up">
+                      {bountyAllocated}
+                    </Animation>
+                  </td>
+                  <td className="py-4 text-white">
+                    <Animation delay={0.8} animationType="slide-up">
+                      {bountyPaid === "N/A" ? "N/A" : `$${bountyPaid}`}
+                    </Animation>
+                  </td>
+                  <td className="py-4">
+                    <Animation delay={1} animationType="slide-up">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm text-white ${getStatusColor(
+                          status
+                        )}`}
+                      >
+                        {project.status}
+                      </span>
+                    </Animation>
+                  </td>
+                  <td className="py-4 cursor-pointer">
+                    <Animation delay={1.2} animationType="slide-up">
+                      <div className="flex gap-2 text-[#0000FF] text-[14px]">
+                        <Link
+                          href={`/dashboard/admin/projects/${id}`}
+                          className="text-[#007BFF] hover:underline text-sm"
+                        >
+                          View
+                        </Link>
+                      </div>
+                    </Animation>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile Card View (visible only on mobile) */}
+      <div className="md:hidden space-y-4">
+        {projects.map((project, index) => {
+          const { id, name, category, bountyPaid, bountyAllocated, status } =
+            project;
+          return (
+            <Animation key={index} delay={0.2 * index} animationType="slide-up">
+              <div className="bg-[#211A1D] rounded-lg p-4 border border-gray-800">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-white font-medium text-lg">
+                    {name}
+                  </h3>
+                  <span
+                    className={`px-3 py-1 rounded-full text-[12px] font-[400] ${getStatusColor(
+                        status
+                      )}`}
+                  >
+                    {status}
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Wallet Address:</span>
+                    <span className="text-white">
+                      {bountyAllocated}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Reviewed Projects:</span>
+                    <span className="text-white">
+                    {bountyPaid === "N/A" ? "N/A" : `$${bountyPaid}`}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Proficiency:</span>
+                    <span className="text-white">{category}</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 text-center">
+                  <button className="text-[#0000FF] hover:text-blue-400 text-[14px]">
+                    View Profile
+                  </button>
+                </div>
+              </div>
+            </Animation>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+
+export default ProjectTable
