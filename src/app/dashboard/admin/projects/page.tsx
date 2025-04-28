@@ -103,52 +103,21 @@ const Projects = () => {
   };
 
   return (
-    <div className="p-6 bg-transparent min-h-screen">
+    <div className="p-6 min-h-screen">
       {/* Tip Section */}
-      {/* <div className="absolute top-6 right-6 bg-white rounded-lg p-4 w-80">
-        <div className="flex items-start gap-2">
-          <div className="p-1 rounded-full bg-[#007BFF]">
-            <svg
-              className="w-4 h-4 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <div>
-            <h3 className="font-semibold text-black mb-1">Tip</h3>
-            <p className="text-sm text-gray-600">
-              All funds in escrow are refundable if no valid reports are
-              submitted before the deadline.
-            </p>
-          </div>
-        </div>
-        <div className="flex justify-center mt-2">
-          <div className="flex gap-1">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-          </div>
-        </div>
-      </div> */}
-
+    
       {/* Stats Cards */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         {stats.map((stat) => (
-          <StatCard
-            key={stat.id}
-            icon={stat.icon}
-            value={stat.value}
-            label={stat.label}
-          />
+          <div key={stat.id}>
+            <StatCard
+              key={stat.id}
+              icon={stat.icon}
+              value={stat.value}
+              label={stat.label}
+            />
+          </div>
         ))}
         <div className="bg-white rounded-lg p-4 ">
           <div className="flex items-start gap-2">
@@ -168,7 +137,7 @@ const Projects = () => {
               </p>
             </div>
           </div>
-          <div className="flex justify-end items-stretch">
+          <div className="flex justify-end">
             <div className="flex gap-1">
               <div className="w-1.5 h-1.5 rounded-full bg-gray-900"></div>
               <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
@@ -186,7 +155,7 @@ const Projects = () => {
       </div>
 
       {/* Projects Section */}
-      <div className="bg-[#1C1C1C] rounded-lg">
+      <div className="rounded-lg">
         <div className="space-y-4">
           <ProjectTable />
         </div>

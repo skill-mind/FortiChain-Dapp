@@ -68,7 +68,7 @@ const ProjectDetails = () => {
   };
 
   return (
-    <div className="p-6 bg-[#1A1A1A] min-h-screen">
+    <div className="p-6 min-h-screen">
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/dashboard/admin/projects"
@@ -78,26 +78,24 @@ const ProjectDetails = () => {
         </Link>
       </div>
 
-      <div className="bg-[#1C1C1C] rounded-2xl p-8">
-        <div className="flex justify-between items-start mb-6">
-          <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-lg bg-[#F2994A]/20 flex items-center justify-center">
-              <span className="text-2xl font-bold text-[#F2994A]">DG</span>
+      <div className="bg-[#1C1C1C] p-4 rounded-lg">
+        <div className="flex justify-between mb-2 ">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 p-8 rounded-lg bg-[#BC8522] flex items-center justify-center">
+              <span className="text-3xl font-extrabold text-[#fff]">DG</span>
             </div>
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold text-white">
                   {project.name}
                 </h1>
-                <span className="px-3 py-1 text-sm bg-[#007BFF] text-white rounded-full">
+                <span className="px-3 py-1 text-sm bg-[#2B2BFF] text-white rounded-full">
                   {project.status}
                 </span>
               </div>
-              <p className="text-gray-400 mt-2 max-w-2xl">
-                {project.description}
-              </p>
             </div>
           </div>
+
           <Menu as="div" className="relative">
             <MenuButton className="p-2 hover:bg-gray-800 rounded-lg text-gray-400">
               <BsThreeDotsVertical className="w-5 h-5" />
@@ -112,10 +110,10 @@ const ProjectDetails = () => {
             >
               <MenuItems className="absolute right-0 mt-2 w-48 bg-[#2D2D2D] rounded-lg shadow-lg">
                 <MenuItem>
-                  {({ active }) => (
+                  {({ focus }) => (
                     <button
                       className={`${
-                        active ? "bg-gray-800" : ""
+                        focus ? "bg-gray-800" : ""
                       } block w-full text-left px-4 py-2 text-sm text-white`}
                     >
                       Edit Project
@@ -123,10 +121,10 @@ const ProjectDetails = () => {
                   )}
                 </MenuItem>
                 <MenuItem>
-                  {({ active }) => (
+                  {({ focus }) => (
                     <button
                       className={`${
-                        active ? "bg-gray-800" : ""
+                        focus ? "bg-gray-800" : ""
                       } block w-full text-left px-4 py-2 text-sm text-white`}
                     >
                       Increase Reward
@@ -134,11 +132,11 @@ const ProjectDetails = () => {
                   )}
                 </MenuItem>
                 <MenuItem>
-                  {({ active }) => (
+                  {({ focus }) => (
                     <button
                       onClick={() => setIsCloseModalOpen(true)}
                       className={`${
-                        active ? "bg-gray-800" : ""
+                        focus ? "bg-gray-800" : ""
                       } block w-full text-left px-4 py-2 text-sm text-red-500`}
                     >
                       Close Project
@@ -149,65 +147,56 @@ const ProjectDetails = () => {
             </Transition>
           </Menu>
         </div>
+        <p className="text-white mt-6 mb-6">{project.description}</p>
 
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6 mt-6">
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="px-4 py-2 text-sm bg-[#2D2D2D] rounded-lg text-white"
+              className="px-4 py-2 text-sm bg-[#fff] rounded-lg text-black font-semibold"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-6 mb-8">
-          <div className="flex items-center gap-3 bg-[#2D2D2D] px-4 py-3 rounded-lg">
+        <div className="flex flex-wrap gap-6 mb-4">
+          <div className="flex items-center gap-3 border border-[#464043] px-4 py-2 rounded-lg">
             <div className="p-2 bg-[#1A1A1A] rounded-lg">
-              <svg
-                className="w-6 h-6 text-gray-400"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-.42 0-.76.34-.76.76v3.43c0 .42.34.76.76.76s.76-.34.76-.76v-3.43c0-.42-.34-.76-.76-.76zm0-3.14c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"
-                  fill="currentColor"
-                />
-              </svg>
+              <Image
+                src={"/adminIcon/pool.svg"}
+                alt="coin"
+                width={15}
+                height={15}
+              />
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Prize Pool</p>
-              <p className="text-white font-semibold">{project.prizePool}</p>
+            <div className="flex gap-2 text-sm text-white font-semibold">
+              <p className="text-sm ">Prize Pool</p>
+              <p>{project.prizePool}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-[#2D2D2D] px-4 py-3 rounded-lg">
+          <div className="flex items-center gap-3 border border-[#464043] px-4 py-2 rounded-lg">
             <div className="p-2 bg-[#1A1A1A] rounded-lg">
-              <svg
-                className="w-6 h-6 text-gray-400"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M19 4h-1V3c0-.55-.45-1-1-1s-1 .45-1 1v1H8V3c0-.55-.45-1-1-1s-1 .45-1 1v1H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"
-                  fill="currentColor"
-                />
-              </svg>
+              <Image
+                src={"/adminIcon/date.svg"}
+                alt="coin"
+                width={10}
+                height={10}
+              />
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Date of Expiry</p>
-              <p className="text-white font-semibold">{project.expiryDate}</p>
+            <div className="flex gap-2 text-sm text-white font-semibold">
+              <p className="text-sm ">Date of Expiry</p>
+              <p>{project.expiryDate}</p>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 mb-8">
+        <div className="flex flex-wrap gap-4 mb-4">
           {project.repositories.map((repo) => (
             <a
               key={repo}
               href="#"
-              className="flex items-center gap-2 px-4 py-2 bg-[#2D2D2D] rounded-lg text-white hover:bg-gray-700"
+              className="flex items-center gap-2 px-4 py-2 border border-[#464043] rounded-lg text-white hover:bg-gray-700"
             >
               <BsGithub className="w-5 h-5" />
               {repo}
@@ -215,22 +204,18 @@ const ProjectDetails = () => {
           ))}
         </div>
 
-        <div className="mb-8">
+        <div className="mb-8 flex flex-col items-start">
           <h2 className="text-xl font-semibold text-white mb-6">Languages</h2>
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             {project.languages.map((lang) => (
-              <div key={lang.name} className="flex items-center gap-4">
-                <div className="w-24">
-                  <p className="text-white">{lang.name}</p>
-                </div>
-                <div className="flex-1 h-2 bg-[#2D2D2D] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#007BFF]"
-                    style={{ width: `${lang.percentage}%` }}
-                  />
-                </div>
-                <div className="w-12">
-                  <p className="text-gray-400">{lang.percentage}%</p>
+              <div key={lang.name} className="flex items-center gap-2">
+                <div className="flex gap-2 items-center">
+                  <div className="text-lg">
+                    <p className="text-white">{lang.name}</p>
+                  </div>
+                  <div className="text-sm">
+                    <p className="text-gray-400/50">{lang.percentage}%</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -241,32 +226,33 @@ const ProjectDetails = () => {
           <h2 className="text-xl font-semibold text-white mb-6">
             Vulnerabilities
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {project.vulnerabilities.map((vuln) => (
-              <div key={vuln.id} className="bg-[#2D2D2D] rounded-lg p-4">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <p className="text-sm text-gray-400">#{vuln.id}</p>
-                    <h3 className="text-white font-medium">{vuln.title}</h3>
-                  </div>
+              <div
+                key={vuln.id}
+                className="bg-[#110D0F] border border-[#464043]  flex flex-col gap-4 rounded-lg p-4"
+              >
+                <div className="flex justify-between items-start">
+                  <p className="text-sm text-gray-400">#{vuln.id}</p>
                   <p className="text-sm text-gray-400">{vuln.date}</p>
                 </div>
+                <h3 className="text-white font-medium">{vuln.title}</h3>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-1 text-xs bg-red-500/20 text-red-500 rounded">
+                    <span className="px-2 py-1 text-xs bg-[#AE2727] text-white rounded-lg">
                       {vuln.severity}
                     </span>
-                    <span className="text-white">{vuln.score}</span>
+                    <span className="text-white">{vuln.score.toFixed(1)}</span>
                   </div>
                   <p className="text-white">{vuln.bounty}</p>
                 </div>
               </div>
             ))}
-          </div>
-          <div className="flex justify-end">
-            <button className="bg-[#007BFF] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-blue-600">
-              View All <BsArrowRight />
-            </button>
+            <div className="h-full w-full">
+              <button className="h-full w-full  justify-center  bg-[#0000AA] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-blue-600">
+                View All <BsArrowRight />
+              </button>
+            </div>
           </div>
         </div>
       </div>
