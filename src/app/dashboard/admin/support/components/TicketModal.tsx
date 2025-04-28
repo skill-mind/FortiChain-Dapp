@@ -1,6 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
+import pdf from '../../../../../../public/adminIcon/pdf.svg';
 
 interface TicketModalProps {
   ticket: {
@@ -33,17 +35,23 @@ export default function TicketModal({ ticket, onClose, onOpenDetails }: TicketMo
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
+      <div className="bg-[#161113] border border-neutral-800 rounded-lg px-6 Pb-4 pt-6 w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl h-[95vh] overflow-y-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
-          <h2 className="text-lg sm:text-xl font-semibold text-white">
-            {ticket.description || 'Ticket Details'}
-          </h2>
-          <div className="flex gap-2">
+         <p className='font-700 text-[24px]'> Issue with MetaConnect Wallet - Transaction Stuck</p>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white ml-4"
+          >
+            ✕
+          </button>
+        </div>
+
+          <div className="flex mb-4 gap-2">
             <span
-              className={`px-3 py-1 rounded-md text-sm sm:text-base ${
-                ticket.status === 'OPEN'
-                  ? 'bg-gray-600'
+              className={`px-6 py-1 rounded-[40px] text-sm sm:text-base ${
+                ticket.status === 'Open'
+                  ? 'bg-[#6B6668] text-gray-400'
                   : ticket.status === 'IN_PROGRESS'
                   ? 'bg-blue-600'
                   : 'bg-green-600'
@@ -51,18 +59,18 @@ export default function TicketModal({ ticket, onClose, onOpenDetails }: TicketMo
             >
               {ticket.status.replace('_', ' ')}
             </span>
-            <span className="bg-gray-600 text-white px-3 py-1 rounded-md text-sm sm:text-base">
-              {ticket.category}
+            <span className="bg-[#161113] border border-neutral-800 text-white px-8 py-1 rounded-[40px] text-sm sm:text-base">
+                 Vulnerability Reports
             </span>
           </div>
-        </div>
 
         {/* Ticket Content */}
+        
         <div className="text-gray-300 text-sm sm:text-base mb-4">
-          <p className="mb-2">
+          <p className="mb-6">
             Hello Support Team,
           </p>
-          <p className="mb-2">
+          <p className="mb-4">
             I tried sending ETH from my MetaConnect Wallet to another address, but the transaction has been stuck as "pending" for over an hour. I used the recommended gas fees, but it still hasn't gone through. My wallet address is 0x1234abcd5678efgh9012jklmnopqrstuvwx, and the transaction hash is 0xa1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef.
           </p>
           <p>
@@ -70,53 +78,64 @@ export default function TicketModal({ ticket, onClose, onOpenDetails }: TicketMo
           </p>
         </div>
 
-        {/* Attachments */}
-        <div className="mb-4">
-          <p className="text-gray-300 text-sm sm:text-base mb-2">2 attachments</p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex items-center bg-gray-700 rounded-md p-2 w-full sm:w-auto">
-              <svg className="w-6 h-6 text-red-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm0 2h7v4h4v12H6V4zm2 6h8v2H8v-2zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"/>
-              </svg>
-              <span className="text-gray-300 text-sm sm:text-base">doc.pdf 5MB</span>
-            </div>
-            <div className="flex items-center bg-gray-700 rounded-md p-2 w-full sm:w-auto">
-              <svg className="w-6 h-6 text-red-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm0 2h7v4h4v12H6V4zm2 6h8v2H8v-2zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"/>
-              </svg>
-              <span className="text-gray-300 text-sm sm:text-base">doc.pdf 5MB</span>
-            </div>
-          </div>
-        </div>
+    
+        
+                <div className="mb-4">
+                  <p className="text-gray-300 text-sm sm:text-base mb-2">2 attachments</p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div>
+                      <Image
+                        src={pdf}
+                        alt="PDF Icon"
+                        width={350}
+                        height={150}
+                      />
+                    </div>
+                    <div>
+                      <Image
+                        src={pdf}
+                        alt="PDF Icon"
+                        width={350}
+                        height={150}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-        {/* Reply Section */}
-        <div className="bg-gray-700 rounded-md p-4 mb-4">
+
+        <hr className='bg-[#161113] border border-neutral-800 my-4' />
+      
+
+        <div className="mb-2">
           <h3 className="text-gray-300 text-sm sm:text-base font-semibold mb-2">Your Reply</h3>
+
+          <p className="text-gray-300 text-sm sm:text-base font-semibold mb-2">Subject</p>
           <input
             type="text"
             placeholder="Enter reply subject"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="w-full bg-gray-800 text-white rounded px-3 py-2 mb-2"
+            className="w-full bg-[#161113] border border-neutral-800 text-white rounded px-3 py-5 mb-2"
           />
+          <p className="text-gray-300 text-sm sm:text-base font-semibold mb-2">Message</p>
           <textarea
             placeholder="Write your reply"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="w-full bg-gray-800 text-white rounded px-3 py-2 h-24 mb-4"
+            className="w-full bg-[#161113] border border-neutral-800 text-white rounded px-3 py-2 h-36 mb-2"
           />
-          <div className="flex justify-end space-x-2">
-            <button
-              onClick={onClose}
-              className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm sm:text-base hover:bg-gray-500"
-            >
-              Cancel
-            </button>
+          <div className="flex space-x-2">
             <button
               onClick={handleReply}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm sm:text-base hover:bg-blue-700"
+              className="bg-[#8080ff] text-gray-400 px-8 py-2 rounded-lg text-sm sm:text-base hover:bg-blue-700"
             >
               Send Reply & Close Ticket
+            </button>
+            <button
+              onClick={onClose}
+              className="bg-[#FF3737] px-6 py-2 rounded-lg text-sm sm:text-base hover:bg-gray-500"
+            >
+              Mark as Resolved
             </button>
           </div>
         </div>

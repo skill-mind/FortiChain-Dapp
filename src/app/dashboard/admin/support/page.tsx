@@ -228,9 +228,7 @@ export default function TicketTable({ tickets = mockTickets }: TicketTableProps)
       )}
 
       {selectedTicket && modalState === 'resolved' && (
-        <Modal onClose={handleCloseModal}>
-          <ResolvedTicket />
-        </Modal>
+        <ResolvedTicket onClose={handleCloseModal} />
       )}
 
       {modalState === 'confirm' && (

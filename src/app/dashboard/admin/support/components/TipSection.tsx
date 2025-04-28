@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import good from '../../../../../../public/adminIcon/good.svg';
+import Image from 'next/image';
 
 export default function TipsSection() {
   const [tips, setTips] = useState<string[]>([
@@ -169,12 +171,14 @@ export default function TipsSection() {
               <p className="mb-6 text-gray-300 text-lg">{message}</p>
               <hr className='border border-neutral-800 mb-4'/>
               <div className="mb-6 mt-10">
-                <svg className="w-14 h-14 mx-auto" viewBox="0 0 50 50">
-                  <circle cx="25" cy="25" r="25" fill="#28a745" />
-                  <path d="M10 25 L20 35 L40 15" stroke="white" strokeWidth="4" fill="none" />
-                </svg>
+              <Image
+    src={good}
+    alt="PDF Icon"
+    width={150}
+    height={80}
+    className="mx-auto mb-6"/>
               </div>
-              <button className="bg-[#0000FF] text-white px-5 py-2 rounded text-base" onClick={onClose}>
+              <button className="bg-[#0000FF] text-white px-14 py-2 my-6 rounded-md text-base" onClick={onClose}>
                 Go Back
               </button>
             </motion.div>

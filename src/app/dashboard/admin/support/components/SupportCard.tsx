@@ -36,7 +36,7 @@ const stats = [
 ];
     
   return(
-    <div className=" p-6">
+    <div className=" px-2 py-6">
         <div>
           {/* Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
