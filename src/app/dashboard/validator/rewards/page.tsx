@@ -1,7 +1,6 @@
 import React from "react";
+import { RewardsPage } from "../../components/RewardsPage";
 
-const Rwards = () => {
-  return <div>Rwards content goes here</div>;
-};
-
-export default Rwards;
+export default function Rewards() {
+  return <RewardsPage />;
+}
