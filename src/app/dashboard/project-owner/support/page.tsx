@@ -1,7 +1,9 @@
-import React from "react";
-
-function Help() {
-  return <div>Help Center</div>;
+export default function page() {
+  return (
+    <div>
+        <div className="card">
+            
+        </div>
+    </div>
+  );
 }
-
-export default Help;
