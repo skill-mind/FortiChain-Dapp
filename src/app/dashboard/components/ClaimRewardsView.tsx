@@ -59,7 +59,7 @@ export function ClaimRewardsView({
 
   return (
     <Animation animationType="fade-in">
-      <div className="flex items-center ">
+      <div className="flex items-center mb-8">
         <button
           onClick={onBack}
           className="flex items-center text-sm text-neutral-400 hover:text-white transition-colors"
