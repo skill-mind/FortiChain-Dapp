@@ -7,7 +7,7 @@ import { ReportHeader } from '../../../components/report/ReportHeader';
 import { ReportInfoSection } from '../../../components/report/ReportInfoSection';
 import { ReportTextSection } from '../../../components/report//ReportTextSection';
 import { ImageGallery } from '../../../components/report/ImageGallery';
-import { ReportDetailModal } from '../../../components/report/DetailsModal';
+import { DetailsModal } from '../../../components/report/DetailsModal';
 import { sampleReports } from '../../../components/type/sampleData';
 
 interface PageProps {
@@ -124,9 +124,13 @@ export default function ReportDetailPage({ params }: PageProps) {
       
       {/* Create a modal for "View More Details" */}
       {showMoreDetailsModal && (
-        <ReportDetailModal 
+        <DetailsModal 
           report={report}
           onClose={() => setShowMoreDetailsModal(false)}
+          onProceed={() => {
+            setShowMoreDetailsModal(false);
+            router.push(`/dashboard/researcher/reports/edit/${id}`);
+          }}
         />
       )}
     </div>
