@@ -4,6 +4,9 @@ import type React from "react";
 import { Animation } from "@/motion/Animation";
 import { Wallet, DollarSign, ArrowRight } from "lucide-react";
 import { StatCard } from "./resuables/StatsCard";
+import imgFour from "../../../../public/validatorIcons/valImgFour.svg";
+
+import Image from "next/image";
 
 interface RewardsStatsProps {
   totalEarnings: string;
@@ -19,13 +22,13 @@ export const RewardsStats: React.FC<RewardsStatsProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <StatCard
-        icon={<DollarSign size={30} />}
+        icon={<Image src={imgFour} alt={"icon"} height={30} width={30} />}
         value={totalEarnings}
         label="Total Earnings"
       />
 
       <StatCard
-        icon={<Wallet size={30} />}
+        icon={<Image src={imgFour} alt={"icon"} height={30} width={30} />}
         value={availableForWithdrawal}
         label="Available for Withdrawal"
       />
