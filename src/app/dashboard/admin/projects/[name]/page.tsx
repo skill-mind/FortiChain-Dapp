@@ -12,22 +12,40 @@ import {
   Transition,
 } from "@headlessui/react";
 import CloseProjectModal from "@/components/dashboard/modals/CloseProjectModal";
-import LoadingModal from "@/components/dashboard/modals/LoadingModal";
 import SuccessModal from "@/components/dashboard/modals/SuccessModal";
+
+interface IProject {
+  name: string;
+  description: string;
+  status: string;
+  tags: string[];
+  prizePool: string;
+  expiryDate: string;
+  repositories: string[];
+  languages: { name: string; percentage: number }[];
+  vulnerabilities: {
+    id: string;
+    title: string;
+    severity: string;
+    score: number;
+    bounty: string;
+    date: string;
+  }[];
+}
 
 const ProjectDetails = () => {
   const [isCloseModalOpen, setIsCloseModalOpen] = React.useState(false);
-  const [isLoadingModalOpen, setIsLoadingModalOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = React.useState(false);
 
   // Mock data - replace with actual data fetching
-  const project = {
+  const project: IProject = {
     name: "DeFi Guard",
     description:
       "A decentralized finance (DeFi) protection tool that scans for vulnerabilities in DeFi protocols and helps prevent hacks.",
     status: "Ongoing",
     tags: ["DeFi", "Storage", "NFTs"],
-    prizePool: "$6,350.56",
+    prizePool: "6,350.56",
     expiryDate: "25-04-2025",
     repositories: ["DeFi-Guard-Smartcontract", "DeFi-Guard-Smartcontract"],
     languages: [
@@ -57,14 +75,16 @@ const ProjectDetails = () => {
   };
 
   const handleConfirmClose = async () => {
-    setIsCloseModalOpen(false);
-    setIsLoadingModalOpen(true);
-
+    setIsLoading(true);
     // Mock API call - replace with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsLoadingModalOpen(false);
-    setIsSuccessModalOpen(true);
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        setIsCloseModalOpen(false);
+        setIsLoading(false);
+        setIsSuccessModalOpen(true);
+        resolve(null);
+      }, 5000)
+    );
   };
 
   return (
@@ -78,7 +98,7 @@ const ProjectDetails = () => {
         </Link>
       </div>
 
-      <div className="bg-[#1C1C1C] p-4 rounded-lg">
+      <div className="border border-[#464043] bg-[#161113]  p-4 rounded-lg">
         <div className="flex justify-between mb-2 ">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 p-8 rounded-lg bg-[#BC8522] flex items-center justify-center">
@@ -250,7 +270,12 @@ const ProjectDetails = () => {
             ))}
             <div className="h-full w-full">
               <button className="h-full w-full  justify-center  bg-[#0000AA] text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-blue-600">
-                View All <BsArrowRight />
+                <Link
+                  href="/dashboard/admin/projects"
+                  className="text-wgite hover:text-white flex items-center gap-2"
+                >
+                  View All <BsArrowRight />
+                </Link>
               </button>
             </div>
           </div>
@@ -261,13 +286,14 @@ const ProjectDetails = () => {
         isOpen={isCloseModalOpen}
         onClose={() => setIsCloseModalOpen(false)}
         onConfirm={handleConfirmClose}
+        isLoading={isLoading}
       />
-
+      {/* 
       <LoadingModal
         isOpen={isLoadingModalOpen}
         title="Close Project"
         message="We are processing your request. This may take a few moments."
-      />
+      /> */}
 
       <SuccessModal
         isOpen={isSuccessModalOpen}

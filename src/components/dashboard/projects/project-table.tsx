@@ -103,7 +103,7 @@ const ProjectTable = () => {
       <div className="hidden md:block overflow-x-auto">
   <table className="w-full">
     <thead className="rounded-md p-5">
-      <tr className="text-white text-[16px] border-b bg-[#161113] rounded-md h-[64px] border-gray-800">
+      <tr className="text-white text-[16px] border-b bg-[#211A1D] rounded-md h-[64px] rounded-t-2xl border-gray-800">
         {TableHeaders.map((header, idx) => (
           <th
             key={header + idx}
@@ -160,7 +160,7 @@ const ProjectTable = () => {
               <Animation delay={1.2} animationType="slide-up">
                 <div className="flex gap-2 text-[#0000FF] text-[14px]">
                   <Link
-                    href={`/dashboard/admin/projects/${id}`}
+                    href={`/dashboard/admin/projects/${name}`}
                     className="text-[#007BFF] hover:underline text-sm"
                   >
                     View
@@ -181,7 +181,7 @@ const ProjectTable = () => {
           const { id, name, category, bountyPaid, bountyAllocated, status } =
             project;
           return (
-            <Animation key={index} delay={0.2 * index} animationType="slide-up">
+            <Animation key={id} delay={0.2 * index} animationType="slide-up">
               <div className="bg-[#211A1D] rounded-lg p-4 border border-gray-800">
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-white font-medium text-lg">{name}</h3>
@@ -215,7 +215,12 @@ const ProjectTable = () => {
 
                 <div className="mt-4 text-center">
                   <button className="text-[#0000FF] hover:text-blue-400 text-[14px]">
+                  <Link
+                    href={`/dashboard/admin/projects/${name}`}
+                    className="text-[#007BFF] hover:underline text-sm"
+                  >
                     View
+                  </Link>
                   </button>
                 </div>
               </div>
