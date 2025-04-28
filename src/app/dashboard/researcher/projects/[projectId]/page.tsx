@@ -72,7 +72,7 @@ export default function ProjectDetailsPage({ params }: Props) {
         >
           <div className="flex items-center gap-4">
             <div
-              className={`${project.logo.bgColor} text-white font-[800] text-[40px] px-2  rounded-full`}
+              className={`${project.logo.bgColor} text-white font-[800] text-[40px] px-2  rounded-xl`}
             >
               {project.logo.text}
             </div>

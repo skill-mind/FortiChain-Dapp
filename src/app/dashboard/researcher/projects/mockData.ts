@@ -8,6 +8,7 @@ type LanguageDetails = {
 export type Project = {
     id: number;
     logo: {
+        logo: string;
         text: string;
         bgColor: string;
     };
@@ -39,6 +40,7 @@ export const projects: Project[] = [
     {
         id: 1,
         logo: {
+            logo: "/researcherIcon/DG.svg",
             text: "DG",
             bgColor: "bg-yellow-600",
         },
@@ -88,6 +90,7 @@ export const projects: Project[] = [
     {
         id: 2,
         logo: {
+            logo: "/researcherIcon/PC.svg",
             text: "PC",
             bgColor: "bg-blue-700",
         },
@@ -137,6 +140,7 @@ export const projects: Project[] = [
     {
         id: 3,
         logo: {
+            logo: "/researcherIcon/P1.svg",
             text: "FD",
             bgColor: "bg-blue-800",
         },
@@ -186,6 +190,7 @@ export const projects: Project[] = [
     {
         id: 4,
         logo: {
+            logo: "/researcherIcon/DG.svg",
             text: "DG",
             bgColor: "bg-blue-800",
         },
@@ -235,6 +240,7 @@ export const projects: Project[] = [
     {
         id: 5,
         logo: {
+            logo: "/researcherIcon/P2.svg",
             text: "FD",
             bgColor: "bg-blue-800",
         },
@@ -284,6 +290,7 @@ export const projects: Project[] = [
     {
         id: 6,
         logo: {
+            logo: "/researcherIcon/P1.svg",
             text: "FD",
             bgColor: "bg-blue-800",
         },
