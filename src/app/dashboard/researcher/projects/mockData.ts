@@ -1,65 +1,39 @@
+type LanguageDetails = {
+    percentage: number;
+    logo: string;
+    icon: string;
+    bgColor: string;
+};
+
 export type Project = {
     id: number;
     logo: {
         text: string;
-        bgColor: string; 
+        bgColor: string;
     };
     title: string;
     description: string;
     amount: string;
     deadline: string;
     tags: string[];
-    progress: {
-        firstIcon: string;
-        firstColor: string; 
-        firstPercentage: number;
-        secondIcon: string;
-        secondColor: string; 
-        secondPercentage: number;
-    };
-    repository?:{
+  
+    repository?: {
         name: string;
         link: string;
     }[];
     language?: {
-        typescript?: {
-            percentage: number;
-            logo: string;
-        };
-        javascript?: {
-            percentage: number;
-            logo: string;
-        };
-        solidity?: {
-            percentage: number;
-            logo: string;
-        };
-        cairo?: {
-            percentage: number;
-            logo: string;
-        };
-        rust?: {
-            percentage: number;
-            logo: string;
-        };
-        go?: {
-            percentage: number;
-            logo: string;
-        };
-        python?: {
-            percentage: number;
-            logo: string;
-        };
-        java?: {
-            percentage: number;
-            logo: string;
-        };
-        c?: {
-            percentage: number;
-            logo: string;
-        };
+        typescript?: LanguageDetails;
+        javascript?: LanguageDetails;
+        solidity?: LanguageDetails;
+        cairo?: LanguageDetails;
+        rust?: LanguageDetails;
+        go?: LanguageDetails;
+        python?: LanguageDetails;
+        java?: LanguageDetails;
+        c?: LanguageDetails;
     };
 };
+
 
 export const projects: Project[] = [
     {
@@ -84,30 +58,30 @@ export const projects: Project[] = [
                 link: "www.github.com/defi-guard/frontend",
             },
         ],
-        progress: {
-            firstIcon: "TS",
-            firstColor: "bg-[#000055]",
-            firstPercentage: 30,
-            secondIcon: "🌍",
-            secondColor: "bg-red-600",
-            secondPercentage: 70,
-        },
         language: {
             typescript: {
                 percentage: 30,
                 logo: "/researcherIcon/typescript.svg",
+                icon: "TS",
+                bgColor: "bg-[#000055]",
             },
             javascript: {
-                percentage: 70,
+                percentage: 10,
                 logo: "/researcherIcon/javascript.svg",
+                icon: "JS",
+                bgColor: "bg-[#4F4F07]",
             },
             python: {
-                percentage: 50,
+                percentage: 10,
                 logo: "/researcherIcon/python.svg",
+                icon: "PY",
+                bgColor: "bg-[#0000AA]",
             },
             cairo: {
                 percentage: 50,
                 logo: "/researcherIcon/cairo.svg",
+                icon: "CA",
+                bgColor: "bg-[#5B1712]",
             },
         },
     },
@@ -119,44 +93,44 @@ export const projects: Project[] = [
         },
         title: "Plankton Chain",
         description:
-            "A Layer 2 blockchain that enhances security while abstracting complex processes, providing a seamless and user-friendly experience for...",
+            "A Layer 2 blockchain that enhances security while abstracting complex processes, providing a seamless and user-friendly experience for developers and users alike.",
         amount: "$50,000",
         deadline: "24/09/2025",
         tags: ["DeFi", "Storage", "NFTs"],
         repository: [
             {
-                name: "DeFi-Guard-Smartcontract",
-                link: "www.github.com/defi-guard/smartcontract",
+                name: "Plankton-Chain-Smartcontract",
+                link: "www.github.com/plankton-chain/smartcontract",
             },
             {
-                name: "DeFi-Guard-Frontend",
-                link: "www.github.com/defi-guard/frontend",
+                name: "Plankton-Chain-Frontend",
+                link: "www.github.com/plankton-chain/frontend",
             },
         ],
-        progress: {
-            firstIcon: "TS",
-            firstColor: "bg-[#000055]",
-            firstPercentage: 50,
-            secondIcon: "🌍",
-            secondColor: "bg-blue-400",
-            secondPercentage: 50,
-        },
         language: {
             typescript: {
                 percentage: 30,
                 logo: "/researcherIcon/typescript.svg",
+                icon: "TS",
+                bgColor: "bg-[#000055]",
             },
             javascript: {
                 percentage: 70,
                 logo: "/researcherIcon/javascript.svg",
+                icon: "JS",
+                bgColor: "bg-[#4F4F07]",
             },
             python: {
                 percentage: 50,
                 logo: "/researcherIcon/python.svg",
+                icon: "PY",
+                bgColor: "bg-[#0000AA]",
             },
             cairo: {
                 percentage: 50,
                 logo: "/researcherIcon/cairo.svg",
+                icon: "CA",
+                bgColor: "bg-[#5B1712]",
             },
         },
     },
@@ -168,44 +142,44 @@ export const projects: Project[] = [
         },
         title: "FortiChain",
         description:
-            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts",
+            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts by identifying and fixing vulnerabilities.",
         amount: "$50,000",
         deadline: "24/09/2025",
         tags: ["Security", "AI"],
         repository: [
             {
-                name: "DeFi-Guard-Smartcontract",
-                link: "www.github.com/defi-guard/smartcontract",
+                name: "FortiChain-Smartcontract",
+                link: "www.github.com/fortichain/smartcontract",
             },
             {
-                name: "DeFi-Guard-Frontend",
-                link: "www.github.com/defi-guard/frontend",
+                name: "FortiChain-Frontend",
+                link: "www.github.com/fortichain/frontend",
             },
         ],
-        progress: {
-            firstIcon: "JS",
-            firstColor: "bg-yellow-400",
-            firstPercentage: 60,
-            secondIcon: "🌍",
-            secondColor: "bg-red-600",
-            secondPercentage: 40,
-        },
         language: {
             typescript: {
-                percentage: 30,
+                percentage: 10,
                 logo: "/researcherIcon/typescript.svg",
+                icon: "TS",
+                bgColor: "bg-[#000055]",
             },
             javascript: {
-                percentage: 70,
+                percentage: 30,
                 logo: "/researcherIcon/javascript.svg",
+                icon: "JS",
+                bgColor: "bg-[#4F4F07]",
             },
             python: {
-                percentage: 50,
+                percentage: 10,
                 logo: "/researcherIcon/python.svg",
+                icon: "PY",
+                bgColor: "bg-[#0000AA]",
             },
             cairo: {
                 percentage: 50,
                 logo: "/researcherIcon/cairo.svg",
+                icon: "CA",
+                bgColor: "bg-[#5B1712]",
             },
         },
     },
@@ -217,44 +191,44 @@ export const projects: Project[] = [
         },
         title: "FortiChain",
         description:
-            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts",
+            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts by identifying and fixing vulnerabilities.",
         amount: "$50,000",
         deadline: "24/09/2025",
         tags: ["Security", "AI"],
         repository: [
             {
-                name: "DeFi-Guard-Smartcontract",
-                link: "www.github.com/defi-guard/smartcontract",
+                name: "FortiChain-Smartcontract",
+                link: "www.github.com/fortichain/smartcontract",
             },
             {
-                name: "DeFi-Guard-Frontend",
-                link: "www.github.com/defi-guard/frontend",
+                name: "FortiChain-Frontend",
+                link: "www.github.com/fortichain/frontend",
             },
         ],
-        progress: {
-            firstIcon: "TS",
-            firstColor: "bg-[#000055]",
-            firstPercentage: 60,
-            secondIcon: "🌍",
-            secondColor: "bg-red-600",
-            secondPercentage: 40,
-        },
         language: {
             typescript: {
-                percentage: 30,
+                percentage: 10,
                 logo: "/researcherIcon/typescript.svg",
+                icon: "TS",
+                bgColor: "bg-[#000055]",
             },
             javascript: {
-                percentage: 70,
+                percentage: 35,
                 logo: "/researcherIcon/javascript.svg",
+                icon: "JS",
+                bgColor: "bg-[#4F4F07]",
             },
             python: {
                 percentage: 50,
                 logo: "/researcherIcon/python.svg",
+                icon: "PY",
+                bgColor: "bg-[#0000AA]",
             },
             cairo: {
-                percentage: 50,
+                percentage: 5,
                 logo: "/researcherIcon/cairo.svg",
+                icon: "CA",
+                bgColor: "bg-[#5B1712]",
             },
         },
     },
@@ -266,44 +240,44 @@ export const projects: Project[] = [
         },
         title: "FortiChain",
         description:
-            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts",
+            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts by identifying and fixing vulnerabilities.",
         amount: "$50,000",
         deadline: "24/09/2025",
         tags: ["Security", "AI"],
         repository: [
             {
-                name: "DeFi-Guard-Smartcontract",
-                link: "www.github.com/defi-guard/smartcontract",
+                name: "FortiChain-Smartcontract",
+                link: "www.github.com/fortichain/smartcontract",
             },
             {
-                name: "DeFi-Guard-Frontend",
-                link: "www.github.com/defi-guard/frontend",
+                name: "FortiChain-Frontend",
+                link: "www.github.com/fortichain/frontend",
             },
         ],
-        progress: {
-            firstIcon: "TS",
-            firstColor: "bg-[#000055]",
-            firstPercentage: 60,
-            secondIcon: "🌍",
-            secondColor: "bg-red-600",
-            secondPercentage: 40,
-        },
         language: {
             typescript: {
-                percentage: 30,
+                percentage: 40,
                 logo: "/researcherIcon/typescript.svg",
+                icon: "TS",
+                bgColor: "bg-[#000055]",
             },
             javascript: {
-                percentage: 70,
+                percentage: 30,
                 logo: "/researcherIcon/javascript.svg",
+                icon: "JS",
+                bgColor: "bg-[#4F4F07]",
             },
             python: {
-                percentage: 50,
+                percentage: 10,
                 logo: "/researcherIcon/python.svg",
+                icon: "PY",
+                bgColor: "bg-[#0000AA]",
             },
             cairo: {
-                percentage: 50,
+                percentage: 20,
                 logo: "/researcherIcon/cairo.svg",
+                icon: "CA",
+                bgColor: "bg-[#5B1712]",
             },
         },
     },
@@ -315,44 +289,44 @@ export const projects: Project[] = [
         },
         title: "FortiChain",
         description:
-            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts",
+            "A decentralized bug bounty and smart contract security platform that rewards researchers and secures smart contracts by identifying and fixing vulnerabilities.",
         amount: "$50,000",
         deadline: "24/09/2025",
         tags: ["Security", "AI"],
         repository: [
             {
-                name: "DeFi-Guard-Smartcontract",
-                link: "www.github.com/defi-guard/smartcontract",
+                name: "FortiChain-Smartcontract",
+                link: "www.github.com/fortichain/smartcontract",
             },
             {
-                name: "DeFi-Guard-Frontend",
-                link: "www.github.com/defi-guard/frontend",
+                name: "FortiChain-Frontend",
+                link: "www.github.com/fortichain/frontend",
             },
         ],
-        progress: {
-            firstIcon: "JS",
-            firstColor: "bg-yellow-400",
-            firstPercentage: 60,
-            secondIcon: "🌍",
-            secondColor: "bg-red-600",
-            secondPercentage: 40,
-        },
         language: {
             typescript: {
-                percentage: 30,
+                percentage: 0,
                 logo: "/researcherIcon/typescript.svg",
+                icon: "TS",
+                bgColor: "bg-[#000055]",
             },
             javascript: {
-                percentage: 70,
+                percentage: 50,
                 logo: "/researcherIcon/javascript.svg",
+                icon: "JS",
+                bgColor: "bg-[#4F4F07]",
             },
             python: {
-                percentage: 50,
+                percentage: 20,
                 logo: "/researcherIcon/python.svg",
+                icon: "PY",
+                bgColor: "bg-[#0000AA]",
             },
             cairo: {
-                percentage: 50,
+                percentage: 30,
                 logo: "/researcherIcon/cairo.svg",
+                icon: "CA",
+                bgColor: "bg-[#5B1712]",
             },
         },
     },

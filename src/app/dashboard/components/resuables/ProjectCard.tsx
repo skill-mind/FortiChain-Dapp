@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 import type { Project } from "../../researcher/projects/mockData";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,21 +9,35 @@ type Props = {
   project: Project;
 };
 
+// ▶️ Helper: pick top two langs and normalize them to 100%
+function getTopTwoNormalized(
+  langs: Record<string, { percentage: number; bgColor: string; logo: string; icon: string }>
+) {
+  const entries = Object.values(langs)
+    .sort((a, b) => b.percentage - a.percentage)
+    .slice(0, 2);
+
+  const total = entries.reduce((sum, l) => sum + l.percentage, 0) || 1;
+  return entries.map((l) => ({
+    ...l,
+    normalized: (l.percentage / total) * 100,
+  }));
+}
+
 export const ProjectCard: React.FC<Props> = ({ project }) => {
-  function shortenText(text: string, maxLength: number) {
-    if (text.length <= maxLength) {
-      return text;
-    }
+  const top = getTopTwoNormalized(project.language ?? {});
 
-    const shortened = text.slice(0, maxLength);
-    const lastSpaceIndex = shortened.lastIndexOf(" ");
+  // 📝 Fallback for project‐level logo: if none, use first lang’s icon/bg
+  const fallback = top[0] ?? { icon: "?", bgColor: "bg-gray-700" };
+  const logoText = project.logo.text || fallback.icon;
+  const logoBg   = project.logo.bgColor || fallback.bgColor;
 
-    if (lastSpaceIndex > 0) {
-      return `${shortened.slice(0, lastSpaceIndex)}...`;
-    }
-
-    return `${shortened}...`;
-  }
+  const shortenText = (text: string, max: number) => {
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const last = cut.lastIndexOf(" ");
+    return last > 0 ? `${cut.slice(0, last)}…` : `${cut}…`;
+  };
 
   return (
     <Link
@@ -31,22 +45,20 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
       className="block col-span-12 sm:col-span-6 lg:col-span-4"
     >
       <motion.div
-        initial={{ opacity: 0, y: 50 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.6, ease: "easeOut" }} 
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="bg-[#110D0F] text-white p-6 rounded-2xl border border-gray-700 w-full max-w-md"
       >
-        {/* Logo and Title */}
+        {/* Logo + Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="flex items-center gap-4 mb-4"
         >
-          <div
-            className={`${project.logo.bgColor} text-black font-bold p-3 rounded-full`}
-          >
-            {project.logo.text}
+          <div className={`${logoBg} text-black font-bold p-3 rounded-full`}>
+            {logoText}
           </div>
           <h2 className="text-xl font-semibold">{project.title}</h2>
         </motion.div>
@@ -61,7 +73,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
           {shortenText(project.description, 150)}
         </motion.p>
 
-        {/* Amount and Deadline */}
+        {/* Amount & Deadline */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -70,20 +82,20 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         >
           <div className="flex items-center gap-2">
             <Image
-              src={"/researcherIcon/moneyBag.svg"}
-              alt="Money bag logo"
+              src="/researcherIcon/moneyBag.svg"
+              alt="Money bag"
               width={15}
               height={15}
-            />{" "}
+            />
             {project.amount}
           </div>
           <div className="flex items-center gap-2">
             <Image
-              src={"/researcherIcon/deadLine.svg"}
-              alt="deadline"
+              src="/researcherIcon/deadLine.svg"
+              alt="Deadline"
               width={15}
               height={15}
-            />{" "}
+            />
             Deadline: {project.deadline}
           </div>
         </motion.div>
@@ -105,30 +117,38 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
           ))}
         </motion.div>
 
-        {/* Dynamic Progress Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, ease: "easeOut" }}
-          className="w-full h-6 rounded-full overflow-hidden"
-        >
-          <div className="flex h-full -space-x-3 w-full">
-            <div
-              className={`${project.progress.firstColor} flex items-center justify-between text-xs px-3 font-bold text-white transition-all duration-500 ease-in-out`}
-              style={{ flexBasis: `${project.progress.firstPercentage}%` }}
-            >
-              <span>{project.progress.firstIcon}</span>{" "}
-              <span>{project.progress.firstPercentage}%</span>
+        {/* Progress Bar (top 2 langs) */}
+        {top.length === 2 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: "easeOut" }}
+            className="w-full h-6 rounded-full overflow-hidden"
+          >
+            <div className="flex h-full w-full -space-x-4">
+              {top.map((lang, i) => (
+                <div
+                  key={i}
+                  className={`${lang.bgColor} flex items-center justify-between text-xs px-4 rounded-full font-bold text-white transition-all duration-500 ease-in-out`}
+                  style={{ flexBasis: `${lang.normalized}%` }}
+                >
+                  {lang.logo ? (
+                    <Image
+                      src={lang.logo}
+                      alt={`${lang.icon} logo`}
+                      width={12}
+                      height={12}
+                      className="inline-block"
+                    />
+                  ) : (
+                    <span>{lang.icon}</span>
+                  )}
+                  <span>{Math.round(lang.normalized)}%</span>
+                </div>
+              ))}
             </div>
-            <div
-              className={`${project.progress.secondColor} flex items-center justify-between rounded-full px-2 text-xs font-bold text-white transition-all duration-500 ease-in-out`}
-              style={{ flexBasis: `${project.progress.secondPercentage}%` }}
-            >
-              <span>{project.progress.secondIcon}</span>{" "}
-              <span>{project.progress.secondPercentage}%</span>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
       </motion.div>
     </Link>
   );
