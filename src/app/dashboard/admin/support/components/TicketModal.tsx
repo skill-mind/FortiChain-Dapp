@@ -36,7 +36,7 @@ export default function TicketModal({ ticket, onClose, onOpenDetails }: TicketMo
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
       <div className="bg-[#161113] border border-neutral-800 rounded-lg px-6 Pb-4 pt-6 w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl h-[95vh] overflow-y-auto">
-        {/* Header */}
+ 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
          <p className='font-700 text-[24px]'> Issue with MetaConnect Wallet - Transaction Stuck</p>
           <button
@@ -64,7 +64,7 @@ export default function TicketModal({ ticket, onClose, onOpenDetails }: TicketMo
             </span>
           </div>
 
-        {/* Ticket Content */}
+
         
         <div className="text-gray-300 text-sm sm:text-base mb-4">
           <p className="mb-6">

@@ -54,7 +54,6 @@ export default function TicketDetailsModal({
                </span>
              </div>
    
-           {/* Ticket Content */}
            
            <div className="text-gray-300 text-sm sm:text-base mb-4">
              <p className="mb-6">

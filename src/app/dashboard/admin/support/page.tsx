@@ -21,11 +21,6 @@ interface Ticket {
   attachments: string[];
 }
 
-interface TicketTableProps {
-  tickets: Ticket[];
-}
-
-// Mock ticket data
 const mockTickets: Ticket[] = [
   {
     id: 1,
@@ -79,13 +74,13 @@ const mockTickets: Ticket[] = [
   }
 ];
 
-export default function TicketTable({ tickets = mockTickets }: TicketTableProps) {
+export default function SupportPage() {
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [modalState, setModalState] = useState<'ticket' | 'details' | 'confirm' | 'closed' | 'resolved' | null>(null);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
-  const filteredTickets = tickets.filter(
+  const filteredTickets = mockTickets.filter(
     (ticket) =>
       (!categoryFilter || ticket.category === categoryFilter) &&
       (!statusFilter || ticket.status === statusFilter)
@@ -205,7 +200,7 @@ export default function TicketTable({ tickets = mockTickets }: TicketTableProps)
       </div>
       <TipsSection/>
 
-      {/* Modals */}
+  
       {selectedTicket && modalState === 'ticket' && (
         <Modal onClose={handleCloseModal}>
           <TicketModal 
