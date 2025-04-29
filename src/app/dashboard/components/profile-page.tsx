@@ -7,6 +7,7 @@ import VerifiedIcon from "../../../../public/blue_verified_icon.svg"
 import CancelIcon from "../../../../public/cancel_symbol.svg"
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import KYCModal from '@/components/dashboard/KYCModal';
 
 interface ProfilePageProps {
     status?: 'pending' | 'verified' | 'rejected' | 'na';
@@ -120,15 +121,17 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ status = 'verified' }) => {
                 );
             case 'na':
                 return (
-                    <KYCButton className='w-[101px]' buttonText='Start KYC' />
+                    <>
+                    <KYCModal className='w-[101px]' buttonText='Start KYC' />
+                    </>
                 );
             case 'verified':
                 return (
-                    <KYCButton buttonIcon={<Pencil className="ml-1 w-[13px] h-[13px]" />} buttonText='Restart KYC' />
+                    <KYCModal className='px-3' buttonIcon={<Pencil className="ml-1 w-[13px] h-[13px]" />} buttonText='Restart KYC' />
                 );
             case 'rejected':
                 return (
-                    <KYCButton buttonIcon={<Pencil className="ml-1 w-4 h-4" />} buttonText='Restart KYC' />
+                    <KYCModal buttonIcon={<Pencil className="ml-1 w-4 h-4" />} buttonText='Restart KYC' />
                 );
         }
     };
@@ -199,7 +202,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ status = 'verified' }) => {
     return (
         <div className="min-h-screen text-white">
             <motion.div 
-                className="mx-auto w-full max-w-[911px] p-4"
+                className="mx-auto w-full max-w-[911px] md:p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isLoaded ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
@@ -292,11 +295,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ status = 'verified' }) => {
                                             transition={{ delay: 0.6, duration: 0.3 }}
                                         >
                                             {profileStatus === 'verified' && (
-                                                <KYCButton buttonIcon={<Pencil className="ml-1 w-[13px] h-[13px]" />} buttonText='Restart KYC' />
+                                                <KYCModal className='px-5' buttonIcon={<Pencil className="ml-1 w-[13px] h-[13px]" />} buttonText='Restart KYC' />
 
                                             )}
                                             {profileStatus === 'rejected' && (
-                                                <KYCButton buttonIcon={<Pencil className="ml-1 w-[13px] h-[13px]" />} buttonText='Restart KYC' />
+                                                <KYCModal className='px-5' buttonIcon={<Pencil className="ml-1 w-[13px] h-[13px]" />} buttonText='Restart KYC' />
                                             )}
                                         </motion.div>
                                     </div>
