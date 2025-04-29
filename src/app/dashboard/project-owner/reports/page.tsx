@@ -1,7 +1,8 @@
 import React from "react";
+import Views from "./views";
 
-function Reports() {
-  return <div>Reports</div>;
-}
+const Reports = () => {
+	return <Views />;
+};
 
 export default Reports;
