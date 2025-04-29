@@ -1,7 +1,9 @@
-import React from "react";
+import { ProjectDashboard } from "./components/project-dashboard";
 
-const Projects = () => {
-  return <div className="">Projects</div>;
-};
-
-export default Projects;
+export default function RegisterProjectPage() {
+  return (
+    <main className="flex min-h-screen bg-[#110d0f]">
+        <ProjectDashboard />
+    </main>
+  );
+}

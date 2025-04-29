@@ -1,8 +1,7 @@
 import React from "react";
-import Views from "./views";
 
 const Reports = () => {
-	return <Views />;
+	return <div>Reports content goes here</div>;
 };
 
 export default Reports;
