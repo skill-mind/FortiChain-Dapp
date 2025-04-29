@@ -52,85 +52,89 @@ export default function WithdrawModal({
 
       <button
         onClick={onClose}
-        className="absolute top-6 left-6 text-gray-300 hover:text-white flex items-center z-20"
+        className="absolute top-4 sm:top-6 left-4 sm:left-6 text-gray-300 hover:text-white flex items-center z-20 text-sm sm:text-base"
       >
-        <ArrowLeft size={20} className="mr-2" />
+        <ArrowLeft size={18} className="mr-1 sm:mr-2" />
         <span>Back to Payouts</span>
       </button>
 
       {step === 1 && (
-        <div className="relative bg-[#1b1618] border border-[#464043] rounded-2xl w-[90%] max-w-xl z-10">
-          <div className="text-center pt-10 pb-6">
-            <h2 className="text-4xl font-bold text-white">Withdraw</h2>
+        <div className="relative bg-[#1b1618] border border-[#464043] rounded-2xl w-[95%] max-w-xl z-10 max-h-[90vh] overflow-y-auto">
+          <div className="text-center pt-6 sm:pt-10 pb-4 sm:pb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">
+              Withdraw
+            </h2>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {/* Recipient Section */}
-            <div className="mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-6">
-              <h3 className="text-white text-xl mb-4">Recepient</h3>
+            <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
+                Recepient
+              </h3>
               <div className="flex items-center">
-                <User size={20} className="text-white mr-2" />
+                <User size={18} className="text-white mr-2" />
                 <div>
-                  <div className="flex items-center">
-                    <span className="text-white text-lg font-medium">
+                  <div className="flex flex-col sm:flex-row sm:items-center">
+                    <span className="text-white text-base sm:text-lg font-medium">
                       0x0596....0f3
                     </span>
-                    <span className="text-gray-500 ml-2 text-sm">
+                    <span className="text-gray-500 sm:ml-2 text-xs sm:text-sm mt-1 sm:mt-0">
                       Account Address
                     </span>
                   </div>
                   <div className="flex items-center text-green-500 mt-1">
-                    <CheckCircle2 size={20} className="mr-2" />
-                    <span>Valid Address</span>
+                    <CheckCircle2 size={16} className="mr-2" />
+                    <span className="text-sm">Valid Address</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Amount Section */}
-            <div className="mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-6">
-              <h3 className="text-white text-xl mb-4">Amount</h3>
+            <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
+                Amount
+              </h3>
 
-              <div className="flex justify-between items-center mb-4 border-b border-gray-800">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-2">
                 <input
                   type="text"
                   value={amount}
                   onChange={handleAmountChange}
                   placeholder="Enter Withdrawal Amount"
-                  className="flex-1 bg-transparent text-white text-2xl placeholder:text-gray-600 font-medium outline-none py-2"
+                  className="flex-1 min-w-0 bg-transparent text-white text-xl placeholder:text-gray-600 font-medium outline-none py-2"
                 />
-                <button className="ml-4 bg-white text-black rounded-lg px-3 py-1 flex items-center">
+                <button className="bg-white text-black rounded-lg px-2 py-1 w-fit sm:px-3 sm:w-28 text-md sm:text-sm flex items-center justify-center">
                   <Image
                     src="/token-branded_starknet.svg"
                     alt="strk logo"
-                    width={20}
-                    height={20}
+                    width={18}
+                    height={18}
                     className="mr-1"
                   />
                   <span className="font-medium">STRK</span>
-                  <ChevronDown size={20} className="ml-1" />
+                  <ChevronDown size={18} className="ml-1" />
                 </button>
               </div>
 
-              <div className="flex justify-between items-center mt-4">
-                <div className="text-gray-500">
+              <div className="flex justify-between items-center mt-3 sm:mt-4">
+                <div className="text-gray-500 text-sm sm:text-base">
                   {amount && parseFloat(amount) > 0
                     ? `Approx. $${usdEquivalent.toFixed(2)}`
                     : ""}
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <div className="invisible">Placeholder</div>
-                  <div className="text-gray-500">
+                  <div className="text-gray-500 text-sm sm:text-base">
                     Escrow Balance: {withdrawableBalance.toLocaleString()}
                   </div>
                 </div>
               </div>
-
-              <div className="absolute right-10 top-60 transform -translate-y-1/2"></div>
             </div>
           </div>
 
-          <div className="px-6 pb-6">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6">
             <button
               onClick={handleNextStep}
               disabled={
@@ -144,7 +148,7 @@ export default function WithdrawModal({
                 parseFloat(amount) > withdrawableBalance
                   ? "bg-gray-800 cursor-not-allowed"
                   : "bg-[#0000FF] hover:bg-[#1100ff] "
-              } text-white font-medium py-4 rounded-lg transition-colors text-xl`}
+              } text-white font-medium py-3 sm:py-4 rounded-lg transition-colors text-lg sm:text-xl`}
             >
               Withdraw
             </button>
@@ -153,74 +157,80 @@ export default function WithdrawModal({
       )}
 
       {step === 2 && (
-        <div className="relative bg-[#1b1618] border border-[#464043] rounded-2xl w-[90%] max-w-xl z-10">
-          <div className="text-center pt-10 pb-6">
-            <h2 className="text-4xl font-bold text-white">Withdraw</h2>
+        <div className="relative bg-[#1b1618] border border-[#464043] rounded-2xl w-[95%] max-w-xl z-10 max-h-[90vh] overflow-y-auto">
+          <div className="text-center pt-6 sm:pt-10 pb-4 sm:pb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">
+              Withdraw
+            </h2>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {/* Recipient Section */}
-            <div className="mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-6">
-              <h3 className="text-white text-xl mb-4">Recepient</h3>
+            <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
+                Recepient
+              </h3>
               <div className="flex items-center">
-                <User size={20} className="text-white mr-2" />
+                <User size={18} className="text-white mr-2" />
                 <div>
-                  <div className="flex items-center">
-                    <span className="text-white text-lg font-medium">
+                  <div className="flex flex-col sm:flex-row sm:items-center">
+                    <span className="text-white text-base sm:text-lg font-medium">
                       0x0596....0f3
                     </span>
-                    <span className="text-gray-500 ml-2 text-sm">
+                    <span className="text-gray-500 sm:ml-2 text-xs sm:text-sm mt-1 sm:mt-0">
                       Account Address
                     </span>
                   </div>
                   <div className="flex items-center text-green-500 mt-1">
-                    <CheckCircle2 size={20} className="mr-2" />
-                    <span>Valid Address</span>
+                    <CheckCircle2 size={16} className="mr-2" />
+                    <span className="text-sm">Valid Address</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Amount Section */}
-            <div className="mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-6">
-              <h3 className="text-white text-xl mb-4">Amount</h3>
-              <div className="flex justify-between items-center mb-4">
-                <div className="text-white text-4xl font-bold">
+            <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
+                Amount
+              </h3>
+              <div className="flex justify-between items-center mb-3 sm:mb-4">
+                <div className="text-white text-2xl sm:text-4xl font-bold">
                   {parseFloat(amount).toLocaleString()}
                 </div>
-                <button className="bg-white text-black rounded-lg px-3 py-1 flex items-center">
+                <button className="bg-white text-black rounded-lg px-2 py-1 sm:px-3 sm:py-1 flex items-center text-sm sm:text-base">
                   <Image
                     src="/token-branded_starknet.svg"
                     alt="strk logo"
-                    width={20}
-                    height={20}
+                    width={16}
+                    height={16}
                   />
                   <span className="font-medium">STRK</span>
-                  <ChevronDown size={20} className="ml-1" />
+                  <ChevronDown size={16} className="ml-1" />
                 </button>
               </div>
 
-              <hr className="border-gray-800 mb-4" />
+              <hr className="border-gray-800 mb-3 sm:mb-4" />
 
-              <div className="flex justify-between items-center">
-                <div className="text-gray-500">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                <div className="text-gray-500 text-sm sm:text-base mb-1 sm:mb-0">
                   Approx. ${usdEquivalent.toFixed(2)}
                 </div>
-                <div className="text-gray-500">
+                <div className="text-gray-500 text-sm sm:text-base">
                   Escrow Balance: {withdrawableBalance.toLocaleString()}
                 </div>
               </div>
 
-              <div className="text-gray-500 mt-2">
+              <div className="text-gray-500 text-sm sm:text-base mt-2">
                 Gas Fee: 0.001 STRK ($0.001)
               </div>
             </div>
           </div>
 
-          <div className="px-6 pb-6">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6">
             <button
               onClick={handleSubmit}
-              className="w-full bg-[#0000FF] hover:bg-[#1100ff] text-white font-medium py-4 rounded-lg transition-colors text-xl"
+              className="w-full bg-[#0000FF] hover:bg-[#1100ff] text-white font-medium py-3 sm:py-4 rounded-lg transition-colors text-lg sm:text-xl"
             >
               Withdraw
             </button>

@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChevronDown,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import FundModal from "@/app/dashboard/components/payoutComponents/FundModal";
 import SuccessModal from "@/app/dashboard/components/payoutComponents/SuccessModal";
 import WithdrawSuccessModal from "../../components/payoutComponents/WithdrawSuccessModal";
@@ -46,11 +44,11 @@ export default function PayoutPage() {
 
   return (
     <div className="relative min-h-screen bg-[#211a1d] text-white">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-4 mb-4">
+      <div className="container mx-auto px-4 py-8 w-full">
+        <div className="flex overflow-x-auto pb-2 gap-4 mb-4 scrollbar-hide">
           <button
             onClick={() => setIsEscrowModalOpen(true)}
-            className="flex items-center gap-3 border border-[#464043] text-white font-medium py-3 px-4 rounded-lg transition-colors"
+            className="flex items-center gap-3 border border-[#464043] text-white font-medium py-3 px-4 rounded-lg transition-colors min-w-max"
           >
             <Image
               src="/Frame 1171276651.svg"
@@ -69,7 +67,7 @@ export default function PayoutPage() {
 
           <button
             onClick={() => setIsWithdrawModalOpen(true)}
-            className="flex items-center gap-3 border border-[#464043] text-white font-medium py-3 px-4 rounded-lg transition-colors"
+            className="flex items-center gap-3 border border-[#464043] text-white font-medium py-3 px-4 rounded-lg transition-colors min-w-max"
           >
             <Image
               src="/Frame 1171276651 (1).svg"
@@ -79,16 +77,18 @@ export default function PayoutPage() {
             />
 
             <div className="flex flex-col text-left ml-1">
-              <span className="text-s font-medium">Withdraw Available Funds</span>{" "}
+              <span className="text-s font-medium">
+                Withdraw Available Funds
+              </span>{" "}
               <span className="text-xs text-gray-300 mt-1">
-              Transfer available funds to your wallet
+                Transfer available funds to your wallet
               </span>{" "}
             </div>
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043] ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/uil_money-withdrawal.svg"
@@ -114,7 +114,7 @@ export default function PayoutPage() {
             <p className="text-gray-300 mt-2">Locked Bounties</p>
           </div>
 
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043] ">
+          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/solar_wallet-bold.svg"
@@ -129,7 +129,7 @@ export default function PayoutPage() {
             </p>
           </div>
 
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043] ">
+          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/healthicons_money-bag.svg"
@@ -143,16 +143,18 @@ export default function PayoutPage() {
           </div>
         </div>
 
-        <div className="bg-[#161113] border border-[#464043]  rounded-lg p-6 mb-8">
-          <div className="flex justify-between items-center mb-6">
+        <div className="bg-[#161113] border border-[#464043] rounded-lg p-6 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-xl font-bold">Transaction History</h2>
-            <div className="flex items-center px-8 py-2 rounded-lg border border-[#464043] ">
+            <div className="flex items-center px-8 py-2 rounded-lg border border-[#464043] w-auto">
               <span>All</span>
               <ChevronDown size={22} className="ml-1" />
             </div>
           </div>
 
-          <TransactionTable />
+          <div className="overflow-x-auto">
+            <TransactionTable />
+          </div>
         </div>
       </div>
 
