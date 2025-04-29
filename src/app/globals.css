@@ -12,7 +12,21 @@
   }
 }
 
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none; 
+}
 
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+
+}
 
 @layer base {
   :root {
@@ -79,4 +93,33 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+/* textEditor.css */
+
+.quill {
+  background-color: #161113;
+  border-radius: 0.5rem;
+}
+ 
+.quill .ql-toolbar {
+  border: none !important; 
+}
+
+.quill .ql-container {
+  border: none !important; 
+}
+
+.quill .ql-editor {
+  min-height: 120px;
+  color: #B5B3B4;
+}
+
+.quill .ql-editor.ql-blank::before {
+  color: #6B6668; 
+  font-size: 14px; 
+}
+
+.ql-toolbar .ql-picker,
+.ql-toolbar button {
+  font-size: 20px;
 }
