@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import StarknetProvider from "@/providers/starknet-provider";
-import { WalletProvider } from "@/providers/wallet-connect-context";
+import ClientProviders from "@/providers/client-providers";
 
 export const metadata: Metadata = {
   title: "FortiChain",
@@ -32,9 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#0F0A0AFA]">
-        <StarknetProvider>
-          <WalletProvider>{children}</WalletProvider>
-        </StarknetProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );
