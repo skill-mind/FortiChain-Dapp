@@ -1,7 +1,7 @@
-import React from "react";
+"use client"
 
-const Reports = () => {
-  return <div>Reports content goes here</div>;
-};
+import ReportsPage from "./components/reports-page"
 
-export default Reports;
+export default function Page() {
+  return <ReportsPage />
+}
