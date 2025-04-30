@@ -1,19 +1,13 @@
-"use client";
 
-import { useSearchParams } from 'next/navigation';
-import ProfilePage from '../../components/profile-page';
+// app/dashboard/validator/profile/page.tsx
+import { Suspense } from "react";
+import ProfileClient from "./profile-client";
 
-export default function Profile() {
-  const searchParams = useSearchParams();
-  const statusParam = searchParams.get('status') as string | null;
-
-  const allowedStatuses = ["pending", "verified", "rejected", "na"] as const;
-  type ProfileStatus = typeof allowedStatuses[number];
-
-  // Validate status, default to "pending" if invalid
-  const profileStatus: ProfileStatus = allowedStatuses.includes(statusParam as ProfileStatus)
-    ? (statusParam as ProfileStatus)
-    : "pending";
-
-  return <ProfilePage status={profileStatus} />;
+export default function ProfilePageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProfileClient />
+    </Suspense>
+  );
 }
+
