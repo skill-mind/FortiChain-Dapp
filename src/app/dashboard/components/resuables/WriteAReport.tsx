@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
 
-
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const modules = {
@@ -88,7 +87,10 @@ export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
   // Click outside to close dropdown
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setShowOptions(false);
       }
     }
@@ -97,7 +99,7 @@ export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   if (!isOpen) {
     return null;
   }
@@ -120,7 +122,8 @@ export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
               Write a Report
             </motion.h1>
 
-            <button type="button"
+            <button
+              type="button"
               className="absolute top-5 right-5 text-white"
               onClick={onClose}
             >

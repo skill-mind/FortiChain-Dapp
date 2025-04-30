@@ -1,7 +1,7 @@
-import React from "react";
+"use client";
 
-const Report = () => {
-  return <div>Report content goes here</div>;
-};
+import ReportsPage from "@/app/dashboard/validator/reports/components/reports-page";
 
-export default Report;
+export default function Page() {
+  return <ReportsPage />;
+}
