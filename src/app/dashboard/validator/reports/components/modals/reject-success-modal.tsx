@@ -22,7 +22,7 @@ export function RejectSuccesModal({
             Report Rejected
           </DialogTitle>
           <p className="text-center border-b pb-2 border-zinc-800 w-full text-zinc-300 mb-6">
-            This report has been successfully rejected this report
+            This report has been successfully rejected these report
           </p>
 
           <div className="bg-green-500 rounded-md mt-8 p-4 mb-8">
