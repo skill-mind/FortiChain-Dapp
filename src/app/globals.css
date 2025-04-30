@@ -11,7 +11,50 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: rgba(70, 64, 67, 0.2);
+  border-radius: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(70, 64, 67, 0.6);
+  border-radius: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(70, 64, 67, 0.8);
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(20px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+/* Animation classes */
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-in-out forwards;
+}
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -19,7 +62,6 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none; 
 }
-
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom,
