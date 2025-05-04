@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   Bell,
@@ -38,6 +38,8 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import ReviewSubmissionPage from "./review-submission";
 import { BitbucketIcon, DocumentIcon, ImageIcon } from "@/components/svg/icons";
+import { useAuth0 } from "@auth0/auth0-react";
+import { auth0Config } from "@/lib/auth0Config";
 
 const availableTags = [
   { value: "defi", label: "DeFi" },
@@ -74,6 +76,13 @@ export function RegisterProject() {
   const [searchTag, setSearchTag] = useState("");
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
+  // Auth0 connection states
+  const [connectedProvider, setConnectedProvider] = useState<string | null>(null);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  
+  // Get Auth0 functions and state
+  const { loginWithPopup, logout, isAuthenticated, user } = useAuth0();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
@@ -94,7 +103,15 @@ export function RegisterProject() {
     autoTopUp: true,
   });
 
-  // Filter tags based on search
+  // Update connectedProvider when Auth0 authentication state changes
+  useEffect(() => {
+    if (isAuthenticated && connectedProvider) {
+      // Keep existing connected provider
+    } else if (!isAuthenticated) {
+      setConnectedProvider(null);
+    }
+  }, [isAuthenticated, connectedProvider]);
+
   const filteredTags = availableTags.filter((tag) =>
     tag.label.toLowerCase().includes(searchTag.toLowerCase())
   );
@@ -132,6 +149,82 @@ export function RegisterProject() {
     reader.readAsDataURL(file);
   };
 
+  // Function to handle connecting with Git providers through Auth0
+  const handleConnect = async (providerName: 'github' | 'gitlab' | 'bitbucket') => {
+    setConnectionError(null);
+    console.log(`Attempting to connect with ${providerName}`);
+    
+    // If trying to connect to a new provider, disconnect from the current one first
+    if (connectedProvider && connectedProvider !== providerName) {
+      await handleDisconnect();
+    }
+
+    try {
+      console.log("Auth0 config:", {
+        domain: auth0Config.domain,
+        clientId: auth0Config.clientId,
+        redirectUri: auth0Config.redirectUri
+      });
+      
+      // Define the connection scope and parameters based on provider
+      let connectionParams = {};
+      
+      // Provider-specific configuration
+      if (providerName === 'github') {
+        connectionParams = {
+          connection: 'github',
+          scope: 'openid profile email repo'
+        };
+      } else if (providerName === 'gitlab') {
+        connectionParams = {
+          connection: 'gitlab',
+          scope: 'openid profile email',
+          audience: 'https://gitlab.com/'
+        };
+      } else if (providerName === 'bitbucket') {
+        connectionParams = {
+          connection: 'bitbucket',
+          scope: 'openid profile email repository account',
+          audience: 'https://api.bitbucket.org/'
+        };
+      }
+      
+      console.log(`Using connection params:`, connectionParams);
+      
+      // Use Auth0's loginWithPopup with the connection parameter
+      await loginWithPopup({
+        authorizationParams: connectionParams,
+      });
+      
+      // If successful, set the connected provider
+      setConnectedProvider(providerName);
+      setFormData((prev) => ({ ...prev, gitProvider: providerName }));
+      console.log(`Successfully connected with ${providerName}`);
+      console.log("User info:", user);
+      
+    } catch (error) {
+      console.error(`Error connecting with ${providerName}:`, error);
+      // More detailed error logging
+      if (error instanceof Error) {
+        console.error("Error name:", error.name);
+        console.error("Error message:", error.message);
+        console.error("Error stack:", error.stack);
+      }
+      setConnectionError(`Failed to connect with ${providerName}. Please try again. Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
+
+  // Function to disconnect the current provider
+  const handleDisconnect = async () => {
+    if (connectedProvider) {
+      await logout({ logoutParams: { returnTo: window.location.origin } });
+      setConnectedProvider(null);
+      setConnectionError(null);
+      // Reset repository input when disconnecting
+      setFormData(prev => ({ ...prev, repository: "" }));
+    }
+  };
+
   const triggerFileInput = (type: "document" | "logo") => {
     if (type === "document" && fileInputRef.current) {
       fileInputRef.current.click();
@@ -149,6 +242,10 @@ export function RegisterProject() {
     }
 
     if (currentStep === 2) {
+      if (!connectedProvider) {
+        setConnectionError("Please connect a Git provider before continuing.");
+        return;
+      }
       setShowSignatureModal(true);
       return;
     }
@@ -158,11 +255,9 @@ export function RegisterProject() {
       return;
     }
 
-    // Final submission
     setSubmitting(true);
     setTimeout(() => {
-      // Simulate random success/failure
-      const success = Math.random() > 0.3; // 70% chance of success
+      const success = Math.random() > 0.3;
 
       if (success) {
         addProject({
@@ -592,73 +687,88 @@ export function RegisterProject() {
                     relevant repository.
                   </p>
 
+                  {connectionError && (
+                    <p className="text-sm text-red-500 mt-2">{connectionError}</p>
+                  )}
+
                   <div className="flex gap-4 mt-4">
                     <Button
                       className={`flex-1 flex items-center justify-center gap-2 ${
-                        formData.gitProvider === "github"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-[#121212] hover:bg-[#1A1A1A]"
-                      } text-white border border-gray-700`}
-                      onClick={() =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          gitProvider: "github",
-                        }))
-                      }
+                        connectedProvider === "github"
+                          ? "bg-green-600 hover:bg-green-700 border-green-500"
+                          : formData.gitProvider === "github"
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-[#121212] hover:bg-[#1A1A1A]"
+                      } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
+                      onClick={() => handleConnect('github')}
                       type="button"
+                      disabled={!isAuthenticated && connectedProvider !== null}
                     >
                       <Github size={18} />
-                      Github
+                      {connectedProvider === 'github' ? 'GitHub Connected' : 'Connect GitHub'}
+                      {connectedProvider === 'github' && <Check size={18} className="ml-1" />}
                     </Button>
                     <Button
                       className={`flex-1 flex items-center justify-center gap-2 ${
-                        formData.gitProvider === "gitlab"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-[#121212] hover:bg-[#1A1A1A]"
-                      } text-white border border-gray-700`}
-                      onClick={() =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          gitProvider: "gitlab",
-                        }))
-                      }
+                        connectedProvider === "gitlab"
+                          ? "bg-green-600 hover:bg-green-700 border-green-500"
+                          : formData.gitProvider === "gitlab"
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-[#121212] hover:bg-[#1A1A1A]"
+                      } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
+                      onClick={() => handleConnect('gitlab')}
                       type="button"
+                      disabled={!isAuthenticated && connectedProvider !== null}
                     >
                       <GitlabIcon size={18} />
-                      Gitlab
+                      {connectedProvider === 'gitlab' ? 'GitLab Connected' : 'Connect GitLab'}
+                      {connectedProvider === 'gitlab' && <Check size={18} className="ml-1" />}
                     </Button>
                     <Button
                       className={`flex-1 flex items-center justify-center gap-2 ${
-                        formData.gitProvider === "bitbucket"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-[#121212] hover:bg-[#1A1A1A]"
-                      } text-white border border-gray-700`}
-                      onClick={() =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          gitProvider: "bitbucket",
-                        }))
-                      }
+                        connectedProvider === "bitbucket"
+                          ? "bg-green-600 hover:bg-green-700 border-green-500"
+                          : formData.gitProvider === "bitbucket"
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-[#121212] hover:bg-[#1A1A1A]"
+                      } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
+                      onClick={() => handleConnect('bitbucket')}
                       type="button"
+                      disabled={!isAuthenticated && connectedProvider !== null}
                     >
                       <BitbucketIcon width={18} height={18} />
-                      Bitbucket
+                      {connectedProvider === 'bitbucket' ? 'Bitbucket Connected' : 'Connect Bitbucket'}
+                      {connectedProvider === 'bitbucket' && <Check size={18} className="ml-1" />}
                     </Button>
                   </div>
 
-                  <div className="mt-6">
-                    <h3 className="text-base text-white mb-2">
-                      Link to Public Repository
-                    </h3>
-                    <Input
-                      name="repository"
-                      value={formData.repository}
-                      onChange={handleInputChange}
-                      placeholder="https://github.com/repository-name"
-                      className="bg-[#121212] border-gray-700 text-white"
-                      required
-                    />
-                  </div>
+                  {connectedProvider && isAuthenticated && (
+                    <>
+                      <div className="mt-4">
+                        <Button
+                          onClick={handleDisconnect}
+                          type="button"
+                          variant="outline"
+                          className="text-gray-400 border-gray-700 hover:text-white hover:bg-gray-800"
+                        >
+                          Disconnect {connectedProvider.charAt(0).toUpperCase() + connectedProvider.slice(1)}
+                        </Button>
+                      </div>
+                      <div className="mt-6">
+                        <h3 className="text-base text-white mb-2">
+                          Link to Public Repository on {connectedProvider.charAt(0).toUpperCase() + connectedProvider.slice(1)}
+                        </h3>
+                        <Input
+                          name="repository"
+                          value={formData.repository}
+                          onChange={handleInputChange}
+                          placeholder={`https://${connectedProvider}.com/your-username/repository-name`}
+                          className="bg-[#121212] border-gray-700 text-white"
+                          required
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -761,26 +871,6 @@ export function RegisterProject() {
                               <h3 className="text-white font-medium">
                                 {format(currentMonth, "MMMM yyyy")}
                               </h3>
-                              {/* <div className="flex gap-1">
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-7 w-7 text-gray-400"
-                                  onClick={handlePrevMonth}
-                                >
-                                  <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-7 w-7 text-gray-400"
-                                  onClick={handleNextMonth}
-                                >
-                                  <ChevronRight className="h-4 w-4" />
-                                </Button>
-                              </div> */}
                             </div>
                            
                             <CalendarComponent
@@ -915,7 +1005,6 @@ export function RegisterProject() {
         )}
       </Card>
 
-      {/* Signature Request Modal */}
       <Dialog open={showSignatureModal} onOpenChange={setShowSignatureModal}>
         <DialogContent className="bg-[#1A1A1A] border-gray-800 p-6 max-w-md">
           {verificationStatus === "idle" && (
