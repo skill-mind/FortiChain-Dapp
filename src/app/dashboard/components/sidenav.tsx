@@ -55,8 +55,8 @@ const navConfig = {
     },
     {
       index: 5,
-      name: "Support",
-      href: "/dashboard/project-owner/support",
+      name: "Help Center",
+      href: "/dashboard/project-owner/help-center",
       icon: helpIcon,
       activeIcon: helpActive,
     },
@@ -122,8 +122,8 @@ const navConfig = {
     },
     {
       index: 5,
-      name: "Support",
-      href: "/dashboard/researcher/support",
+      name: "Help Center",
+      href: "/dashboard/researcher/help-center",
       icon: helpIcon,
       activeIcon: helpActive,
     },
