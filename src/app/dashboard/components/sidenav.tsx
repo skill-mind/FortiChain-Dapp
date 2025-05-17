@@ -12,6 +12,8 @@ import projectsIcon from "../../../../public/navIcons/projects.svg";
 import reportsIcon from "../../../../public/navIcons/reports.svg";
 import payoutsIcon from "../../../../public/navIcons/payouts.svg";
 import helpIcon from "../../../../public/navIcons/help.svg";
+import profileIcon from "../../../../public/navIcons/profile.svg";
+import profileActive from "../../../../public/navIcons/profileActive.svg";
 import homeActive from "../../../../public/navIcons/homeBlue.svg";
 import projectsActive from "../../../../public/navIcons/projectsBlue.svg";
 import reportsActive from "../../../../public/navIcons/reportsBlue.svg";
@@ -20,7 +22,7 @@ import helpActive from "../../../../public/navIcons/helpBlue.svg";
 import validatorIcon from "../../../../public/navIcons/validator.svg";
 import validatorActive from "../../../../public/navIcons/validatorBlue.svg";
 import rewardIcon from "../../../../public/navIcons/rewards.svg";
-import rewardActive from "../../../../public/navIcons/rewardsBlue.svg";
+import rewardActive from "../../../../public/navIcons/rewardActives.svg";
 import { Animation } from "@/motion/Animation";
 
 const navConfig = {
@@ -89,6 +91,13 @@ const navConfig = {
       href: "/dashboard/validator/help-center",
       icon: helpIcon,
       activeIcon: helpActive,
+    },
+    {
+      index: 5,
+      name: "Profile",
+      href: "/dashboard/validator/profile",
+      icon: profileIcon,
+      activeIcon: profileActive,
     },
   ],
   researcher: [
