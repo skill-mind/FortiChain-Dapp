@@ -4,19 +4,21 @@ import { ActionButton } from "../../components/resuables/ActionButton";
 import { StatCard } from "../../components/resuables/StatsCard";
 import { RecentActivity } from "../../components/resuables/RecentActivity";
 import Image from "next/image";
-import infoOne from "../../../../../public/overviewIcons/infoOne.svg";
-import infoTwo from "../../../../../public/overviewIcons/infoTwo.svg";
-import infoThree from "../../../../../public/overviewIcons/infoThree.svg";
-import statsOne from "../../../../../public/overviewIcons/statsOne.svg";
-import statsTwo from "../../../../../public/overviewIcons/statsTwo.svg";
-import statsThree from "../../../../../public/overviewIcons/statsThree.svg";
-import statsFour from "../../../../../public/overviewIcons/statsFour.svg";
+// import infoOne from "@/public/overviewIcons/infoOne.svg";
+// import infoTwo from "@/public/overviewIcons/infoTwo.svg";
+// import infoThree from "@/public/overviewIcons/infoThree.svg";
+// import statsOne from "@/public/overviewIcons/statsOne.svg";
+// import statsTwo from "@/public/overviewIcons/statsTwo.svg";
+// import statsThree from "@/public/overviewIcons/statsThree.svg";
+// import statsFour from "@/public/overviewIcons/statsFour.svg";
 
 const Overview = () => {
   const actionButtons = [
     {
+      // id: 1,
+      // icon: <Image src={infoOne} alt={"icon"} height={20} width={20} />,
       id: 1,
-      icon: <Image src={infoOne} alt={"icon"} height={20} width={20} />,
+      icon: <Image src="/overviewIcons/infoOne.svg" alt="icon" height={20} width={20} />,
       title: "Register Project",
       description: "Submit your smart contract for security review",
       href: "/dashboard/project-owner/support",
@@ -24,7 +26,9 @@ const Overview = () => {
     },
     {
       id: 2,
-      icon: <Image src={infoTwo} alt={"icon"} height={20} width={20} />,
+      // icon: <Image src={infoTwo} alt={"icon"} height={20} width={20} />,
+      icon: <Image src="/overviewIcons/infoTwo.svg" alt="icon" height={20} width={20} />,
+
       title: "Fund Escrow",
       description: "Securely deposit bounty rewards",
       href: "/dashboard/project-owner/support",
@@ -32,7 +36,9 @@ const Overview = () => {
     },
     {
       id: 3,
-      icon: <Image src={infoThree} alt={"icon"} height={20} width={20} />,
+      // icon: <Image src={infoThree} alt={"icon"} height={20} width={20} />,
+         icon: <Image src="/overviewIcons/infThree.svg" alt="icon" height={20} width={20} />,
+
       title: "View Reports",
       description: "Track vulnerability findings in real time",
       href: "/dashboard/project-owner/support",
@@ -43,25 +49,33 @@ const Overview = () => {
   const stats = [
     {
       id: 1,
-      icon: <Image src={statsOne} alt={"icon"} height={30} width={30} />,
+      // icon: <Image src={statsOne} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/overviewIcons/statsOne.svg" alt="icon" height={20} width={20} />,
+
       value: 5,
       label: "Total Number of Projects",
     },
     {
       id: 2,
-      icon: <Image src={statsTwo} alt={"icon"} height={30} width={30} />,
+      // icon: <Image src={statsTwo} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/overviewIcons/statsTwo.svg" alt="icon" height={20} width={20} />,
+
       value: 5,
       label: "Total Vulnerabilities Found",
     },
     {
       id: 3,
-      icon: <Image src={statsThree} alt={"icon"} height={30} width={30} />,
+      // icon: <Image src={statsThree} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/overviewIcons/statsThree.svg" alt="icon" height={20} width={20} />,
+
       value: "$2,523.34",
       label: "Total Bounties Paid",
     },
     {
       id: 4,
-      icon: <Image src={statsFour} alt={"icon"} height={30} width={30} />,
+      // icon: <Image src={statsFour} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/overviewIcons/statsFour.svg" alt="icon" height={20} width={20} />,
+
       value: 5,
       label: "Active Bounties",
     },

@@ -10,39 +10,39 @@ import { StatCard } from "../../components/resuables/StatsCard";
 import { RecentReports } from "../../components/resuables/TableComponents";
 import { Announcements } from "../../components/resuables/AnnoucmentSection";
 import Image from "next/image";
-import statsOne from "../../../../../public/researcherIcon/reStatsOne.svg";
-import statsTwo from "../../../../../public/researcherIcon/reSttatsTwo.svg";
-import statsThree from "../../../../../public/researcherIcon/reStatsThree.svg";
-import statsFour from "../../../../../public/researcherIcon/reStatsFour.svg";
-import statsFive from "../../../../../public/researcherIcon/reStatsFive.svg";
-import hourglass from "../../../../../public/researcherIcon/hourGlass.svg";
-import calendar from "../../../../../public/researcherIcon/calendarImg.svg";
+// import statsOne from "../../../../../public/researcherIcon/reStatsOne.svg";
+// import statsTwo from "../../../../../public/researcherIcon/reSttatsTwo.svg";
+// import statsThree from "../../../../../public/researcherIcon/reStatsThree.svg";
+// import statsFour from "../../../../../public/researcherIcon/reStatsFour.svg";
+// import statsFive from "../../../../../public/researcherIcon/reStatsFive.svg";
+// import hourglass from "../../../../../public/researcherIcon/hourGlass.svg";
+// import calendar from "../../../../../public/researcherIcon/calendarImg.svg";
 
 const Overview = () => {
   // Data for stat cards
   const statCardsData = [
     {
-      icon: <Image src={statsOne} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/researcherIcon/reStatsOne.svg" alt="icon" height={20} width={20} />,
       value: "15",
       label: "Total Reports Submitted",
     },
     {
-      icon: <Image src={statsTwo} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/researcher/reSttatsTwo.svg" alt="icon" height={20} width={20} />,
       value: "15",
       label: "Pending Reviews",
     },
     {
-      icon: <Image src={statsThree} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/researcher/reStatsThree.svg" alt="icon" height={20} width={20} />,
       value: "8",
       label: "Approved Reports",
     },
     {
-      icon: <Image src={statsFour} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/researcher/reStatsFour.svg" alt="icon" height={20} width={20} />,
       value: "1",
       label: "Disputed Reports",
     },
     {
-      icon: <Image src={statsFive} alt={"icon"} height={30} width={30} />,
+            icon: <Image src="/researcher/reStatsFive.svg" alt="icon" height={20} width={20} />,
       value: "$1,525.11",
       label: "Total Earnings",
     },
@@ -92,7 +92,7 @@ const Overview = () => {
       description:
         "The vulnerability report for Project name... that you submitted have been rejected",
       actionLink: "/view-report/1",
-      authorIcon: <Image src={hourglass} alt={"icon"} height={20} width={20} />,
+      authorIcon:<Image src="/researcher/hourGlass.svg" alt="icon" height={20} width={20} />,
       timeAgo: "2 mins ago",
     },
     {
@@ -101,7 +101,7 @@ const Overview = () => {
       description:
         "Project name... has been approved and your bounty has been paid",
       actionLink: "/view-bounty/1",
-      authorIcon: <Image src={calendar} alt={"icon"} height={20} width={20} />,
+      authorIcon: <Image src="/researcher/calenderImg.svg" alt="icon" height={20} width={20} />,
       timeAgo: "1 hour ago",
     },
     {
@@ -110,7 +110,7 @@ const Overview = () => {
       description:
         "A new project have been created, take a look and check out vulnerabilities",
       actionLink: "/view-project/1",
-      authorIcon: <Image src={hourglass} alt={"icon"} height={20} width={20} />,
+      authorIcon: <Image src="/researcher/hourGlass.svg" alt="icon" height={20} width={20} />,
       timeAgo: "30 mins ago",
     },
   ];

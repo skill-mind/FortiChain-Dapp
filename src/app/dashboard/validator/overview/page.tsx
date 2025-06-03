@@ -8,11 +8,11 @@ import {
 } from "../../components/resuables/TableComponents";
 import { RecentActivity } from "../../components/resuables/RecentActivity";
 import Image from "next/image";
-import walletIcon from "../../../../../public/validatorIcons/valAction.svg";
-import imgOne from "../../../../../public/validatorIcons/valImgOne.svg";
-import imgTwo from "../../../../../public/validatorIcons/valImgTwo.svg";
-import imgThree from "../../../../../public/validatorIcons/valImgThree.svg";
-import imgFour from "../../../../../public/validatorIcons/valImgFour.svg";
+// import walletIcon from "../../../../../public/validatorIcons/valAction.svg";
+// import imgOne from "../../../../../public/validatorIcons/valImgOne.svg";
+// import imgTwo from "../../../../../public/validatorIcons/valImgTwo.svg";
+// import imgThree from "../../../../../public/validatorIcons/valImgThree.svg";
+// import imgFour from "../../../../../public/validatorIcons/valImgFour.svg";
 
 const Overview = () => {
   // Sample data for validator ranking
@@ -107,7 +107,8 @@ const Overview = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <ActionButton
           icon={
-            <Image src={walletIcon} alt="Wallet Icon" height={20} width={20} />
+            // <Image src={walletIcon} alt="Wallet Icon" height={20} width={20} />
+            <Image src="/validatorIcons/valAction.svg" alt="icon" height={20} width={20} />
           }
           title="Withdraw Available Funds"
           description="Transfer available funds to your wallet"
@@ -120,22 +121,23 @@ const Overview = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard
-          icon={<Image src={imgOne} alt={"icon"} height={30} width={30} />}
+          icon={<Image src="/validatorIcons/valImgOne.svg" alt="icon" height={20} width={20} />
+}
           value={15}
           label="Pending Reports"
         />
         <StatCard
-          icon={<Image src={imgTwo} alt={"icon"} height={30} width={30} />}
+          icon={<Image src="/validatorIcons/valImgTwo.svg" alt="icon" height={20} width={20} />}
           value={8}
           label="Approved Reports"
         />
         <StatCard
-          icon={<Image src={imgThree} alt={"icon"} height={30} width={30} />}
+          icon={<Image src="/validatorIcons/valImgThree.svg" alt="icon" height={20} width={20} />}
           value={1}
           label="Disputed Reports"
         />
         <StatCard
-          icon={<Image src={imgFour} alt={"icon"} height={30} width={30} />}
+          icon={<Image src="/validatorIcons/valImgFour.svg" alt="icon" height={20} width={20} />}
           value="$1,525.11"
           label="Total Earnings"
         />
