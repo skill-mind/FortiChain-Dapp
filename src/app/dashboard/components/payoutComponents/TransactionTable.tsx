@@ -87,7 +87,7 @@ export default function TransactionTable() {
               key={index} // It's generally better to use a unique ID from transaction if available
               className="border-b border-gray-800 text-white"
               variants={rowVariants} // Apply row-specific variants
-              transition={{ duration: 0.3, ease: "easeOut" }} // Duration for each row's animation
+              transition={{ duration: 0.3, ease: "easeOut", delay: index * 0.1 }} // Duration for each row's animation
             >
               <td className="py-4 px-4">{transaction.date}</td>
               <td className="py-4 px-4">{transaction.id}</td>
