@@ -15,18 +15,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ProjectsContext } from "@/context/project-context";
 import { ProjectsTable } from "./project-table";
+import { motion } from "framer-motion";
 
 export function Dashboard() {
   const { projects, stats, wallet, disconnectWallet } =
     useContext(ProjectsContext);
   return (
-    <div>
-      <Link href="/dashboard/project-owner/projects/register-project" className="block w-fit ml-auto mb-4">
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-          <PlusIcon className="w-4 h-4 mr-2" />
-          Add Project
-        </Button>
-      </Link>
+    <motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Link
+          href="/dashboard/project-owner/projects/register-project"
+          className="block w-fit ml-auto mb-4"
+        >
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <PlusIcon className="w-4 h-4 mr-2" />
+            Add Project
+          </Button>
+        </Link>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
       <div className="flex-1 p-6 bg-[#161113] border border-[#464043] rounded-2xl">
         <div className="flex justify-between items-center mb-6">
           <div className="flex justify-between items-center">
@@ -65,7 +80,8 @@ export function Dashboard() {
 
         <ProjectsTable projects={projects} />
       </div>
-    </div>
+    </motion.div>
+    </motion.div>
   );
 }
 
