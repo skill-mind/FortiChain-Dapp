@@ -12,7 +12,7 @@ export function ProjectDashboard() {
 
   const handleAddProject = () => {
     router.push("/dashboard/project-owner/projects/register-project");
-  };
+  }; 
 
   return (
     <div className="flex min-h-screen bg-[#110d0f]">
