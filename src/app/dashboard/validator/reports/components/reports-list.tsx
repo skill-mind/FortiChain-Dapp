@@ -15,6 +15,7 @@ import {
 import { mockReports } from "../data/mock-data";
 import { getSeverityColor } from "../utils/helpers";
 import type { Report } from "../types";
+import { motion } from "framer-motion";
 
 interface ReportsListProps {
   selectedTab: string;
@@ -33,6 +34,19 @@ export function ReportsList({
   );
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedSeverity, setSelectedSeverity] = useState<string | null>(null);
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const containerVariants = {
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
   return (
     <div className="">
@@ -293,42 +307,54 @@ export function ReportsList({
         </TabsList>
 
         <TabsContent value="pending" className="mt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+        <motion.div 
+        initial="hidden" 
+        animate="visible" 
+        variants={containerVariants} 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {mockReports.pending.map((report, index) => (
-              <Card
-                key={index}
-                className="bg-[#110D0F] border-[#464043] cursor-pointer hover:bg-[#110D0F] transition-colors"
-                onClick={() => onReportClick(report)}
+              <motion.div
+                key={report.id || index}
+                variants={cardVariants}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <div className="p-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-zinc-400">{report.id}</span>
-                    <span className="text-zinc-400">{report.date}</span>
-                  </div>
-                  <h3 className="text-white font-medium mb-4 line-clamp-2">
-                    {report.title}
-                  </h3>
-                  <div className="flex justify-between items-center">
-                    <span className="flex items-center space-x-3">
-                      <span
-                        className={`px-3 py-1 rounded-lg text-xs font-medium ${getSeverityColor(
-                          report.severity
-                        )}`}
-                      >
-                        {report.severity}
+                <Card
+                  className="bg-[#110D0F] border-[#464043] cursor-pointer hover:bg-[#110D0F] transition-colors"
+                  onClick={() => onReportClick(report)}
+                >
+                  <div className="p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-zinc-400">{report.id}</span>
+                      <span className="text-zinc-400">{report.date}</span>
+                    </div>
+                    <h3 className="text-white font-medium mb-4 line-clamp-2">
+                      {report.title}
+                    </h3>
+                    <div className="flex justify-between items-center">
+                      <span className="flex items-center space-x-3">
+                        <span
+                          className={`px-3 py-1 rounded-lg text-xs font-medium ${getSeverityColor(
+                            report.severity
+                          )}`}
+                        >
+                          {report.severity}
+                        </span>
+                        <span className="text-white font-medium">
+                          {report.cvssScore}
+                        </span>
                       </span>
-                      <span className="text-white font-medium">
-                        {report.cvssScore}
-                      </span>
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-zinc-400">{report.researcher}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-zinc-400">
+                          {report.researcher}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+                </Card>
+              </motion.div>
+            ))}{" "}
+          </motion.div>
         </TabsContent>
 
         <TabsContent value="validated" className="mt-0">
