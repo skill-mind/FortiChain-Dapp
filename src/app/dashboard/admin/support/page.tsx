@@ -125,7 +125,10 @@ export default function SupportPage() {
   return (
     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
       <SupportCard />
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
         className={`bg-[#161113] rounded-[40px] p-4 sm:p-5 md:p-8 bg-[#110D0F] rounded-[20px] border border-neutral-800 cursor-pointer overflow-x-auto ${
           modalState ? "blur-sm" : ""
         }`}
@@ -219,7 +222,7 @@ export default function SupportPage() {
             </tbody>{" "}
           </table>
         </div>
-      </div>
+      </motion.div>
       <TipsSection />
 
       {selectedTicket && modalState === "ticket" && (
