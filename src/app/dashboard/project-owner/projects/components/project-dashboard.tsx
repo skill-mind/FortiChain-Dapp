@@ -26,7 +26,7 @@ export function ProjectDashboard() {
       <div className="flex-1 p-8">
         {/* Stats Cards */}
         <motion.div
-          className="grid grid-cols-3 gap-6 mb-8"
+          className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-6 mb-8"
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
           variants={{
