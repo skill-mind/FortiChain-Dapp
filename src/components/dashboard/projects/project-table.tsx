@@ -1,7 +1,23 @@
-import { Search, ChevronDown } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  Calendar,
+  DollarSign,
+  Github,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import {
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface Project {
   id: string;
@@ -227,12 +243,14 @@ export default function ProjectTable() {
 
             {/* Action Button */}
             <div className="pt-2 border-t border-gray-700">
-              <Link
-                href={`/dashboard/admin/projects/${project.id}`}
-                className="text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm"
-              >
-                View Project →
-              </Link>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm">
+                    View Project
+                  </button>
+                </DialogTrigger>
+                <ProjectDialog project={project} />
+              </Dialog>
             </div>
           </motion.div>
         ))}
@@ -289,7 +307,6 @@ export default function ProjectTable() {
               >
                 <td className="py-4 px-4">
                   <div className="flex items-center gap-3">
-                    
                     <Image
                       src={project.imgSrc}
                       alt={project.name}
@@ -327,12 +344,14 @@ export default function ProjectTable() {
                   </span>
                 </td>
                 <td className="py-4 px-4">
-                  <Link
-                    href={`/dashboard/admin/projects/${project.id}`}
-                    className="text-[#0000FF] hover:text-blue-300 transition-colors font-semibold text-sm"
-                  >
-                    View
-                  </Link>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
+                        View
+                      </button>
+                    </DialogTrigger>
+                    <ProjectDialog project={project} />
+                  </Dialog>
                 </td>
               </motion.tr>
             ))}
@@ -340,5 +359,157 @@ export default function ProjectTable() {
         </table>
       </div>
     </div>
+  );
+}
+
+function ProjectDialog({ project }: { project: Project }) {
+  return (
+    <DialogContent className="bg-[#161113] border-gray-700 text-white max-w-2xl">
+      <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+        <div className="flex items-center gap-4">
+          <Image
+            src={project.imgSrc}
+            alt={project.name}
+            width={75}
+            height={75}
+          />
+          <div className="flex flex-col gap-2">
+            <DialogTitle className="text-3xl font-semibold text-white">
+              {project.name}
+            </DialogTitle>
+            <Badge
+              className={`${getStatusBadgeColor(
+                project.status
+              )} text-white w-fit`}
+            >
+              {project.status}
+            </Badge>
+          </div>
+        </div>
+      </DialogHeader>
+
+      <div className="space-y-6">
+        {/* Description */}
+        <p className="text-gray-300 text-base font-[300] leading-relaxed">
+          A decentralized finance (DeFi) protection tool that scans for
+          vulnerabilities in DeFi protocols and helps prevent hacks.
+        </p>
+
+        {/* Category Tags */}
+        <div className="flex flex-wrap gap-2">
+          <Badge
+            variant="secondary"
+            className="bg-white text-black rounded-[5px] font-semibold text-xs hover:bg-gray-100"
+          >
+            DeFi
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="bg-white text-black rounded-[5px] font-semibold text-xs hover:bg-gray-100"
+          >
+            Storage
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="bg-white text-black rounded-[5px] font-semibold text-xs hover:bg-gray-100"
+          >
+            NFTs
+          </Badge>
+        </div>
+
+        {/* Prize Pool and Expiry */}
+        <div className=" flex gap-2">
+          <div className="flex w-fit items-center gap-3 bg-transparent border border-gray-700 rounded-lg p-2">
+            <Image
+              src={"/adminIcon/money-bag.svg"}
+              alt={"icon"}
+              width={20}
+              height={20}
+            />
+            <div className="flex items-center gap-1">
+              <p className="text-xs text-[white]">Prize Pool:</p>
+              <p className=" text-white text-xs">{project.bountyPool}</p>
+            </div>
+          </div>
+          <div className="flex w-fit items-center gap-3 bg-transparent border border-gray-700 rounded-lg p-2">
+            <Image src={"/calendar.svg"} alt={"icon"} width={20} height={20} />
+            <div className="flex items-center gap-1">
+              <p className="text-xs text-[white]">Date of Expiry:</p>
+              <p className=" text-white text-xs">{project.deadline}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* GitHub Links */}
+        <div className="flex gap-2 !mt-5">
+          <div className="flex items-center gap-3 bg-transparent border border-gray-700 rounded-lg p-2">
+            <Github className="w-5 h-5 text-white" />
+            <span className="text-xs text-white">DeFi-Guard-Smartcontract</span>
+          </div>
+          <div className="flex items-center gap-3 bg-transparent border border-gray-700 rounded-lg p-2">
+            <Github className="w-5 h-5 text-white" />
+            <span className="text-xs text-white">DeFi-Guard-Smartcontract</span>
+          </div>
+        </div>
+
+        {/* Languages */}
+        <div>
+          <h3 className="text-xl  font-semibold text-white mb-4">Languages</h3>
+          <div className="flex flex-wrap gap-2 max-w-xs">
+            {[
+              {
+                name: "TypeScript",
+                percentage: 45,
+                src: "/adminIcon/ts.svg",
+              },
+              {
+                name: "Python",
+                percentage: 25,
+                src: "/adminIcon/python.svg",
+              },
+              {
+                name: "Cairo",
+                percentage: 20,
+                src: "/adminIcon/cairo.svg",
+              },
+              {
+                name: "Rust",
+                percentage: 10,
+                src: "/adminIcon/rust.svg",
+              },
+            ].map((language) => (
+              <div
+                key={language.name}
+                className="flex items-center gap-2 bg-transparent rounded-lg p-2"
+              >
+                <Image
+                  src={language.src}
+                  alt={language.name}
+                  width={20}
+                  height={20}
+                />
+                <span className="text-xs text-white">{language.name}</span>
+                <span className="text-xs text-[#6B6668]">
+                  {language.percentage}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <Button className="bg-[#0000FF] font-light hover:bg-blue-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit">
+            View Reports
+          </Button>
+          <Button
+            variant="destructive"
+            className="bg-[#FF3737] font-light hover:bg-red-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit"
+          > 
+            Close Project
+          </Button>
+        </div>
+      </div>
+    </DialogContent>
   );
 }
