@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import React from "react";
+import { CloseProjectDialog } from "@/app/dashboard/components/project/close-project-dialog";
 
 interface Project {
   id: string;
@@ -363,8 +366,29 @@ export default function ProjectTable() {
 }
 
 function ProjectDialog({ project }: { project: Project }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
+
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsLoading(false);
+    setIsClosed(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setIsClosed(false);
+    setIsOpen(false);
+  };
   return (
     <DialogContent className="bg-[#161113] border-gray-700 text-white max-w-2xl">
+      <CloseProjectDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onConfirm={handleConfirm}
+        isLoading={isLoading}
+        isClosed={isClosed}
+      />
       <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div className="flex items-center gap-4">
           <Image
@@ -503,6 +527,7 @@ function ProjectDialog({ project }: { project: Project }) {
             View Reports
           </Button>
           <Button
+            onClick={() => setIsOpen(true)}
             variant="destructive"
             className="bg-[#FF3737] max-w-[161px] font-light hover:bg-red-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit"
           >
