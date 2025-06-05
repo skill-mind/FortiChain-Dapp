@@ -498,14 +498,14 @@ function ProjectDialog({ project }: { project: Project }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-4">
-          <Button className="bg-[#0000FF] font-light hover:bg-blue-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit">
+        <div className="flex gap-3 pt-4">
+          <Button className="bg-[#0000FF] max-w-[161px] font-light hover:bg-blue-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit">
             View Reports
           </Button>
           <Button
             variant="destructive"
-            className="bg-[#FF3737] font-light hover:bg-red-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit"
-          > 
+            className="bg-[#FF3737] max-w-[161px] font-light hover:bg-red-700 text-white flex-1 !px-[30px] !py-[13px] !w-fit"
+          >
             Close Project
           </Button>
         </div>
