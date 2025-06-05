@@ -7,6 +7,7 @@ import SuccessModal from "@/app/dashboard/components/payoutComponents/SuccessMod
 import WithdrawSuccessModal from "../../components/payoutComponents/WithdrawSuccessModal";
 import WithdrawModal from "@/app/dashboard/components/payoutComponents/WithdrawModal";
 import TransactionTable from "@/app/dashboard/components/payoutComponents/TransactionTable";
+import { motion } from "framer-motion";
 
 import Image from "next/image";
 
@@ -42,11 +43,32 @@ export default function PayoutPage() {
     setIsWithdrawSuccessModalOpen(false);
   };
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <div className="relative min-h-screen bg-[#211a1d] text-white">
-      <div className="container mx-auto px-4 py-8 w-full">
+      <motion.div
+        className="container mx-auto px-4 py-8 w-full"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.2,
+            },
+          },
+        }}
+      >
         <div className="flex overflow-x-auto pb-2 gap-4 mb-4 scrollbar-hide">
-          <button
+          <motion.button
+            initial="hidden"
+            animate="visible"
+            variants={cardVariants}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             onClick={() => setIsEscrowModalOpen(true)}
             className="flex items-center gap-3 border border-[#464043] text-white font-medium py-3 px-4 rounded-lg transition-colors min-w-max"
           >
@@ -63,9 +85,13 @@ export default function PayoutPage() {
                 Securely deposit bounty rewards from your wallet.
               </span>{" "}
             </div>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
+            initial="hidden"
+            animate="visible"
+            variants={cardVariants}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             onClick={() => setIsWithdrawModalOpen(true)}
             className="flex items-center gap-3 border border-[#464043] text-white font-medium py-3 px-4 rounded-lg transition-colors min-w-max"
           >
@@ -84,11 +110,29 @@ export default function PayoutPage() {
                 Transfer available funds to your wallet
               </span>{" "}
             </div>
-          </button>
+          </motion.button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.1,
+              },
+            },
+          }}
+        >
+          {/* Card 1: Withdrawable Escrow */}
+          <motion.div
+            className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]"
+            variants={cardVariants}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/uil_money-withdrawal.svg"
@@ -99,9 +143,14 @@ export default function PayoutPage() {
             </div>
             <h2 className="text-2xl font-bold">$243.21</h2>
             <p className="text-gray-300 mt-2">Withdrawable Escrow</p>
-          </div>
+          </motion.div>
 
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
+          {/* Card 2: Locked Bounties */}
+          <motion.div
+            className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]"
+            variants={cardVariants}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/mdi_cash-lock.svg"
@@ -112,9 +161,14 @@ export default function PayoutPage() {
             </div>
             <h2 className="text-2xl font-bold">$5,257.12</h2>
             <p className="text-gray-300 mt-2">Locked Bounties</p>
-          </div>
+          </motion.div>
 
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
+          {/* Card 3: Wallet Balance */}
+          <motion.div
+            className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]"
+            variants={cardVariants}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/solar_wallet-bold.svg"
@@ -127,9 +181,14 @@ export default function PayoutPage() {
             <p className="text-gray-300 mt-2 flex justify-between items-center">
               Wallet Balance <span className="text-xs text-white">STRK</span>
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]">
+          {/* Card 4: Total Bounties Paid */}
+          <motion.div
+            className="bg-[#110d0f] rounded-3xl p-6 border border-[#464043]"
+            variants={cardVariants}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
             <div className="flex items-center justify-center w-10 h-10 mb-2">
               <Image
                 src="/healthicons_money-bag.svg"
@@ -140,10 +199,22 @@ export default function PayoutPage() {
             </div>
             <h2 className="text-2xl font-bold">$2,523.34</h2>
             <p className="text-gray-300 mt-2">Total Bounties Paid</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="bg-[#161113] border border-[#464043] rounded-lg p-6 mb-8">
+        <motion.div
+          className="bg-[#161113] border border-[#464043] rounded-lg p-6 mb-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.2,
+              },
+            },
+          }}
+        >
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-xl font-bold">Transaction History</h2>
             <div className="flex items-center px-8 py-2 rounded-lg border border-[#464043] w-auto">
@@ -155,8 +226,8 @@ export default function PayoutPage() {
           <div className="overflow-x-auto">
             <TransactionTable />
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {isEscrowModalOpen && (
         <FundModal
