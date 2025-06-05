@@ -118,10 +118,10 @@ const Projects = () => {
       </div>
 
       <div className="flex justify-end">
-        <button className="px-6 py-3 bg-[#0000FF] text-white rounded-lg flex items-center gap-2 hover:bg-blue-600 ">
+        {/* <button className="px-6 py-3 bg-[#0000FF] text-white rounded-lg flex items-center gap-2 hover:bg-blue-600 ">
           <span className="text-[1rem]">+</span>
           <h2>Add Project</h2>
-        </button>
+        </button> */}
       </div>
 
       {/* Projects Section */}

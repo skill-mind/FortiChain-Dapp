@@ -39,7 +39,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
 
   return (
     <div>
-      <div className="bg-[#161113] rounded-md  overflow-hidden">
+      <div className="bg-[#161113] rounded-md overflow-x-scroll">
         {/* Ensure Table and its sub-components are imported correctly */}
         <Table className="bg-[#161113]">
           <TableHeader className="bg-[#211A1D]">
