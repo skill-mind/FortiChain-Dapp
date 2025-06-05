@@ -9,6 +9,7 @@ import SuspendUserModal from "./components/SuspendUserModal";
 import SuspensionSuccessModal from "./components/SuspensionSuccessModal";
 import PendingValidatorProfileModal from "./components/viewValidatorProfileModal";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface Validator {
   id: string;
@@ -253,9 +254,14 @@ const ValidatorsDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+<div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="bg-[#110D0F] border border-[#464043] rounded-lg p-6">
+          <motion.div 
+            className="bg-[#110D0F] border border-[#464043] rounded-lg p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+          >
             <div className="flex items-center mb-2">
               <div className="">
                 <Image
@@ -268,8 +274,13 @@ const ValidatorsDashboard: React.FC = () => {
             </div>
             <h1 className="text-4xl font-bold text-white">{totalValidators}</h1>
             <p className="text-neutral-400 mt-1">Total Number of Validators</p>
-          </div>
-          <div className="bg-[#110D0F] border border-[#464043] rounded-lg p-6">
+          </motion.div>
+          <motion.div 
+            className="bg-[#110D0F] border border-[#464043] rounded-lg p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+          >
             <div className="flex items-center mb-2">
               <div className="">
                 <Image
@@ -286,10 +297,15 @@ const ValidatorsDashboard: React.FC = () => {
             <p className="text-neutral-400 mt-1">
               Validators Pending KYC Review
             </p>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="bg-[#161113] border border-[#464043] rounded-lg overflow-hidden">
+        <motion.div 
+          className="bg-[#161113] border border-[#464043] rounded-lg overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+        >
           <div className="p-6 flex justify-between items-center">
             <h2 className="text-xl font-semibold text-white">Validators</h2>
             <div className="flex gap-2">
@@ -315,10 +331,17 @@ const ValidatorsDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {validators.map((validator) => (
-                  <tr
+                {validators.map((validator, index) => (
+                  <motion.tr
                     key={validator.id}
                     className="border-t border-[#464043] text-[14px] text-white"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.1 + 0.4,
+                      ease: "easeOut"
+                    }}
                   >
                     <td className="px-6 py-4">{validator.name}</td>
                     <td className="px-6 py-4">{validator.walletAddress}</td>
@@ -349,14 +372,13 @@ const ValidatorsDashboard: React.FC = () => {
                         View Profile
                       </button>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       </div>
-
       {selectedValidator && selectedValidator.status !== "Pending" && (
         <ValidatorProfileModal
           isOpen={isProfileModalOpen}
