@@ -34,6 +34,19 @@ const stats = [
     value: "5",
     label: "Active bounties",
   },
+  {
+    id: 3,
+    icon: (
+      <Image
+        src={"/adminIcon/money-bag.svg"}
+        alt={"icon"}
+        height={30}
+        width={30}
+      />
+    ),
+    value: "$8,232,523.34",
+    label: "Total Bounty Paid",
+  },
 ];
 
 const Projects = () => {
@@ -71,6 +84,15 @@ const Projects = () => {
       bountyPaid: "N/A",
       status: "Ongoing" as const,
     },
+    ,
+    {
+      id: "4",
+      name: "SkillNet",
+      category: "DeFi",
+      bountyAllocated: "5,200.11",
+      bountyPaid: "N/A",
+      status: "Ongoing" as const,
+    },
   ];
 
   return (
@@ -79,49 +101,51 @@ const Projects = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         {stats.map((stat) => (
-        <div key={stat.id} className="[&>div]:flex [&>div]:flex-col [&>div]:items-stretch [&>div]:h-full">
-        <StatCard
-          key={stat.id}
-          icon={stat.icon}
-          value={stat.value}
-          label={stat.label}
-        />
+          <div
+            key={stat.id}
+            className="[&>div]:flex [&>div]:flex-col [&>div]:items-stretch [&>div]:h-full"
+          >
+            <StatCard
+              key={stat.id}
+              icon={stat.icon}
+              value={stat.value}
+              label={stat.label}
+            />
           </div>
         ))}
-        <div className="bg-white rounded-lg p-4 flex flex-col justify-between h-full">
+        {/* <div className="bg-white rounded-lg p-4 flex flex-col justify-between h-full">
           <div className="flex items-start gap-2">
-        <div className="p-1 rounded-full">
-          <Image
-            src={"/adminIcon/tip.svg"}
-            alt={"icon"}
-            height={30}
-            width={30}
-          />
-        </div>
-        <div>
-          <h3 className="font-semibold text-black mb-1">Tip</h3>
-          <p className="text-sm text-gray-600">
-            All funds in escrow are refundable if no valid reports are
-            submitted before the deadline.
-          </p>
-        </div>
+            <div className="p-1 rounded-full">
+              <Image
+                src={"/adminIcon/tip.svg"}
+                alt={"icon"}
+                height={30}
+                width={30}
+              />
+            </div>
+            <div>
+              <h3 className="font-semibold text-black mb-1">Tip</h3>
+              <p className="text-sm text-gray-600">
+                All funds in escrow are refundable if no valid reports are
+                submitted before the deadline.
+              </p>
+            </div>
           </div>
           <div className="flex justify-end mt-4">
-        <div className="flex gap-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-900"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-        </div>
+            <div className="flex gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-900"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+            </div>
           </div>
-        </div>
-    
+        </div> */}
       </div>
 
       <div className="flex justify-end">
-        <button className="px-6 py-3 bg-[#0000FF] text-white rounded-lg flex items-center gap-2 hover:bg-blue-600 ">
+        {/* <button className="px-6 py-3 bg-[#0000FF] text-white rounded-lg flex items-center gap-2 hover:bg-blue-600 ">
           <span className="text-[1rem]">+</span>
           <h2>Add Project</h2>
-        </button>
+        </button> */}
       </div>
 
       {/* Projects Section */}

@@ -1,27 +1,46 @@
 "use client";
 
-import { Bell, ChevronDown, Plus, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Dashboard } from "./dashboard";
+import { motion } from "framer-motion";
 
 export function ProjectDashboard() {
   const router = useRouter();
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleAddProject = () => {
     router.push("/dashboard/project-owner/projects/register-project");
   };
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 }, 
+    visible: { opacity: 1, y: 0 },
+  };
   return (
     <div className="flex min-h-screen bg-[#110d0f]">
-
       {/* Main Content */}
       <div className="flex-1 p-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="bg-[#1c1618] rounded-lg p-6">
+        <motion.div
+          className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-6 mb-8"
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.2 }, // Stagger the animation of children
+            },
+          }}
+        >
+          <motion.div
+            className="bg-[#1c1618] rounded-lg p-6"
+            variants={cardVariants}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
             <div className="flex items-center gap-2 mb-4">
               <div className="bg-[#211a1d] p-2 rounded-md">
                 <svg
@@ -42,8 +61,13 @@ export function ProjectDashboard() {
             </div>
             <h2 className="text-white text-4xl font-bold mb-2">5</h2>
             <p className="text-gray-400">Total Number of Projects</p>
-          </div>
-          <div className="bg-[#1c1618] rounded-lg p-6">
+          </motion.div>
+
+          <motion.div
+            className="bg-[#1c1618] rounded-lg p-6"
+            variants={cardVariants}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
             <div className="flex items-center gap-2 mb-4">
               <div className="bg-[#211a1d] p-2 rounded-md">
                 <svg
@@ -65,8 +89,13 @@ export function ProjectDashboard() {
             </div>
             <h2 className="text-white text-4xl font-bold mb-2">5</h2>
             <p className="text-gray-400">Active Bounties</p>
-          </div>
-          <div className="bg-white rounded-lg p-6">
+          </motion.div>
+
+          <motion.div
+            className="bg-white rounded-lg p-6"
+            variants={cardVariants}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
             <div className="flex items-center gap-2 mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,9 +124,9 @@ export function ProjectDashboard() {
               <div className="w-2 h-2 rounded-full bg-gray-300"></div>
               <div className="w-2 h-2 rounded-full bg-gray-300"></div>
             </div>
-          </div>
-        </div>
-<Dashboard/>
+          </motion.div>
+        </motion.div>{" "}
+        <Dashboard />
         {/* <div className="flex justify-end mb-6">
           <Button
             className="bg-[#0000ff] hover:bg-[#2b2bff] text-white rounded-lg"
@@ -107,7 +136,6 @@ export function ProjectDashboard() {
             Add Project
           </Button>
         </div> */}
-
         {/* Projects Table */}
         {/* <div className="bg-[#1c1618] rounded-lg overflow-hidden">
           <div className="p-6 flex justify-between items-center">
@@ -225,7 +253,6 @@ export function ProjectDashboard() {
             </div>
           </div>
         </div> */}
-
       </div>
     </div>
   );
