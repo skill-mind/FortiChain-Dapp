@@ -1,9 +1,7 @@
-import React from "react";
-import Overview from "./overview/page";
-
+import { redirect } from "next/navigation";
 
 const page = () => {
-  return <div className="text-white"><Overview/></div>;
+  redirect("/dashboard/researcher/overview");
 };
 
 export default page;

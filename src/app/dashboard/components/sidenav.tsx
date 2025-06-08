@@ -182,6 +182,45 @@ export const Sidebar = () => {
   const basePath = pathname.split("/")[2] as keyof typeof navConfig;
   const navItems = navConfig[basePath] || [];
 
+  // Check if we're on validator dashboard for different styling
+  const isValidatorDashboard = basePath === "validator";
+
+  // Function to determine if a nav item is active
+  const isNavItemActive = (href: string, name: string) => {
+    // Exact match
+    if (pathname === href) return true;
+
+    // If we're on the base dashboard path and this is the Overview item, make it active
+    if (name === "Overview" && pathname === `/dashboard/${basePath}`) {
+      return true;
+    }
+
+    // Special handling for Projects nav item
+    if (name === "Projects") {
+      // Check if we're on any projects-related route
+      const projectsBasePath = `/dashboard/${basePath}/projects`;
+      if (pathname.startsWith(projectsBasePath)) {
+        return true;
+      }
+    }
+
+    // Special handling for Reports nav item
+    if (name === "Reports") {
+      // Check if we're on any reports-related route
+      const reportsBasePath = `/dashboard/${basePath}/reports`;
+      if (pathname.startsWith(reportsBasePath)) {
+        return true;
+      }
+    }
+
+    // Special handling for other nav items that might have sub-routes
+    if (pathname.startsWith(href + "/")) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <>
       {/* Top Navbar for Mobile */}
@@ -202,49 +241,144 @@ export const Sidebar = () => {
         } md:flex w-[272px] h-[95vh] bg-[#110D0F] m-3 rounded-[20px] py-6 flex-col border-r border-none z-50 absolute md:static top-[65px] left-0 md:top-0 md:left-0`}
       >
         <Animation delay={0.2} animationType="slide-up">
-          <div className="hidden md:flex w-full items-center justify-center cursor-pointer mb-[40px] rounded-lg">
+          <Link
+            href={"/"}
+            className="hidden md:flex w-full items-center justify-center cursor-pointer mb-[40px] rounded-lg"
+          >
             <Image width={158} height={35} src={Logo} alt="Brand Logo" />
-          </div>
+          </Link>
         </Animation>
 
-        <nav className="space-y-2 flex-1">
-          {navItems.map(
-            ({ name, href, icon: Icon, activeIcon, index: index }) => {
-              const isActive = pathname === href;
-              return (
-                <Animation
-                  delay={0.2 * index}
-                  animationType="slide-up"
-                  key={href}
-                >
-                  <Link
-                    href={href}
-                    onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${
-                      isActive
-                        ? "border-l-4 border-[#0000FF] rounded-none text-white font-extrabold"
-                        : "text-zinc-400 hover:text-white"
-                    }`}
+        {/* CONDITIONAL RENDERING - ONLY VALIDATOR GETS SPECIAL LAYOUT */}
+        {isValidatorDashboard ? (
+          /* VALIDATOR DASHBOARD - Special Layout with Spacer */
+          <nav className="flex-1 flex flex-col">
+            {/* Top 3 items for validator */}
+            <div className="space-y-2">
+              {navItems
+                .slice(0, 3)
+                .map(({ name, href, icon: Icon, activeIcon, index: index }) => {
+                  const isActive = isNavItemActive(href, name);
+
+                  return (
+                    <Animation
+                      delay={0.2 * index}
+                      animationType="slide-up"
+                      key={href}
+                    >
+                      <Link
+                        href={href}
+                        onClick={() => setIsOpen(false)}
+                        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${
+                          isActive
+                            ? "border-l-4 border-[#0000FF] rounded-none text-white bg-[#1a1a1a]"
+                            : "text-zinc-400 hover:text-white hover:bg-[#1a1a1a]"
+                        }`}
+                      >
+                        <Image
+                          src={isActive ? activeIcon : Icon}
+                          alt={name}
+                          width={24}
+                          height={24}
+                        />
+                        <span
+                          className={`text-[18px] ${
+                            isActive ? "font-semibold" : "font-normal"
+                          }`}
+                        >
+                          {name}
+                        </span>
+                      </Link>
+                    </Animation>
+                  );
+                })}
+            </div>
+
+            {/* Spacer - ONLY FOR VALIDATOR */}
+            <div className="flex-1"></div>
+
+            {/* Bottom 2 items for validator */}
+            <div className="space-y-2">
+              {navItems
+                .slice(3)
+                .map(({ name, href, icon: Icon, activeIcon, index: index }) => {
+                  const isActive = isNavItemActive(href, name);
+
+                  return (
+                    <Animation
+                      delay={0.2 * (index + 3)}
+                      animationType="slide-up"
+                      key={href}
+                    >
+                      <Link
+                        href={href}
+                        onClick={() => setIsOpen(false)}
+                        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${
+                          isActive
+                            ? "border-l-4 border-[#0000FF] rounded-none text-white bg-[#1a1a1a]"
+                            : "text-zinc-400 hover:text-white hover:bg-[#1a1a1a]"
+                        }`}
+                      >
+                        <Image
+                          src={isActive ? activeIcon : Icon}
+                          alt={name}
+                          width={24}
+                          height={24}
+                        />
+                        <span
+                          className={`text-[18px] ${
+                            isActive ? "font-semibold" : "font-normal"
+                          }`}
+                        >
+                          {name}
+                        </span>
+                      </Link>
+                    </Animation>
+                  );
+                })}
+            </div>
+          </nav>
+        ) : (
+          /* ALL OTHER DASHBOARDS - Original Layout (NO SPACER) */
+          <nav className="space-y-2 flex-1">
+            {navItems.map(
+              ({ name, href, icon: Icon, activeIcon, index: index }) => {
+                const isActive = isNavItemActive(href, name);
+                return (
+                  <Animation
+                    delay={0.2 * index}
+                    animationType="slide-up"
+                    key={href}
                   >
-                    <Image
-                      src={isActive ? activeIcon : Icon}
-                      alt={name}
-                      width={20}
-                      height={20}
-                    />
-                    <span
-                      className={`text-[18px] ${
-                        isActive ? "font-[600]" : "font-thin"
+                    <Link
+                      href={href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${
+                        isActive
+                          ? "border-l-4 border-[#0000FF] rounded-none text-white font-extrabold"
+                          : "text-zinc-400 hover:text-white"
                       }`}
                     >
-                      {name}
-                    </span>
-                  </Link>
-                </Animation>
-              );
-            }
-          )}
-        </nav>
+                      <Image
+                        src={isActive ? activeIcon : Icon}
+                        alt={name}
+                        width={20}
+                        height={20}
+                      />
+                      <span
+                        className={`text-[18px] ${
+                          isActive ? "font-[600]" : "font-thin"
+                        }`}
+                      >
+                        {name}
+                      </span>
+                    </Link>
+                  </Animation>
+                );
+              }
+            )}
+          </nav>
+        )}
       </aside>
     </>
   );

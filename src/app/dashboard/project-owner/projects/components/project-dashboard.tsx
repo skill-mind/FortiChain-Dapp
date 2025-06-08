@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Dashboard } from "./dashboard";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import project1 from "../../../../../../public/project1.svg";
+import project2 from "../../../../../../public/project2.svg";
+import project3 from "../../../../../../public/project3.svg";
 
 export function ProjectDashboard() {
   const router = useRouter();
@@ -17,7 +21,7 @@ export function ProjectDashboard() {
   }, []);
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 50 }, 
+    hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0 },
   };
   return (
@@ -43,20 +47,7 @@ export function ProjectDashboard() {
           >
             <div className="flex items-center gap-2 mb-4">
               <div className="bg-[#211a1d] p-2 rounded-md">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-white"
-                >
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                </svg>
+                <Image src={project2} alt="Projects" width={24} height={24} />
               </div>
             </div>
             <h2 className="text-white text-4xl font-bold mb-2">5</h2>
@@ -70,21 +61,7 @@ export function ProjectDashboard() {
           >
             <div className="flex items-center gap-2 mb-4">
               <div className="bg-[#211a1d] p-2 rounded-md">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-white"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <circle cx="12" cy="12" r="4" />
-                </svg>
+                <Image src={project1} alt="Projects" width={24} height={24} />
               </div>
             </div>
             <h2 className="text-white text-4xl font-bold mb-2">5</h2>
@@ -97,22 +74,7 @@ export function ProjectDashboard() {
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-black"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" x2="12" y1="16" y2="12" />
-                <line x1="12" x2="12.01" y1="8" y2="8" />
-              </svg>
+              <Image src={project3} alt="Projects" width={24} height={24} />
               <h3 className="text-black text-xl font-bold">Tip</h3>
             </div>
             <p className="text-black text-sm">

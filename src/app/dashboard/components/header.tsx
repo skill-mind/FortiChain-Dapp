@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Bell, Copy, ChevronUp, ChevronDown } from "lucide-react";
 import { Animation } from "@/motion/Animation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { ConnectButton } from "@/components/connect-button";
 
 const Header = () => {
   const pathname = usePathname();
@@ -15,13 +16,70 @@ const Header = () => {
 
   const walletAddress = "0x04baf3f32432a21D3b2C90E998Aa5EC7817E61b3";
 
-  const title = pathname?.split("/").filter(Boolean).pop() || "Dashboard";
-  const capitalizedTitle = title.charAt(0).toUpperCase() + title.slice(1);
+  // Fixed title logic to handle project detail pages and report pages
+  const getPageTitle = () => {
+    const pathSegments = pathname?.split("/").filter(Boolean) || [];
+
+    // Check if we're on a report detail page
+    if (pathSegments.includes("reports")) {
+      const reportsIndex = pathSegments.indexOf("reports");
+
+      // If there's a segment after "reports" that looks like an ID or specific route
+      if (reportsIndex < pathSegments.length - 1) {
+        const nextSegment = pathSegments[reportsIndex + 1];
+
+        // Check for specific report routes
+        if (nextSegment === "success" || nextSegment === "reject") {
+          return "Report Details";
+        }
+
+        // If it's just a report ID (numeric or alphanumeric), show "Report Details"
+        if (/^[a-zA-Z0-9-_]+$/.test(nextSegment) && nextSegment !== "new") {
+          return "Report Details";
+        }
+      }
+
+      // Default for reports page
+      return "Reports";
+    }
+
+    // Check if we're on a project detail page (ends with a project ID)
+    if (pathSegments.length >= 4 && pathSegments[2] === "projects") {
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      // If the last segment looks like a project ID (numeric or alphanumeric ID)
+      if (
+        /^[a-zA-Z0-9-_]+$/.test(lastSegment) &&
+        pathSegments[pathSegments.length - 2] !== "register-project"
+      ) {
+        return "Project Details";
+      }
+    }
+
+    // For register project page
+    if (pathSegments.includes("register-project")) {
+      return "Register Project";
+    }
+
+    // Default behavior for other pages
+    const title = pathSegments[pathSegments.length - 1] || "dashboard";
+    return title.charAt(0).toUpperCase() + title.slice(1);
+  };
+
+  const capitalizedTitle = getPageTitle().replace("-", " ");
 
   const handleCopy = () => {
     navigator.clipboard.writeText(walletAddress);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const navItemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.3 },
+    },
   };
 
   interface Notification {
@@ -94,7 +152,7 @@ const Header = () => {
     <header className="flex relative flex-row gap-4 justify-between items-start px-0 py-3 w-full md:flex-row md:items-center md:px-0 md:pb-8 md:pt-1">
       <Animation delay={0.2} animationType="slide-up">
         <h1 className="text-white text-[24px] md:text-[40px] font-bold">
-          {capitalizedTitle.replace("-", " ")}
+          {capitalizedTitle}
         </h1>
       </Animation>
       <Animation delay={0.2} animationType="slide-up">
@@ -113,7 +171,7 @@ const Header = () => {
           </button>
 
           {isBellActive && (
-            <div className="fixed inset-0 top-24 z-10 backdrop-blur-sm">
+            <div className="fixed inset-0 top-0 z-[9998] bg-black/80 backdrop-blur-sm">
               <motion.div
                 key="notification-dropdown"
                 variants={dropdownVariants}
@@ -121,7 +179,7 @@ const Header = () => {
                 animate="visible"
                 exit="exit"
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                className="fixed left-0 right-0 mx-auto md:mx-0 md:left-auto  md:right-8 w-[80vw]  md:max-w-[400px] z-10 bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden"
+                className="fixed left-0 right-0 mx-auto md:mx-0 md:left-auto md:right-8 w-[80vw] md:max-w-[400px] z-[9999] bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden mt-24"
               >
                 <div className="p-3">
                   <div className="py-[22px] flex items-center justify-between border-b border-[#464043]">
@@ -210,26 +268,13 @@ const Header = () => {
           )}
 
           {/* Wallet Button */}
-          <div
-            onClick={() => setWalletOpen(!walletOpen)}
-            className="flex items-center gap-2 cursor-pointer border border-[#6B6668] text-white text-[14px] md:text-[16px] md:text-sm px-3 py-2 rounded-lg bg-transparent"
-          >
-            <span
-              onClick={() => setWalletOpen(!walletOpen)}
-              className="truncate max-w-[100px] md:max-w-[140px]"
-            >
-              {walletAddress.slice(0, 14)}...
-            </span>
-            {walletOpen ? (
-              <ChevronUp size={16} className="text-white" />
-            ) : (
-              <ChevronDown size={16} className="text-white" />
-            )}
-          </div>
+          <motion.div variants={navItemVariants} className="hidden md:block">
+            <ConnectButton variant="navbar" />
+          </motion.div>
 
           {/* Wallet Dropdown */}
           {walletOpen && (
-            <div className="absolute right-0 top-[110%] bg-none z-10 shadow-md">
+            <div className="absolute right-0 top-[110%] bg-none z-[9997] shadow-md">
               <button className="px-6 py-3 bg-[#FF3737] hover:bg-red-600 text-white rounded-md text-sm transition-colors">
                 Disconnect Wallet
               </button>

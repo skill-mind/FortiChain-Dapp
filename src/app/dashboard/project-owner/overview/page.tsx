@@ -19,7 +19,7 @@ const Overview = () => {
       icon: <Image src={infoOne} alt={"icon"} height={20} width={20} />,
       title: "Register Project",
       description: "Submit your smart contract for security review",
-      href: "/dashboard/project-owner/support",
+      href: "/dashboard/project-owner/projects",
       iconBgColor: "bg-[#0000FF]",
     },
     {
@@ -27,7 +27,7 @@ const Overview = () => {
       icon: <Image src={infoTwo} alt={"icon"} height={20} width={20} />,
       title: "Fund Escrow",
       description: "Securely deposit bounty rewards",
-      href: "/dashboard/project-owner/support",
+      href: "/dashboard/project-owner/projects",
       iconBgColor: "bg-[#0000FF]",
     },
     {
@@ -35,7 +35,7 @@ const Overview = () => {
       icon: <Image src={infoThree} alt={"icon"} height={20} width={20} />,
       title: "View Reports",
       description: "Track vulnerability findings in real time",
-      href: "/dashboard/project-owner/support",
+      href: "/dashboard/project-owner/reports",
       iconBgColor: "bg-[#0000FF]",
     },
   ];
@@ -117,9 +117,9 @@ const Overview = () => {
       </div>
 
       {/* Recent Activity */}
-     <div className="mb-6">
-     <RecentActivity events={recentEvents} />
-     </div>
+      <div className="mb-6">
+        <RecentActivity events={recentEvents} />
+      </div>
     </div>
   );
 };
