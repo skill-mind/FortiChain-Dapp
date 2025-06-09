@@ -112,7 +112,7 @@ export function ConnectButton({ variant = "default" }: ConnectButtonProps) {
 
           {isDropdownOpen && (
             <div
-              className={`absolute right-0 mt-2 bg-[#1C1D1F] overflow-hidden shadow-lg z-10 ${
+              className={`absolute right-0 mt-2 bg-[#1d1f1c] overflow-hidden shadow-lg z-10 ${
                 variant === "default"
                   ? "rounded-lg px-8 py-3 sm:py-4 md:py-5 text-base font-semibold w-fit"
                   : "rounded-md w-48"
@@ -120,7 +120,7 @@ export function ConnectButton({ variant = "default" }: ConnectButtonProps) {
             >
               <button
                 onClick={handleDisconnect}
-                className="w-full text-left px-4 py-2 hover:bg-[#2a2b2e] transition-colors"
+                className="w-full text-left px-4 py-2 bg-[#FF3737] transition-colors"
               >
                 <Link href={"/"}>Disconnect Wallet</Link>
               </button>
