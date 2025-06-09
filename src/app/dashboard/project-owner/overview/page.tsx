@@ -11,6 +11,7 @@ import statsOne from "../../../../../public/overviewIcons/statsOne.svg";
 import statsTwo from "../../../../../public/overviewIcons/statsTwo.svg";
 import statsThree from "../../../../../public/overviewIcons/statsThree.svg";
 import statsFour from "../../../../../public/overviewIcons/statsFour.svg";
+import { ProjectOwnerActionButton } from "../../components/resuables/ProjectOwnerActionButton";
 
 const Overview = () => {
   const actionButtons = [
@@ -92,7 +93,7 @@ const Overview = () => {
       {/* Action Buttons */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {actionButtons.map((btn) => (
-          <ActionButton
+          <ProjectOwnerActionButton
             id={btn.id}
             key={btn.id}
             icon={btn.icon}
