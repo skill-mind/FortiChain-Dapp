@@ -11,6 +11,7 @@ import statsOne from "../../../../../public/overviewIcons/statsOne.svg";
 import statsTwo from "../../../../../public/overviewIcons/statsTwo.svg";
 import statsThree from "../../../../../public/overviewIcons/statsThree.svg";
 import statsFour from "../../../../../public/overviewIcons/statsFour.svg";
+import { ProjectOwnerActionButton } from "../../components/resuables/ProjectOwnerActionButton";
 
 const Overview = () => {
   const actionButtons = [
@@ -19,7 +20,7 @@ const Overview = () => {
       icon: <Image src={infoOne} alt={"icon"} height={20} width={20} />,
       title: "Register Project",
       description: "Submit your smart contract for security review",
-      href: "/dashboard/project-owner/support",
+      href: "/dashboard/project-owner/projects",
       iconBgColor: "bg-[#0000FF]",
     },
     {
@@ -27,7 +28,7 @@ const Overview = () => {
       icon: <Image src={infoTwo} alt={"icon"} height={20} width={20} />,
       title: "Fund Escrow",
       description: "Securely deposit bounty rewards",
-      href: "/dashboard/project-owner/support",
+      href: "/dashboard/project-owner/projects",
       iconBgColor: "bg-[#0000FF]",
     },
     {
@@ -35,7 +36,7 @@ const Overview = () => {
       icon: <Image src={infoThree} alt={"icon"} height={20} width={20} />,
       title: "View Reports",
       description: "Track vulnerability findings in real time",
-      href: "/dashboard/project-owner/support",
+      href: "/dashboard/project-owner/reports",
       iconBgColor: "bg-[#0000FF]",
     },
   ];
@@ -92,7 +93,7 @@ const Overview = () => {
       {/* Action Buttons */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {actionButtons.map((btn) => (
-          <ActionButton
+          <ProjectOwnerActionButton
             id={btn.id}
             key={btn.id}
             icon={btn.icon}
@@ -117,9 +118,9 @@ const Overview = () => {
       </div>
 
       {/* Recent Activity */}
-     <div className="mb-6">
-     <RecentActivity events={recentEvents} />
-     </div>
+      <div className="mb-6">
+        <RecentActivity events={recentEvents} />
+      </div>
     </div>
   );
 };
