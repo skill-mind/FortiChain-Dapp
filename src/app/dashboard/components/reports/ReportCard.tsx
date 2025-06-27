@@ -43,7 +43,7 @@ const ReportCard: React.FC<Props> = ({ report, onClick }) => {
 					</span>
 					<p className=" text-[#B5B3B4]">{report.score}</p>
 				</div>
-				<span className="text-[#B5B3B4]">{report.amount}</span>
+				<span className="text-[#B5B3B4]">{report.researcher}</span>
 			</div>
 		</div>
 	);
