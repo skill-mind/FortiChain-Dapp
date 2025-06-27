@@ -9,12 +9,15 @@ import { WithdrawalHistory } from "@/components/dashboard/Withdrawal-history";
 import { WithdrawalHistoryModal } from "@/components/dashboard/Withdrawal-history-modal";
 import { WithdrawalRequest } from "@/components/dashboard/Withdrawal-request";
 import { StatCard } from "../../components/resuables/StatsCard";
+import { useAccount } from "@starknet-react/core"; // ✅ Added
 
 export default function RewardPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [withdrawalAmount, setWithdrawalAmount] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"rewards" | "withdraw">("rewards");
+
+  const { account } = useAccount(); // ✅ Get connected wallet address
 
   const handleWithdrawalSubmit = (amount: number) => {
     setWithdrawalAmount(amount);
@@ -23,6 +26,18 @@ export default function RewardPage() {
 
   return (
     <div className="flex flex-col gap-6 md:p-6">
+      {/* ✅ Connected Wallet Display */}
+      <div className="text-white text-sm mb-2">
+        Connected Wallet:{" "}
+        {account?.address ? (
+          <span className="font-mono">
+            {account.address.slice(0, 6)}...{account.address.slice(-4)}
+          </span>
+        ) : (
+          <span className="text-gray-400">Not connected</span>
+        )}
+      </div>
+
       {activeTab === "rewards" ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
