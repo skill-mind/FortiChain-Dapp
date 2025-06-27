@@ -95,3 +95,37 @@ export const sampleReports: Report[] = [
     ]
   }
 ];
+
+
+// New dummy report for modal testing - Fixed TypeScript errors
+export const dummyReport: Report = {
+  id: "1982",
+  title: "UI Glitch in Wallet Connection Modal",
+  projectName: "Dummy Report ",
+  severity: "Medium",
+  status: "Pending",
+  cvssScore: "5.4", 
+  vulnerableUrl: "https://example.com/wallet",
+  vulnerableParam: "wallet_address",
+  description:
+    "A UI glitch occurs when connecting wallet through the modal interface, causing display inconsistencies and potential user confusion.",
+  impact:
+    "Users may experience confusion during wallet connection process, potentially leading to failed transactions.",
+  stepsToReproduce: [
+    "Navigate to wallet connection page",
+    "Click 'Connect Wallet' button",
+    "Select MetaMask option",
+    "Observe the UI glitch in modal display",
+  ],
+  pocImages: [
+    {
+      src: "/placeholder.svg?height=200&width=300",
+      alt: "UI Glitch Screenshot",
+    },
+  ],
+  mitigationSteps: [
+    "Update CSS styling for modal component",
+    "Test across different screen resolutions",
+    "Implement responsive design fixes",
+  ],
+}
