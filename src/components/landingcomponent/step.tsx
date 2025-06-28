@@ -3,12 +3,12 @@ import Image from "next/image";
 import Logo from "../../../public/validatorImage.svg";
 import Logo1 from "../../../public/swapicon.svg";
 import { MdOutlineLock } from "react-icons/md";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 const StepProcess = () => {
   // Animation variants
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -19,7 +19,7 @@ const StepProcess = () => {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
@@ -31,7 +31,7 @@ const StepProcess = () => {
     },
   };
 
-  const titleVariants = {
+  const titleVariants: Variants = {
     hidden: { opacity: 0, y: -20 },
     visible: {
       opacity: 1,

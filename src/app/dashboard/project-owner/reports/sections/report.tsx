@@ -6,7 +6,7 @@ import LanguageDropdown from "@/app/dashboard/components/reports/LanguageDropdow
 import SeverityDropdown from "@/app/dashboard/components/reports/SeverityDropdown";
 import ReportCard from "@/app/dashboard/components/reports/ReportCard";
 import { Search } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 interface Props {
   dataIndex: number | null;
@@ -14,7 +14,7 @@ interface Props {
   setDataIndex: (e: number | null) => void;
 }
 
-const mainContainerVariants = {
+const mainContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -25,12 +25,12 @@ const mainContainerVariants = {
   },
 };
 
-const searchVariants = {
+const searchVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-const dropdownsContainerVariants = {
+const dropdownsContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -40,12 +40,12 @@ const dropdownsContainerVariants = {
   },
 };
 
-const dropdownVariants = {
+const dropdownVariants: Variants = {
   hidden: { opacity: 0, x: 20 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-const columnVariants = {
+const columnVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -55,33 +55,44 @@ const columnVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-const headerVariants = {
+const headerVariants: Variants = {
   hidden: { opacity: 0, x: -20 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-const indicatorVariants = {
+const indicatorVariants: Variants = {
   hidden: { opacity: 0, scale: 0 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.4, ease: "easeOut", type: "spring", stiffness: 200 },
+    transition: {
+      duration: 0.4,
+      ease: "easeOut",
+      type: "spring",
+      stiffness: 200,
+    },
   },
 };
 
-const countVariants = {
+const countVariants: Variants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", delay: 0.2 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut", delay: 0.2 },
+  },
 };
 
 const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedSeverity, setSelectedSeverity] = useState<ReportData["severity"][]>([]);
+  const [selectedSeverity, setSelectedSeverity] = useState<
+    ReportData["severity"][]
+  >([]);
   const [selectedResearcher, setSelectedResearcher] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -96,25 +107,39 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
   }, []);
 
   const allLanguages = useMemo(() => {
-    const languages = new Set(reports.flatMap((report) => report.language || []));
+    const languages = new Set(
+      reports.flatMap((report) => report.language || [])
+    );
     return Array.from(languages).length > 0
       ? Array.from(languages)
       : ["Python", "JavaScript", "Rust", "Cairo", "Solidity"];
   }, []);
 
-  const allSeverities: ReportData["severity"][] = ["Critical", "High", "Medium", "Low"];
+  const allSeverities: ReportData["severity"][] = [
+    "Critical",
+    "High",
+    "Medium",
+    "Low",
+  ];
 
   const filteredAndPartitionedReports = useMemo(() => {
     const filtered = reports.filter((report) => {
-      const matchesSearch = report.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = report.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
       const matchesSeverity =
-        selectedSeverity.length === 0 || selectedSeverity.includes(report.severity);
+        selectedSeverity.length === 0 ||
+        selectedSeverity.includes(report.severity);
       const matchesResearcher =
-        selectedResearcher.length === 0 || selectedResearcher.includes(report.researcher);
+        selectedResearcher.length === 0 ||
+        selectedResearcher.includes(report.researcher);
       const matchesLanguage =
         selectedLanguages.length === 0 ||
-        (report.language && report.language.some((lang) => selectedLanguages.includes(lang)));
-      return matchesSearch && matchesSeverity && matchesResearcher && matchesLanguage;
+        (report.language &&
+          report.language.some((lang) => selectedLanguages.includes(lang)));
+      return (
+        matchesSearch && matchesSeverity && matchesResearcher && matchesLanguage
+      );
     });
 
     const pending = filtered.filter((r) => r.status === "Pending");
@@ -195,7 +220,11 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
       </motion.div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-[29px]">
-        <motion.div variants={columnVariants} initial="hidden" animate="visible">
+        <motion.div
+          variants={columnVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <motion.h3
             variants={headerVariants}
             className="text-sm font-semibold mb-4 flex items-center md:text-base lg:mb-[24px]"
@@ -205,7 +234,10 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
               className="w-2.5 h-2.5 bg-gray-500 rounded-full mr-1.5 md:w-3 md:h-3 md:mr-2"
             ></motion.span>
             Pending Review{" "}
-            <motion.p variants={countVariants} className="text-[#B5B3B4] pl-1 text-xs md:text-sm">
+            <motion.p
+              variants={countVariants}
+              className="text-[#B5B3B4] pl-1 text-xs md:text-sm"
+            >
               ({filteredAndPartitionedReports.pending.length})
             </motion.p>
           </motion.h3>
@@ -221,7 +253,11 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
           </div>
         </motion.div>
 
-        <motion.div variants={columnVariants} initial="hidden" animate="visible">
+        <motion.div
+          variants={columnVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <motion.h3
             variants={headerVariants}
             className="text-sm font-semibold mb-4 flex items-center md:text-base lg:mb-[24px]"
@@ -231,7 +267,10 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
               className="w-2.5 h-2.5 bg-green-500 rounded-full mr-1.5 md:w-3 md:h-3 md:mr-2"
             ></motion.span>
             Validated{" "}
-            <motion.p variants={countVariants} className="text-[#B5B3B4] pl-1 text-xs md:text-sm">
+            <motion.p
+              variants={countVariants}
+              className="text-[#B5B3B4] pl-1 text-xs md:text-sm"
+            >
               ({filteredAndPartitionedReports.validated.length})
             </motion.p>
           </motion.h3>
@@ -247,7 +286,11 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
           </div>
         </motion.div>
 
-        <motion.div variants={columnVariants} initial="hidden" animate="visible">
+        <motion.div
+          variants={columnVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <motion.h3
             variants={headerVariants}
             className="text-sm font-semibold mb-4 flex items-center md:text-base lg:mb-[24px]"
@@ -257,7 +300,10 @@ const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
               className="w-2.5 h-2.5 bg-red-500 rounded-full mr-1.5 md:w-3 md:h-3 md:mr-2"
             ></motion.span>
             Rejected{" "}
-            <motion.p variants={countVariants} className="text-[#B5B3B4] pl-1 text-xs md:text-sm">
+            <motion.p
+              variants={countVariants}
+              className="text-[#B5B3B4] pl-1 text-xs md:text-sm"
+            >
               ({filteredAndPartitionedReports.rejected.length})
             </motion.p>
           </motion.h3>
