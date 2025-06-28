@@ -13,7 +13,7 @@ export const ReportHeader: React.FC<ReportHeaderProps> = ({
   actionButton,
 }) => {
   return (
-    <div className="w-full py-6 flex items-center justify-between gap-5">
+    <div className="w-full py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
       <div className="font-sora font-semibold text-2xl leading-tight text-white">
         {title}
       </div>
