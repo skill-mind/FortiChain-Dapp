@@ -1,326 +1,191 @@
 "use client";
 import React, { useState, useMemo } from "react";
-import { reports, ReportData } from "../data";
-import ResearcherDropdown from "@/app/dashboard/components/reports/ResearcherDropdown";
-import LanguageDropdown from "@/app/dashboard/components/reports/LanguageDropdown";
-import SeverityDropdown from "@/app/dashboard/components/reports/SeverityDropdown";
-import ReportCard from "@/app/dashboard/components/reports/ReportCard";
-import { Search } from "lucide-react";
-import { motion, Variants } from "framer-motion";
+import { Search, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
+import {mockReports} from "../data";
+
+
 
 interface Props {
-  dataIndex: number | null;
+  reportIndex: number | null;
   setCurrentView: (view: number) => void;
-  setDataIndex: (e: number | null) => void;
+  setReportIndex: (index: number | null) => void;
 }
 
-const mainContainerVariants: Variants = {
+const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       when: "beforeChildren",
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
     },
   },
 };
 
-const searchVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+const headerVariants = {
+  hidden: { opacity: 0, y: -20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-const dropdownsContainerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const dropdownVariants: Variants = {
-  hidden: { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
-};
-
-const columnVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const cardVariants: Variants = {
+const tableVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-const headerVariants: Variants = {
-  hidden: { opacity: 0, x: -20 },
+const rowVariants = {
+  hidden: { opacity: 0, x: -10 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-const indicatorVariants: Variants = {
-  hidden: { opacity: 0, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.4,
-      ease: "easeOut",
-      type: "spring",
-      stiffness: 200,
-    },
-  },
-};
-
-const countVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut", delay: 0.2 },
-  },
-};
-
-const Report: React.FC<Props> = ({ setCurrentView, setDataIndex }) => {
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedSeverity, setSelectedSeverity] = useState<
-    ReportData["severity"][]
-  >([]);
-  const [selectedResearcher, setSelectedResearcher] = useState<string[]>([]);
+const Report: React.FC<Props> = ({ setCurrentView, setReportIndex }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("All");
 
-  const handleViewDetails = (index: number) => {
-    setDataIndex(index);
-    setCurrentView(1);
+ const handleViewVulnerabilities = (index: number) => {
+  setReportIndex(index);
+  setCurrentView(1); // Navigate to VulnerabilityReport page
+};
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Completed":
+        return "bg-[#01A901]";
+      case "Ongoing":
+        return "bg-[#2B2BFF]";
+      case "Closed":
+        return "bg-[#FF3737]";
+      default:
+        return "bg-gray-500";
+    }
   };
 
-  const uniqueResearchers = useMemo(() => {
-    const researchers = new Set(reports.map((report) => report.researcher));
-    return Array.from(researchers);
-  }, []);
-
-  const allLanguages = useMemo(() => {
-    const languages = new Set(
-      reports.flatMap((report) => report.language || [])
-    );
-    return Array.from(languages).length > 0
-      ? Array.from(languages)
-      : ["Python", "JavaScript", "Rust", "Cairo", "Solidity"];
-  }, []);
-
-  const allSeverities: ReportData["severity"][] = [
-    "Critical",
-    "High",
-    "Medium",
-    "Low",
-  ];
-
-  const filteredAndPartitionedReports = useMemo(() => {
-    const filtered = reports.filter((report) => {
-      const matchesSearch = report.title
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const matchesSeverity =
-        selectedSeverity.length === 0 ||
-        selectedSeverity.includes(report.severity);
-      const matchesResearcher =
-        selectedResearcher.length === 0 ||
-        selectedResearcher.includes(report.researcher);
-      const matchesLanguage =
-        selectedLanguages.length === 0 ||
-        (report.language &&
-          report.language.some((lang) => selectedLanguages.includes(lang)));
-      return (
-        matchesSearch && matchesSeverity && matchesResearcher && matchesLanguage
-      );
+  const filteredReports = useMemo(() => {
+    return mockReports.filter((report) => {
+      const matchesSearch = report.project.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = filterStatus === "All" || report.status === filterStatus;
+      return matchesSearch && matchesStatus;
     });
-
-    const pending = filtered.filter((r) => r.status === "Pending");
-    const validated = filtered.filter((r) => r.status === "Validated");
-    const rejected = filtered.filter((r) => r.status === "Rejected");
-
-    return { pending, validated, rejected };
-  }, [searchQuery, selectedSeverity, selectedResearcher, selectedLanguages]);
+  }, [searchQuery, filterStatus]);
 
   return (
     <motion.div
-      className="h-screen pb-16 overflow-y-auto text-white md:pb-20 lg:h-[720px] lg:pb-[100px] scrollbar-none"
-      variants={mainContainerVariants}
+      className="min-h-screen bg-[#161113] text-white p-6"
+      variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <motion.div className="flex flex-col mb-8 md:flex-row md:items-center md:justify-between md:mb-12 lg:mb-[60px] gap-3 flex-wrap">
-        <motion.div
-          variants={searchVariants}
-          className="relative flex items-center w-full max-w-xs mb-4 md:mb-0"
-        >
-          <Search className="w-4 h-4 text-[#B5B3B4] absolute left-2.5 md:w-5 md:h-5 md:left-3" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="rounded-lg bg-[#161113] border border-[#464043] focus:outline-none focus:border-gray-500 placeholder:text-[#B5B3B4] w-full pl-10 pr-4 py-2 text-sm"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </motion.div>
-
-        <motion.div
-          variants={dropdownsContainerVariants}
-          className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4 lg:gap-[16px]"
-        >
-          <motion.div variants={dropdownVariants}>
-            <ResearcherDropdown
-              selectedResearchers={selectedResearcher}
-              allResearchers={uniqueResearchers}
-              onSelectChange={(researcher) => {
-                setSelectedResearcher((prev) =>
-                  prev.includes(researcher)
-                    ? prev.filter((item) => item !== researcher)
-                    : [...prev, researcher]
-                );
-              }}
+      {/* Header */}
+      <motion.div
+        variants={headerVariants}
+        className="flex flex-col md:flex-row md:items-center md:justify-between mb-8"
+      >
+        <h1 className="text-2xl font-bold mb-4 md:mb-0">Reports</h1>
+        
+        <div className="flex flex-col md:flex-row gap-4 md:items-center">
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search"
+              className="bg-[#161113] border border-[#464043] rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-gray-500 w-full md:w-64"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </motion.div>
+          </div>
 
-          <motion.div variants={dropdownVariants}>
-            <LanguageDropdown
-              selectedLanguages={selectedLanguages}
-              allLanguages={allLanguages}
-              onSelectChange={(language) => {
-                setSelectedLanguages((prev) =>
-                  prev.includes(language)
-                    ? prev.filter((item) => item !== language)
-                    : [...prev, language]
-                );
-              }}
-            />
-          </motion.div>
-
-          <motion.div variants={dropdownVariants}>
-            <SeverityDropdown
-              selectedSeverities={selectedSeverity}
-              allSeverities={allSeverities}
-              onSelectChange={(severity) => {
-                setSelectedSeverity((prev) =>
-                  prev.includes(severity)
-                    ? prev.filter((item) => item !== severity)
-                    : [...prev, severity]
-                );
-              }}
-            />
-          </motion.div>
-        </motion.div>
+          {/* Filter Dropdown */}
+          <div className="relative">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="bg-[#161113] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#464043] appearance-none pr-10 cursor-pointer"
+            >
+              <option value="All">All</option>
+              <option value="Completed">Completed</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Closed">Closed</option>
+            </select>
+            <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+          </div>
+        </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-[29px]">
-        <motion.div
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.h3
-            variants={headerVariants}
-            className="text-sm font-semibold mb-4 flex items-center md:text-base lg:mb-[24px]"
-          >
-            <motion.span
-              variants={indicatorVariants}
-              className="w-2.5 h-2.5 bg-gray-500 rounded-full mr-1.5 md:w-3 md:h-3 md:mr-2"
-            ></motion.span>
-            Pending Review{" "}
-            <motion.p
-              variants={countVariants}
-              className="text-[#B5B3B4] pl-1 text-xs md:text-sm"
-            >
-              ({filteredAndPartitionedReports.pending.length})
-            </motion.p>
-          </motion.h3>
-          <div className="flex flex-col space-y-3 md:space-y-4">
-            {filteredAndPartitionedReports.pending.map((report, index) => (
-              <motion.div key={report.id + "-" + index} variants={cardVariants}>
-                <ReportCard
-                  report={report}
-                  onClick={() => handleViewDetails(reports.indexOf(report))}
-                />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+      {/* Table */}
+      <motion.div
+        variants={tableVariants}
+        className="bg-[#161113] rounded-lg overflow-hidden"
+      >
+        {/* Table Header */}
+        <div className="grid grid-cols-5 gap-4 p-4 bg-[#211A1D] text-gray-300 text-sm font-medium">
+          <div>Project</div>
+          <div>Vulnerabilities Found</div>
+          <div>Total Bounty Paid</div>
+          <div>Status</div>
+          <div>Action</div>
+        </div>
 
-        <motion.div
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.h3
-            variants={headerVariants}
-            className="text-sm font-semibold mb-4 flex items-center md:text-base lg:mb-[24px]"
-          >
-            <motion.span
-              variants={indicatorVariants}
-              className="w-2.5 h-2.5 bg-green-500 rounded-full mr-1.5 md:w-3 md:h-3 md:mr-2"
-            ></motion.span>
-            Validated{" "}
-            <motion.p
-              variants={countVariants}
-              className="text-[#B5B3B4] pl-1 text-xs md:text-sm"
+        {/* Table Body */}
+        <div className="divide-y divide-gray-800">
+          {filteredReports.map((report, index) => (
+            <motion.div
+              key={report.id}
+              variants={rowVariants}
+              className="grid grid-cols-5 gap-4 p-4 hover:bg-[#161113] transition-colors duration-200 items-center"
             >
-              ({filteredAndPartitionedReports.validated.length})
-            </motion.p>
-          </motion.h3>
-          <div className="flex flex-col space-y-3 md:space-y-4">
-            {filteredAndPartitionedReports.validated.map((report, index) => (
-              <motion.div key={report.id + "-" + index} variants={cardVariants}>
-                <ReportCard
-                  report={report}
-                  onClick={() => handleViewDetails(reports.indexOf(report))}
-                />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+              {/* Project */}
+              <div className="text-white font-medium">
+                {report.project}
+              </div>
 
+              {/* Vulnerabilities Found */}
+              <div className="text-gray-300">
+                {report.vulnerabilitiesFound}
+              </div>
+
+              {/* Total Bounty Paid */}
+              <div className="text-gray-300">
+                {report.totalBountyPaid}
+              </div>
+
+              {/* Status */}
+              <div>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium text-white ${getStatusColor(
+                    report.status
+                  )}`}
+                >
+                  {report.status}
+                </span>
+              </div>
+
+              {/* Action */}
+              <div>
+                <button
+                  onClick={() => handleViewVulnerabilities(index)}
+                  className="text-[#0000FF] hover:text-blue-300 text-sm font-medium transition-colors duration-200"
+                >
+                  View Vulnerabilities
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Empty State */}
+      {filteredReports.length === 0 && (
         <motion.div
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center text-gray-400 mt-12"
         >
-          <motion.h3
-            variants={headerVariants}
-            className="text-sm font-semibold mb-4 flex items-center md:text-base lg:mb-[24px]"
-          >
-            <motion.span
-              variants={indicatorVariants}
-              className="w-2.5 h-2.5 bg-red-500 rounded-full mr-1.5 md:w-3 md:h-3 md:mr-2"
-            ></motion.span>
-            Rejected{" "}
-            <motion.p
-              variants={countVariants}
-              className="text-[#B5B3B4] pl-1 text-xs md:text-sm"
-            >
-              ({filteredAndPartitionedReports.rejected.length})
-            </motion.p>
-          </motion.h3>
-          <div className="flex flex-col space-y-3 md:space-y-4">
-            {filteredAndPartitionedReports.rejected.map((report, index) => (
-              <motion.div key={report.id + "-" + index} variants={cardVariants}>
-                <ReportCard
-                  report={report}
-                  onClick={() => handleViewDetails(reports.indexOf(report))}
-                />
-              </motion.div>
-            ))}
-          </div>
+          <p>No reports found matching your search criteria.</p>
         </motion.div>
-      </div>
+      )}
     </motion.div>
   );
 };
 
-export default Report;
+export default Report;
