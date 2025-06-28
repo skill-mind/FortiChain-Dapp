@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { reports, ReportData } from "../data";
-import { ArrowLeft, Bookmark, X } from "lucide-react";
+import { ArrowLeft,  X } from "lucide-react";
 import {
   poc1,
   poc2,
-  poc3,
   dollars,
   github,
   calendar,
@@ -21,14 +20,12 @@ import {
   backButtonVariants,
   titleContainerVariants,
   titleVariants,
-  bookmarkVariants,
   metadataContainerVariants,
   metadataItemVariants,
   sectionVariants,
   sectionTitleVariants,
   sectionContentVariants,
   pocImageVariants,
-  buttonContainerVariants,
   buttonVariants,
   modalItemVariants,
 } from "../animations";
@@ -36,17 +33,18 @@ import {
 import { Modal } from "@/app/dashboard/components/resuables/Modal";
 
 interface Props {
-  dataIndex: number | null;
+  vulnerabilityIndex: number | null;
   setCurrentView: (view: number) => void;
 }
 
-const Details: React.FC<Props> = ({ dataIndex, setCurrentView }) => {
+const Details: React.FC<Props> = ({ vulnerabilityIndex, setCurrentView }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const report: ReportData | undefined =
-    dataIndex !== null ? reports[dataIndex] : undefined;
 
-  const handleBackToReport = () => {
-    setCurrentView(0);
+  const report: ReportData | undefined =
+    vulnerabilityIndex !== null ? reports[vulnerabilityIndex] : undefined;
+
+  const handleBackToVulnerabilityReport = () => {
+    setCurrentView(1);
   };
 
   if (!report) {
@@ -66,10 +64,9 @@ const Details: React.FC<Props> = ({ dataIndex, setCurrentView }) => {
       <motion.button
         variants={backButtonVariants}
         className="text-white mb-4 flex items-center hover:text-white transition-colors md:mb-6"
-        onClick={handleBackToReport}
+        onClick={handleBackToVulnerabilityReport}
       >
-        <ArrowLeft className="w-5 h-5 mr-1.5 md:w-6 md:h-6 md:mr-2" /> Back to
-        Reports
+        <ArrowLeft className="w-5 h-5 mr-1.5 md:w-6 md:h-6 md:mr-2" /> Back to Vulnerability Report
       </motion.button>
 
       <div className="text-white bg-[#1C1618] p-4 border border-[#464043] rounded-[8px] h-[calc(100vh-200px)] overflow-y-auto scrollbar-none md:p-6 md:rounded-[10px] lg:p-10 lg:h-[660px] lg:pb-[20px] lg:rounded-[12px]">
@@ -84,8 +81,10 @@ const Details: React.FC<Props> = ({ dataIndex, setCurrentView }) => {
             >
               {report.title}
             </motion.h2>
-            <motion.div variants={bookmarkVariants}>
-              <Bookmark className="w-5 h-5 cursor-pointer text-white md:w-6 md:h-6" />
+            <motion.div variants={buttonVariants}>
+              <div className="bg-[#AAAAFF] text-[#0000FF] px-3 py-1 rounded-md text-sm font-semibold">
+                $200
+              </div>
             </motion.div>
           </div>
 
@@ -99,15 +98,14 @@ const Details: React.FC<Props> = ({ dataIndex, setCurrentView }) => {
             >
               <p className="text-sm md:text-base lg:text-[18px]">Severity</p>
               <span
-                className={`px-3 py-1 rounded-full text-[10px] font-semibold mr-1.5 md:px-4 md:py-2 md:text-xs md:mr-2 ${
-                  report.severity === "Critical"
+                className={`px-3 py-1 rounded-full text-[10px] font-semibold mr-1.5 md:px-4 md:py-2 md:text-xs md:mr-2 ${report.severity === "Critical"
                     ? "bg-red-600"
                     : report.severity === "High"
-                    ? "bg-orange-600"
-                    : report.severity === "Medium"
-                    ? "bg-blue-600"
-                    : "bg-gray-600"
-                }`}
+                      ? "bg-orange-600"
+                      : report.severity === "Medium"
+                        ? "bg-blue-600"
+                        : "bg-gray-600"
+                  }`}
               >
                 {report.severity}
               </span>
@@ -288,36 +286,6 @@ const Details: React.FC<Props> = ({ dataIndex, setCurrentView }) => {
           </motion.section>
         </motion.div>
 
-        <motion.div
-          variants={buttonContainerVariants}
-          className="flex flex-col gap-3 mt-6 md:flex-row md:gap-4 md:mt-7 lg:space-x-4 lg:mt-8"
-        >
-          <motion.button
-            variants={buttonVariants}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors md:px-5 md:py-2.5 lg:px-6 lg:py-3"
-          >
-            Approve Payout
-          </motion.button>
-          <motion.button
-            variants={buttonVariants}
-            className="border border-gray-600 text-black font-semibold bg-white hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors md:px-5 md:py-2.5 lg:px-6 lg:py-3"
-            onClick={() => setIsModalOpen(true)}
-          >
-            View Project
-          </motion.button>
-          <motion.button
-            variants={buttonVariants}
-            className="border border-gray-600 text-white hover:border-gray-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-colors md:px-5 md:py-2.5 lg:px-6 lg:py-3"
-          >
-            Request More Info
-          </motion.button>
-          <motion.button
-            variants={buttonVariants}
-            className="text-red-500 hover:text-red-600 font-semibold px-4 py-2 rounded-lg transition-colors md:px-5 lg:px-6"
-          >
-            Reject Report
-          </motion.button>
-        </motion.div>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
