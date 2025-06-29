@@ -4,6 +4,7 @@ export interface ReportData {
     severity: "Critical" | "High" | "Medium" | "Low";
     score: number;
     date: string;
+    amount:string;
     status: "Pending" | "Validated" | "Rejected";
     researcher: string;
     url?: string;
@@ -21,6 +22,7 @@ export const reports: ReportData[] = [
         title: "Filename parameter on Home Page",
         severity: "Critical",
         score: 9.6,
+        amount: "$200",
         date: "3 Jan, 4:35 PM",
         status: "Pending",
         researcher: "@HYPElab",
@@ -44,6 +46,7 @@ export const reports: ReportData[] = [
         title: "Cross-Site Scripting (XSS) on Comment Section",
         severity: "High",
         score: 8.9,
+        amount: "$200",
         date: "5 Jan, 10:00 AM",
         status: "Pending",
         researcher: "@BugHunterX",
@@ -67,6 +70,7 @@ export const reports: ReportData[] = [
         title: "Insecure Direct Object Reference (IDOR) in User Profile",
         severity: "High",
         score: 8.5,
+        amount: "$200",
         date: "6 Jan, 2:15 PM",
         status: "Pending",
         researcher: "@SecureMind",
@@ -92,6 +96,7 @@ export const reports: ReportData[] = [
         title: "Broken Authentication - Weak Password Policy",
         severity: "Medium",
         score: 6.7,
+        amount: "$200",
         date: "8 Jan, 9:00 AM",
         status: "Validated",
         researcher: "@InfoSecPro",
@@ -115,6 +120,7 @@ export const reports: ReportData[] = [
         title: "Security Misconfiguration - Directory Listing Enabled",
         severity: "Medium",
         score: 5.5,
+        amount: "$200",
         date: "9 Jan, 1:00 PM",
         status: "Validated",
         researcher: "@NetSpy",
@@ -137,6 +143,7 @@ export const reports: ReportData[] = [
         title: "Insufficient Logging & Monitoring",
         severity: "Low",
         score: 3.9,
+        amount: "$200",
         date: "10 Jan, 11:30 AM",
         status: "Validated",
         researcher: "@LogSentinel",
@@ -159,6 +166,7 @@ export const reports: ReportData[] = [
         title: "Outdated Software Component",
         severity: "Low",
         score: 3.5,
+        amount: "$200",
         date: "11 Jan, 4:00 PM",
         status: "Validated",
         researcher: "@PatchMeUp",
@@ -182,6 +190,7 @@ export const reports: ReportData[] = [
         title: "SQL Injection - Contact Form",
         severity: "Critical",
         score: 9.1,
+        amount: "$200",
         date: "12 Jan, 9:30 AM",
         status: "Rejected",
         researcher: "@DBNinja",
@@ -206,6 +215,7 @@ export const reports: ReportData[] = [
         title: "Denial of Service (DoS) - Resource Exhaustion",
         severity: "Low",
         score: 2.2,
+        amount: "$200",
         date: "13 Jan, 2:00 PM",
         status: "Rejected",
         researcher: "@FloodKing",
@@ -229,6 +239,7 @@ export const reports: ReportData[] = [
         title: "Phishing Attempt Reported",
         severity: "Low",
         score: 2.9,
+        amount: "$200",
         date: "14 Jan, 10:00 AM",
         status: "Rejected",
         researcher: "@CommunityWatch",
@@ -249,6 +260,7 @@ export const reports: ReportData[] = [
         title: "Spam Detected on Forum",
         severity: "Low",
         score: 1.5,
+        amount: "$200",
         date: "15 Jan, 3:00 PM",
         status: "Rejected",
         researcher: "@AntiSpamBot",
@@ -272,6 +284,7 @@ export const reports: ReportData[] = [
         title: "Informational - HTTP Security Headers Missing",
         severity: "Low",
         score: 6.4,
+        amount: "$200",
         date: "16 Jan, 11:00 AM",
         status: "Rejected",
         researcher: "@HeaderChecker",
@@ -289,4 +302,42 @@ export const reports: ReportData[] = [
         ],
         language: ["Rust", "Solidity", "Python"],
     },
+];
+
+export const mockReports = [
+    {
+        id: 1,
+        project: "SkillNet",
+        vulnerabilitiesFound: 4,
+        totalBountyPaid: "$5,200.13",
+        status: "Completed"
+    },
+    {
+        id: 2,
+        project: "SkillNet",
+        vulnerabilitiesFound: 4,
+        totalBountyPaid: "$5,200.13",
+        status: "Ongoing"
+    },
+    {
+        id: 3,
+        project: "SkillNet",
+        vulnerabilitiesFound: 4,
+        totalBountyPaid: "$5,200.13",
+        status: "Closed"
+    },
+    {
+        id: 4,
+        project: "SkillNet",
+        vulnerabilitiesFound: 4,
+        totalBountyPaid: "$5,200.13",
+        status: "Completed"
+    },
+    {
+        id: 5,
+        project: "SkillNet",
+        vulnerabilitiesFound: 4,
+        totalBountyPaid: "$5,200.13",
+        status: "Completed"
+    }
 ];

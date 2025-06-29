@@ -35,7 +35,7 @@ const ReportCard: React.FC<Props> = ({ report, onClick }) => {
 								: report.severity === "High"
 								? "bg-orange-600"
 								: report.severity === "Medium"
-								? "bg-blue-600"
+								? "bg-[#0000FF]"
 								: "bg-gray-600"
 						}`}
 					>
