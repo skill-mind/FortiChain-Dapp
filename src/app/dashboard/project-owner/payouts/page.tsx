@@ -234,6 +234,7 @@ export default function PayoutPage() {
           onClose={() => setIsEscrowModalOpen(false)}
           onSubmit={handleFundEscrow}
           walletBalance={11235.01}
+          tokenSymbol="STRK"
         />
       )}
 
