@@ -18,9 +18,9 @@ const Footer = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -29,9 +29,9 @@ const Footer = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5
-      }
-    }
+        duration: 0.5,
+      },
+    },
   };
 
   return (
@@ -47,19 +47,19 @@ const Footer = () => {
         />
       </div>
 
-      <motion.div 
+      <motion.div
         className="relative z-10 max-w-6xl mx-auto pt-16 pb-8 px-4"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
           variants={containerVariants}
         >
           <motion.div className="md:col-span-1" variants={itemVariants}>
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
@@ -72,29 +72,29 @@ const Footer = () => {
               />
             </motion.div>
 
-            <motion.p 
+            <motion.p
               className="text-center md:text-left text-gray-300 mt-4 max-w-md"
               variants={itemVariants}
             >
               Decentralized Bug Bounty and Smart Contract Security
             </motion.p>
 
-            <motion.div 
+            <motion.div
               className="flex justify-center md:justify-start gap-4 mt-4"
               variants={itemVariants}
             >
-              <motion.a 
-                href="https://twitter.com" 
-                target="_blank" 
+              <motion.a
+                href="https://x.com/Fortichain3"
+                target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.2 }}
                 transition={{ duration: 0.3 }}
               >
                 <FaXTwitter size={20} />
               </motion.a>
-              <motion.a 
-                href="https://telegram.org" 
-                target="_blank" 
+              <motion.a
+                href="https://t.me/+4xRZ99AALDQ3MjQ0"
+                target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.2 }}
                 transition={{ duration: 0.3 }}
@@ -104,7 +104,7 @@ const Footer = () => {
             </motion.div>
           </motion.div>
 
-          <motion.nav 
+          <motion.nav
             className="md:col-span-2 flex flex-wrap justify-center md:justify-end gap-6 md:gap-10"
             variants={containerVariants}
           >
@@ -115,10 +115,12 @@ const Footer = () => {
               { name: "Terms and Conditions", path: "/terms-and-condition" },
             ].map((item, index) => (
               <motion.div key={index} variants={itemVariants}>
-                <Link 
-                  href={item.path} 
+                <Link
+                  href={item.path}
                   className={`text-lg hover:text-blue-400 transition ${
-                    pathname === item.path ? "text-blue-400 font-medium" : "text-gray-300"
+                    pathname === item.path
+                      ? "text-blue-400 font-medium"
+                      : "text-gray-300"
                   }`}
                 >
                   <motion.span
@@ -135,7 +137,7 @@ const Footer = () => {
       </motion.div>
 
       {/* Copyright */}
-      <motion.div 
+      <motion.div
         className="relative z-10 text-center py-4 border-t border-gray-800"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
