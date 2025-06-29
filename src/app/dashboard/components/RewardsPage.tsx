@@ -8,6 +8,7 @@ import { RewardsStats } from "./RewardsStats";
 import { RewardsTable } from "./RewardsTable";
 import { ConfirmClaimView } from "./ConfirmClaimView";
 import { TransactionSuccessModal } from "./TransactionSuccessModal";
+import { useAccount } from "@starknet-react/core";
 
 export type RewardItem = {
   id: string;
@@ -20,8 +21,14 @@ export type RewardItem = {
 
 type View = "main" | "claim" | "confirm";
 
+const truncateAddress = (address?: string) => {
+  if (!address) return "";
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+
 export const RewardsPage = () => {
-  const [currentView, setCurrentView] = useState<View>("main");
+  const [currentView, setCurrentView] = useState<View>("confirm");
+  const { isConnected, address } = useAccount();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedRewards, setSelectedRewards] = useState<RewardItem[]>([]);
 
@@ -120,7 +127,7 @@ export const RewardsPage = () => {
             key="confirm-view"
             amount="$67.23"
             tokenAmount="254.32 STRK"
-            recipientAddress="0x0596....0f3"
+            recipientAddress={truncateAddress(address)}
             onBack={handleBackToClaim}
             onConfirm={handleConfirmClaim}
           />
