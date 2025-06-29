@@ -1,5 +1,5 @@
 import React from "react";
-import { ReportData } from "../type/ReportData";
+import { ReportData } from "../../project-owner/reports/data";
 
 interface Props {
     report: ReportData;
