@@ -29,7 +29,6 @@ import {
   buttonVariants,
   modalItemVariants,
 } from "../animations";
-
 import { Modal } from "@/app/dashboard/components/resuables/Modal";
 
 interface Props {

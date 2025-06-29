@@ -119,6 +119,7 @@ const modalItemVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
 };
 
+// Fixed variants with proper Variants type annotation
 const headerVariants: Variants = {
   hidden: { opacity: 0, y: -20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
@@ -145,6 +146,21 @@ const containerVariants: Variants = {
   },
 };
 
+const gridContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
 export {
   mainContainerVariants,
   backButtonVariants,
@@ -167,5 +183,7 @@ export {
   rowVariants,
   tableVariants,
   headerVariants,
-  containerVariants
+  containerVariants,
+  gridContainerVariants,
+  cardVariants
 };
