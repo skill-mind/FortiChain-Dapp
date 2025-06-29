@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAccount } from "@starknet-react/core";
 import { CheckCircle2, ChevronDown, ArrowLeft, User } from "lucide-react";
 import Image from "next/image";
 
@@ -11,6 +12,7 @@ export default function WithdrawModal({
   onSubmit: (amount: number, numAmount: number, usdEquivalent: number) => void;
   withdrawableBalance?: number;
 }) {
+  const { address, isConnected } = useAccount();
   const [amount, setAmount] = useState("");
   const [step, setStep] = useState(1);
   const [usdEquivalent, setUsdEquivalent] = useState(0);
@@ -46,6 +48,10 @@ export default function WithdrawModal({
     setUsdEquivalent(withdrawableBalance * 0.573);
   };
 
+  // Helper to truncate address nicely
+  const truncateAddress = (addr: string) =>
+    addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
       <div className="fixed inset-0 bg-[#211a1d] bg-opacity-80 backdrop-blur-md"></div>
@@ -61,31 +67,31 @@ export default function WithdrawModal({
       {step === 1 && (
         <div className="relative bg-[#1b1618] border border-[#464043] rounded-2xl w-[95%] max-w-xl z-10 max-h-[90vh] overflow-y-auto">
           <div className="text-center pt-6 sm:pt-10 pb-4 sm:pb-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Withdraw
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">Withdraw</h2>
           </div>
 
           <div className="p-4 sm:p-6">
             {/* Recipient Section */}
             <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
-              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
-                Recepient
-              </h3>
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">Recipient</h3>
               <div className="flex items-center">
                 <User size={18} className="text-white mr-2" />
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-center">
                     <span className="text-white text-base sm:text-lg font-medium">
-                      0x0596....0f3
+                      {isConnected ? truncateAddress(address!) : "Wallet not connected"}
                     </span>
                     <span className="text-gray-500 sm:ml-2 text-xs sm:text-sm mt-1 sm:mt-0">
                       Account Address
                     </span>
                   </div>
                   <div className="flex items-center text-green-500 mt-1">
-                    <CheckCircle2 size={16} className="mr-2" />
-                    <span className="text-sm">Valid Address</span>
+                    {isConnected && (
+                      <>
+                        <CheckCircle2 size={16} className="mr-2" />
+                        <span className="text-sm">Valid Address</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -93,9 +99,7 @@ export default function WithdrawModal({
 
             {/* Amount Section */}
             <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
-              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
-                Amount
-              </h3>
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">Amount</h3>
 
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-2">
                 <input
@@ -147,7 +151,7 @@ export default function WithdrawModal({
                 parseFloat(amount) <= 0 ||
                 parseFloat(amount) > withdrawableBalance
                   ? "bg-gray-800 cursor-not-allowed"
-                  : "bg-[#0000FF] hover:bg-[#1100ff] "
+                  : "bg-[#0000FF] hover:bg-[#1100ff]"
               } text-white font-medium py-3 sm:py-4 rounded-lg transition-colors text-lg sm:text-xl`}
             >
               Withdraw
@@ -159,31 +163,31 @@ export default function WithdrawModal({
       {step === 2 && (
         <div className="relative bg-[#1b1618] border border-[#464043] rounded-2xl w-[95%] max-w-xl z-10 max-h-[90vh] overflow-y-auto">
           <div className="text-center pt-6 sm:pt-10 pb-4 sm:pb-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Withdraw
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">Withdraw</h2>
           </div>
 
           <div className="p-4 sm:p-6">
             {/* Recipient Section */}
             <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
-              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
-                Recepient
-              </h3>
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">Recipient</h3>
               <div className="flex items-center">
                 <User size={18} className="text-white mr-2" />
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-center">
                     <span className="text-white text-base sm:text-lg font-medium">
-                      0x0596....0f3
+                      {isConnected ? truncateAddress(address!) : "Wallet not connected"}
                     </span>
                     <span className="text-gray-500 sm:ml-2 text-xs sm:text-sm mt-1 sm:mt-0">
                       Account Address
                     </span>
                   </div>
                   <div className="flex items-center text-green-500 mt-1">
-                    <CheckCircle2 size={16} className="mr-2" />
-                    <span className="text-sm">Valid Address</span>
+                    {isConnected && (
+                      <>
+                        <CheckCircle2 size={16} className="mr-2" />
+                        <span className="text-sm">Valid Address</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -191,9 +195,7 @@ export default function WithdrawModal({
 
             {/* Amount Section */}
             <div className="mb-4 sm:mb-6 bg-[#110D0F] border border-gray-800 rounded-2xl p-4 sm:p-6">
-              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">
-                Amount
-              </h3>
+              <h3 className="text-white text-lg sm:text-xl mb-3 sm:mb-4">Amount</h3>
               <div className="flex justify-between items-center mb-3 sm:mb-4">
                 <div className="text-white text-2xl sm:text-4xl font-bold">
                   {parseFloat(amount).toLocaleString()}

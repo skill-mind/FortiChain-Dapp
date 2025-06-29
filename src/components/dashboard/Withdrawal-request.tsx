@@ -7,6 +7,7 @@ import { ChevronDown,  CircleCheck, User } from "lucide-react";
 import Image from "next/image";
 import CoinBag from "../../../public/researcherIcon/moneyBag.svg";
 import Starknet from "../../../public/researcherIcon/starknet.svg";
+import { useAccount } from "@starknet-react/core";
 
 interface WithdrawalRequestProps {
   onSubmit: (amount: number) => void;
@@ -82,9 +83,14 @@ export const WithdrawalRequest: React.FC<WithdrawalRequestProps> = ({
                   <User className="w-8 h-8" />
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-white text-xl">{address}</span>
                       <span className="text-[#6B6668] text-[10px]">
-                        Account Address
+                        <span className="text-white text-xl">
+                       {account?.address
+                        ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}`
+                        : "Not connected"}
+                        </span>
+
+                       Account Address
                       </span>
                     </div>
                     {isAddressValid && (
