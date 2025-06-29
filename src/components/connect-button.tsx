@@ -13,6 +13,8 @@ type ConnectButtonVariant = "default" | "navbar";
 
 interface ConnectButtonProps {
   variant?: ConnectButtonVariant;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const truncateAddress = (address?: string) => {
@@ -20,13 +22,16 @@ const truncateAddress = (address?: string) => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
 
-export function ConnectButton({ variant = "default" }: ConnectButtonProps) {
+export function ConnectButton({
+  variant = "default",
+  isModalOpen,
+  setIsModalOpen,
+}: ConnectButtonProps) {
   const { connect, connectors } = useConnect();
   const { isConnected, address } = useAccount();
   const { disconnect } = useDisconnect();
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [selectedAccountType, setSelectedAccountType] = useState<
     "project-owner" | "security-researcher" | "validator" | null

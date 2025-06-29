@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import StepProcess from "@/components/landingcomponent/step";
 import KeyFeatures from "@/components/landingcomponent/features";
@@ -12,6 +12,7 @@ import { ConnectButton } from "@/components/connect-button";
 import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -69,14 +70,18 @@ const Home: React.FC = () => {
               variants={fadeIn}
               transition={{ delay: 0.4 }}
             >
-              <ConnectButton variant="default" />
+              <ConnectButton
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                variant="default"
+              />
             </motion.div>
           </div>
         </div>
       </div>
 
       <section>
-        <StepProcess />
+        <StepProcess handleConnectModal={setIsModalOpen} />
       </section>
 
       <section>
