@@ -10,6 +10,7 @@ import TransactionTable from "@/app/dashboard/components/payoutComponents/Transa
 import { motion } from "framer-motion";
 
 import Image from "next/image";
+import { useTokenBalance } from "@/hooks/useTokenBalance";
 
 export default function PayoutPage() {
   const [isEscrowModalOpen, setIsEscrowModalOpen] = useState(false);
@@ -22,6 +23,8 @@ export default function PayoutPage() {
     strk: 0,
     usd: 0,
   });
+
+  const { balance: walletBalance, symbol } = useTokenBalance();
 
   const handleFundEscrow = (amount: number, strk: number, usd: number) => {
     setIsEscrowModalOpen(false);
@@ -233,8 +236,8 @@ export default function PayoutPage() {
         <FundModal
           onClose={() => setIsEscrowModalOpen(false)}
           onSubmit={handleFundEscrow}
-          walletBalance={11235.01}
-          tokenSymbol="STRK"
+          walletBalance={walletBalance}
+          tokenSymbol={symbol || "STRK"}
         />
       )}
 
