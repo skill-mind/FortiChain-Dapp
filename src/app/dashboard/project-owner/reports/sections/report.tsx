@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import {mockReports} from "../data";
-
+import {headerVariants, rowVariants, tableVariants, containerVariants} from "../animations";
 
 
 interface Props {
@@ -12,31 +12,6 @@ interface Props {
   setReportIndex: (index: number | null) => void;
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      when: "beforeChildren",
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const headerVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
-const tableVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
-
-const rowVariants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
-};
 
 const Report: React.FC<Props> = ({ setCurrentView, setReportIndex }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
