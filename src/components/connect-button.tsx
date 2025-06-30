@@ -31,7 +31,6 @@ export function ConnectButton({
   const { isConnected, address } = useAccount();
   const { disconnect } = useDisconnect();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [selectedAccountType, setSelectedAccountType] = useState<
     "project-owner" | "security-researcher" | "validator" | null
