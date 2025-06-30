@@ -12,15 +12,16 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => {
@@ -33,57 +34,59 @@ const Navbar: React.FC = () => {
   // Animation variants
   const navbarVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.5,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const navItemVariants = {
     hidden: { opacity: 0, y: -10 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   };
 
   const mobileMenuVariants = {
     hidden: { opacity: 0, height: 0 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       height: "auto",
-      transition: { 
+      transition: {
         duration: 0.3,
-        staggerChildren: 0.05 
-      }
-    }
+        staggerChildren: 0.05,
+      },
+    },
   };
 
   const mobileItemVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
-      transition: { duration: 0.2 }
-    }
+      transition: { duration: 0.2 },
+    },
   };
 
   return (
-    <motion.nav 
+    <motion.nav
       initial="hidden"
       animate="visible"
       variants={navbarVariants}
-      className={`${scrolled ? 'backdrop-blur-md bg-black/50' : 'bg-transparent'} text-white sticky top-0 z-50 transition-all duration-300 mt-4`}
+      className={`${
+        scrolled ? "backdrop-blur-md bg-black/50" : "bg-transparent"
+      } text-white sticky top-0 z-50 transition-all duration-300 mt-4`}
     >
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center py-6 px-6 flex-row justify-between h-20">
           {/* Logo */}
-          <motion.div 
+          <motion.div
             variants={navItemVariants}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -107,10 +110,10 @@ const Navbar: React.FC = () => {
                   </motion.span>
                 </Link>
               </motion.div>
-              
+
               <motion.div variants={navItemVariants}>
                 <Link href="#how-it-works" scroll={true}>
-                  <motion.span 
+                  <motion.span
                     whileHover={{ scale: 1.1 }}
                     className="cursor-pointer hover:text-gray-300 transition-all duration-200"
                   >
@@ -124,20 +127,24 @@ const Navbar: React.FC = () => {
                   <motion.span
                     whileHover={{ scale: 1.1 }}
                     className={`cursor-pointer hover:text-gray-300 transition-all duration-200 ${
-                      isActive("/about-us") ? "text-[#0000FF] font-semibold" : ""
+                      isActive("/about-us")
+                        ? "text-[#0000FF] font-semibold"
+                        : ""
                     }`}
                   >
                     About
                   </motion.span>
                 </Link>
               </motion.div>
-              
+
               <motion.div variants={navItemVariants}>
                 <Link href="/contact-us">
                   <motion.span
                     whileHover={{ scale: 1.1 }}
                     className={`cursor-pointer hover:text-gray-300 transition-all duration-200 ${
-                      isActive("/contact-us") ? "text-[#0000FF] font-semibold" : ""
+                      isActive("/contact-us")
+                        ? "text-[#0000FF] font-semibold"
+                        : ""
                     }`}
                   >
                     Contact Us
@@ -148,18 +155,16 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Connect Wallet Button (Desktop) */}
-          <motion.div
-            variants={navItemVariants}
-            className="hidden md:block"
-          >
-            <ConnectButton variant="navbar" />
+          <motion.div variants={navItemVariants} className="hidden md:block">
+            <ConnectButton
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+              variant="navbar"
+            />
           </motion.div>
 
           {/* Mobile Menu Button */}
-          <motion.div 
-            variants={navItemVariants}
-            className="flex md:hidden"
-          >
+          <motion.div variants={navItemVariants} className="flex md:hidden">
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={toggleMenu}
@@ -205,12 +210,12 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <motion.div 
+        <motion.div
           initial="hidden"
           animate="visible"
           exit="hidden"
           variants={mobileMenuVariants}
-          className="md:hidden backdrop-blur-md bg-black/90" 
+          className="md:hidden backdrop-blur-md bg-black/90"
           id="mobile-menu"
         >
           <div className="space-y-1 px-4 pt-2 pb-3">
@@ -237,7 +242,7 @@ const Navbar: React.FC = () => {
                 </span>
               </Link>
             </motion.div>
-            
+
             <motion.div variants={mobileItemVariants}>
               <Link href="/contact-us">
                 <span className="block cursor-pointer rounded-md px-3 py-2 text-base font-medium hover:bg-gray-700 hover:text-white transition-all duration-200">
@@ -245,12 +250,13 @@ const Navbar: React.FC = () => {
                 </span>
               </Link>
             </motion.div>
-            
-            <motion.div 
-              variants={mobileItemVariants}
-              className="px-3 py-2"
-            >
-              <ConnectButton variant="navbar" />
+
+            <motion.div variants={mobileItemVariants} className="px-3 py-2">
+              <ConnectButton
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                variant="navbar"
+              />
             </motion.div>
           </div>
         </motion.div>
