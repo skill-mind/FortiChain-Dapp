@@ -13,7 +13,7 @@ const StepProcess = ({
   handleConnectModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { isConnected } = useAccount();
-  console.log(isConnected);
+
   // Animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
