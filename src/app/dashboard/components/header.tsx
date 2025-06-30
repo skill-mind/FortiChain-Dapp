@@ -13,6 +13,7 @@ const Header = () => {
   const [isBellActive, setIsBellActive] = useState(false);
   const [walletOpen, setWalletOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const walletAddress = "0x04baf3f32432a21D3b2C90E998Aa5EC7817E61b3";
 
@@ -269,7 +270,11 @@ const Header = () => {
 
           {/* Wallet Button */}
           <motion.div variants={navItemVariants} className="hidden md:block">
-            <ConnectButton variant="navbar" />
+            <ConnectButton
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+              variant="navbar"
+            />
           </motion.div>
 
           {/* Wallet Dropdown */}
