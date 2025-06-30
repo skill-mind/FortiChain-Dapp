@@ -9,12 +9,14 @@ interface FundModalProps {
   onClose: () => void;
   onSubmit: (amount: number, strk: number, usd: number) => void;
   walletBalance: number;
+  tokenSymbol: string;
 }
 
 export default function FundModal({
   onClose,
   onSubmit,
   walletBalance,
+  tokenSymbol,
 }: FundModalProps) {
   const [amount, setAmount] = useState<string>("");
   const [step, setStep] = useState<number>(1);
@@ -83,7 +85,7 @@ export default function FundModal({
                       height={20}
                       className="mr-1"
                     />
-                    <span className="font-medium">STRK</span>
+                    <span className="font-medium uppercase">{tokenSymbol}</span>
                     <ChevronDown size={20} className="ml-1" />
                   </button>
                 </div>
