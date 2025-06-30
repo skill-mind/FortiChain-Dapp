@@ -1,28 +1,48 @@
 "use client";
-import { mainnet } from "@starknet-react/chains";
+import { mainnet, sepolia } from "@starknet-react/chains";
 import {
   StarknetConfig,
   publicProvider,
-  argent,
-  braavos,
-  useInjectedConnectors,
-  starkscan,
+  voyager,
+  Connector,
 } from "@starknet-react/core";
+import { InjectedConnector } from "starknetkit/injected";
+import { WebWalletConnector } from "starknetkit/webwallet";
+import { ArgentMobileConnector } from "starknetkit/argentMobile";
 
 export function StarknetProvider({ children }: { children: React.ReactNode }) {
-  const { connectors } = useInjectedConnectors({
-    recommended: [argent(), braavos()],
-    includeRecommended: "onlyIfNoConnectors",
-    order: "alphabetical",
-  });
+  const connectors = [
+    new InjectedConnector({
+      options: { id: "argentX", name: "Argent X" },
+    }),
+    new InjectedConnector({
+      options: { id: "braavos", name: "Braavos" },
+    }),
+    new InjectedConnector({
+      options: { id: "metamask", name: "MetaMask" },
+    }),
+    new InjectedConnector({
+      options: { id: "keplr", name: "Keplr" },
+    }),
+    new InjectedConnector({
+      options: { id: "okxwallet", name: "OKX" },
+    }),
+    new WebWalletConnector({ url: "https://web.argent.xyz" }),
+    ArgentMobileConnector.init({
+      options: {
+        dappName: "Fortichain", // Replace with your app's name
+        url: "https://web.argent.xyz",
+      },
+    }),
+  ];
 
   return (
     <StarknetConfig
-      chains={[mainnet]}
+      chains={[mainnet, sepolia]}
       provider={publicProvider()}
-      connectors={connectors}
-      explorer={starkscan}
-      autoConnect={true} // Enable auto-connect
+      connectors={connectors as Connector[]}
+      explorer={voyager}
+      autoConnect={true}
     >
       {children}
     </StarknetConfig>
