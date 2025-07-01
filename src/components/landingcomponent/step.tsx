@@ -5,8 +5,15 @@ import Logo1 from "../../../public/swapicon.svg";
 import { MdOutlineLock } from "react-icons/md";
 import { motion, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { useAccount } from "@starknet-react/core";
 
-const StepProcess = () => {
+const StepProcess = ({
+  handleConnectModal,
+}: {
+  handleConnectModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const { isConnected } = useAccount();
+
   // Animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -64,6 +71,14 @@ const StepProcess = () => {
     threshold: 0.3,
     triggerOnce: true,
   });
+
+  const requireWallet = (callback: () => void) => {
+    if (isConnected) {
+      callback();
+    } else {
+      handleConnectModal(true);
+    }
+  };
 
   return (
     <section className="text-white py-16 px-4 overflow-hidden">
@@ -126,6 +141,7 @@ const StepProcess = () => {
               className="mt-4 px-6 py-3 bg-white text-black rounded-md font-medium hover:bg-gray-300 transition sm:text-lg"
               whileHover={{ scale: 1.05, backgroundColor: "#e0e0e0" }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => requireWallet(() => console.log("register"))}
             >
               Register Your Project
             </motion.button>
@@ -155,6 +171,7 @@ const StepProcess = () => {
               className="w-fit px-2 space-x-2 py-2 bg-[#0000FF] rounded-md font-medium hover:bg-blue-700 transition"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => requireWallet(() => console.log("submit project"))}
             >
               <span className="flex gap-2 text-[20px] justify-center">
                 <MdOutlineLock className="mt-1" />
@@ -196,6 +213,9 @@ const StepProcess = () => {
               className="mt-4 px-6 py-3 bg-white text-black rounded-md font-medium hover:bg-gray-300 transition sm:text-lg"
               whileHover={{ scale: 1.05, backgroundColor: "#e0e0e0" }}
               whileTap={{ scale: 0.95 }}
+              onClick={() =>
+                requireWallet(() => console.log("Submit a Vulnerability"))
+              }
             >
               Submit a Vulnerability
             </motion.button>
@@ -269,6 +289,9 @@ const StepProcess = () => {
               className="mt-4 px-6 py-3 bg-white text-black rounded-md font-medium hover:bg-gray-300 transition sm:text-lg"
               whileHover={{ scale: 1.05, backgroundColor: "#e0e0e0" }}
               whileTap={{ scale: 0.95 }}
+              onClick={() =>
+                requireWallet(() => console.log("Become a Validator"))
+              }
             >
               Become a Validator
             </motion.button>
@@ -330,6 +353,7 @@ const StepProcess = () => {
               className="mt-4 px-6 py-3 bg-white text-black rounded-md font-medium hover:bg-gray-300 transition sm:text-lg"
               whileHover={{ scale: 1.05, backgroundColor: "#e0e0e0" }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => requireWallet(() => console.log("Fund a Bounty"))}
             >
               Fund a Bounty
             </motion.button>
