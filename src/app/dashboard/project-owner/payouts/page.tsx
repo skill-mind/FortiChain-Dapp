@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 
 import Image from "next/image";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
+import {useAccount} from "@starknet-react/core"
 
 export default function PayoutPage() {
   const [isEscrowModalOpen, setIsEscrowModalOpen] = useState(false);
@@ -45,6 +46,7 @@ export default function PayoutPage() {
   const handleCloseWithdrawSuccessModal = () => {
     setIsWithdrawSuccessModalOpen(false);
   };
+  const {address} = useAccount()
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -246,6 +248,7 @@ export default function PayoutPage() {
           onClose={() => setIsWithdrawModalOpen(false)}
           onSubmit={handleWithdraw}
           withdrawableBalance={243.21}
+          walletAddress={address ?? ""}
         />
       )}
 
