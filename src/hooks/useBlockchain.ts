@@ -194,6 +194,33 @@ export async function readContractWithStarknetJs(
   return result;
 }
 
+export async function readTokenBalance(
+  tokenContractAddress: `0x{string}`,
+  address: `0x{string}`
+) {
+  const provider = new RpcProvider({
+    nodeUrl: process.env.NEXT_PUBLIC_RPC_URL,
+  });
+
+  // Get the contract ABI from the chain
+  const { abi } = await provider.getClassAt(tokenContractAddress);
+  if (!abi) {
+    throw new Error("No ABI found for the contract.");
+  }
+
+  // Instantiate contract
+  const contract = new Contract(abi, tokenContractAddress, provider);
+
+  // Dynamically call the function
+  if (typeof contract["balance_of"] !== "function") {
+    throw new Error(`Function 'balance_of' does not exist on the contract.`);
+  }
+
+  const result = await contract["balance_of"](address);
+
+  return result;
+}
+
 export async function writeContractWithStarknetJs(
   account: Account,
   entrypoint: string,
