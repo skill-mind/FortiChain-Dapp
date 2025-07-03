@@ -64,7 +64,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       </button>
 
       {showModal && (
-        <WithdrawModal onClose={handleClose} onSubmit={handleSubmit} />
+        <WithdrawModal onClose={handleClose} onSubmit={handleSubmit}  />
       )}
     </>
   );

@@ -6,10 +6,12 @@ export default function WithdrawModal({
   onClose,
   onSubmit,
   withdrawableBalance = 11235.01,
+  walletAddress,
 }: {
   onClose: () => void;
   onSubmit: (amount: number, numAmount: number, usdEquivalent: number) => void;
   withdrawableBalance?: number;
+  walletAddress?: string
 }) {
   const [amount, setAmount] = useState("");
   const [step, setStep] = useState(1);
@@ -77,7 +79,7 @@ export default function WithdrawModal({
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-center">
                     <span className="text-white text-base sm:text-lg font-medium">
-                      0x0596....0f3
+                     {walletAddress && `${walletAddress.slice(0,6)}...${walletAddress.slice(-4)}`}
                     </span>
                     <span className="text-gray-500 sm:ml-2 text-xs sm:text-sm mt-1 sm:mt-0">
                       Account Address
@@ -175,7 +177,7 @@ export default function WithdrawModal({
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-center">
                     <span className="text-white text-base sm:text-lg font-medium">
-                      0x0596....0f3
+                      {walletAddress}
                     </span>
                     <span className="text-gray-500 sm:ml-2 text-xs sm:text-sm mt-1 sm:mt-0">
                       Account Address
