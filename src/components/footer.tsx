@@ -113,6 +113,7 @@ const Footer = () => {
               { name: "Privacy Policy", path: "/privacy-policy" },
               { name: "Contact Us", path: "/contact-us" },
               { name: "Terms and Conditions", path: "/terms-and-condition" },
+              { name: "Docs and API", path: "/doc-api" },
             ].map((item, index) => (
               <motion.div key={index} variants={itemVariants}>
                 <Link
