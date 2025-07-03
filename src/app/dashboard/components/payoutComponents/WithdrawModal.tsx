@@ -11,7 +11,7 @@ export default function WithdrawModal({
   onClose: () => void;
   onSubmit: (amount: number, numAmount: number, usdEquivalent: number) => void;
   withdrawableBalance?: number;
-  walletAddress: string
+  walletAddress?: string
 }) {
   const [amount, setAmount] = useState("");
   const [step, setStep] = useState(1);

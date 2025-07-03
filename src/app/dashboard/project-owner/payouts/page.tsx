@@ -248,7 +248,7 @@ export default function PayoutPage() {
           onClose={() => setIsWithdrawModalOpen(false)}
           onSubmit={handleWithdraw}
           withdrawableBalance={243.21}
-          walletAddress={address ?? ""}
+          walletAddress={ address ?? ""}
         />
       )}
 
