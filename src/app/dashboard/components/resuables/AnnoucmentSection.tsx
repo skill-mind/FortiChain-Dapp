@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle, File, ChevronRight } from "lucide-react";
 import { Animation } from "@/motion/Animation";
@@ -9,6 +9,7 @@ import imgTwo from "../../../../../public/researcherIcon/annImgeTwo.svg";
 import imgThree from "../../../../../public/researcherIcon/annImgeThree.svg";
 import hourglass from "../../../../../public/researcherIcon/hourGlass.svg";
 import calendar from "../../../../../public/researcherIcon/calendarImg.svg";
+import NotificationModal from "./Notification-modal";
 
 // Type for a single announcement
 interface Announcement {
@@ -30,6 +31,12 @@ export const Announcements: React.FC<AnnouncementsProps> = ({
   announcements,
   viewAllLink = "#",
 }) => {
+  const [showNotification, setShowNotification] = useState(false);
+
+  function bellActiveHandler() {
+    setShowNotification(false);
+  }
+
   const getAnnouncementIcon = (type: string) => {
     switch (type) {
       case "rejected":
@@ -49,15 +56,17 @@ export const Announcements: React.FC<AnnouncementsProps> = ({
         <h2 className="text-white text-[28px] font-semibold">
           Announcements & Updates
         </h2>
-        <Link
-          href={viewAllLink}
+        <button
+          onClick={() => setShowNotification((prev) => !prev)}
           className="text-[#0000FF] flex items-center text-sm hover:text-blue-400"
         >
           View All
           <ChevronRight size={16} className="ml-1" />
-        </Link>
+        </button>
       </div>
-
+      {showNotification && (
+        <NotificationModal setIsBellActive={bellActiveHandler} />
+      )}
       <div className="space-y-5">
         {announcements.map((announcement, index) => (
           <Animation delay={0.2 * index} animationType="slide-up" key={index}>

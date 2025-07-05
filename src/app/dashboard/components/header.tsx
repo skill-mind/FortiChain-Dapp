@@ -7,6 +7,7 @@ import { Bell, Copy, ChevronUp, ChevronDown } from "lucide-react";
 import { Animation } from "@/motion/Animation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ConnectButton } from "@/components/connect-button";
+import NotificationModal from "./resuables/Notification-modal";
 
 const Header = () => {
   const pathname = usePathname();
@@ -149,6 +150,10 @@ const Header = () => {
     visible: { opacity: 1, x: 0 },
   };
 
+  function bellActiveHandler() {
+    setIsBellActive(false);
+  }
+
   return (
     <header className="flex relative flex-row gap-4 justify-between items-start px-0 py-3 w-full md:flex-row md:items-center md:px-0 md:pb-8 md:pt-1">
       <Animation delay={0.2} animationType="slide-up">
@@ -172,100 +177,7 @@ const Header = () => {
           </button>
 
           {isBellActive && (
-            <div className="fixed inset-0 top-0 z-[9998] bg-black/80 backdrop-blur-sm">
-              <motion.div
-                key="notification-dropdown"
-                variants={dropdownVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="fixed left-0 right-0 mx-auto md:mx-0 md:left-auto md:right-8 w-[80vw] md:max-w-[400px] z-[9999] bg-[#211A1D] border border-[#464043] rounded-md h-fit max-h-[70vh] overflow-hidden mt-24"
-              >
-                <div className="p-3">
-                  <div className="py-[22px] flex items-center justify-between border-b border-[#464043]">
-                    <h2 className="text-2xl font-semibold text-white">
-                      Notifications
-                    </h2>
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setIsBellActive(false)}
-                      className="flex items-center p-2 bg-gray-600 rounded-full"
-                      aria-label="Close notifications panel"
-                    >
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M2.40114 0.515524C1.88044 -0.00517459 1.03622 -0.00517498 0.515524 0.515524C-0.00517476 1.03622 -0.0051748 1.88044 0.515524 2.40114L7.11519 9.0008L0.515524 15.6005C-0.0051748 16.1212 -0.00517476 16.9654 0.515524 17.4861C1.03622 18.0068 1.88044 18.0068 2.40114 17.4861L9.00081 10.8864L15.6005 17.4861C16.1212 18.0068 16.9654 18.0068 17.4861 17.4861C18.0068 16.9654 18.0068 16.1212 17.4861 15.6005L10.8864 9.0008L17.4861 2.40114C18.0068 1.88044 18.0068 1.03622 17.4861 0.515524C16.9654 -0.00517455 16.1212 -0.00517407 15.6005 0.515524L9.00081 7.11519L2.40114 0.515524Z"
-                          fill="#D3D1D2"
-                        />
-                      </svg>
-                    </motion.button>
-                  </div>
-                </div>
-
-                <ScrollArea className="bg-[#211A1D] p-3 text-white h-[calc(70vh-100px)]">
-                  {notifications.map((notification, index) => (
-                    <motion.div
-                      key={notification.id}
-                      variants={notificationItemVariants}
-                      transition={{ delay: index * 0.05 }}
-                      className="py-6 border-b border-gray-700"
-                    >
-                      <div className="flex gap-1 items-center mb-2">
-                        <span className="text-2xl">
-                          <img
-                            className="h-[24px]"
-                            src={notification.imageSrc}
-                            alt={notification.type}
-                          />
-                        </span>
-                        <h2 className="text-lg font-semibold capitalize">
-                          [
-                          {notification.title.startsWith("[")
-                            ? ""
-                            : notification.type}
-                          ] {notification.title}
-                        </h2>
-                      </div>
-                      <p className="mb-4 text-sm text-gray-300">
-                        {notification.description}
-                      </p>
-                      <div className="flex gap-4 items-center">
-                        <a
-                          href="#"
-                          className="text-sm text-[#0000FF] underline hover:text-[#0000FF]/90"
-                        >
-                          [{notification.actionText}]
-                        </a>
-                        <div className="flex gap-2 items-center text-xs text-gray-400">
-                          {notification.type === "urgent" ||
-                          notification.type === "New submission"
-                            ? "⏳"
-                            : "📅"}
-                          {notification.timeAgo}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                  <div className="py-2">
-                    <div className="flex gap-2 justify-center items-center">
-                      <img
-                        className="h-[15px] w-[15px]"
-                        src="/notification-icons/refresh.svg"
-                        alt=""
-                      />
-                      <div className="text-sm text-[#0000FF]">Load More</div>
-                    </div>
-                  </div>
-                </ScrollArea>
-              </motion.div>
-            </div>
+            <NotificationModal setIsBellActive={bellActiveHandler} />
           )}
 
           {/* Wallet Button */}
