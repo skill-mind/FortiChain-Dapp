@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Animation } from "@/motion/Animation";
 import { Modal } from "./Modal";
 import WithdrawModal from "../payoutComponents/WithdrawModal";
+import ReportModal from "./view-all-report-modal";
 
 export const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = React.useState(false);
@@ -407,11 +408,7 @@ export const RecentReports: React.FC<RecentReportsProps> = ({
       </div>
 
       {isModalOpen && (
-        <WithdrawModal
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={handleWithdrawSubmit}
-          withdrawableBalance={1000} // You can adjust this value based on your needs
-        />
+        <ReportModal onClose={() => setIsModalOpen(false)} report={reports} />
       )}
     </>
   );
