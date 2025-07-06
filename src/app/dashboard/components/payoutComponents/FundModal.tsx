@@ -4,6 +4,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ChevronDown } from "lucide-react";
+import { useTokenBalance } from "@/hooks/useTokenBalance";
+import { useAccount } from "@starknet-react/core";
+import {
+  FORTICHAIN_CONTRACT_ADDRESS,
+  useContractWriteUtility,
+} from "@/hooks/useBlockchain";
+import { FORTICHAIN_ABI } from "@/app/abi/fortichain-abi";
+import SuccessModal from "./SuccessModal";
+import { byteArray, cairo, CallData, RpcProvider, shortString } from "starknet";
+
+export const myProvider = new RpcProvider({
+  nodeUrl: process.env.NEXT_PUBLIC_RPC_URL,
+});
 
 interface FundModalProps {
   onClose: () => void;
@@ -19,8 +32,12 @@ export default function FundModal({
   tokenSymbol,
 }: FundModalProps) {
   const [amount, setAmount] = useState<string>("");
+  const { account } = useAccount();
   const [step, setStep] = useState<number>(1);
   const [usdEquivalent, setUsdEquivalent] = useState<number>(0);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [id] = useState(1);
+  const [locktime] = useState(60);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -39,15 +56,60 @@ export default function FundModal({
     }
   };
 
-  const handleSubmit = () => {
-    if (amount) {
-      const numAmount = parseFloat(amount);
-      onSubmit(numAmount, numAmount, usdEquivalent);
+  // const handleSubmit =() => {
+  //   if (amount) {
+  //     console.log(amount)
+  //     useContractWriteUtility("fund_project", [id, amount, locktime], FORTICHAIN_ABI);
+  //     oncloseModalHandle()
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    if (!account) {
+      console.log("Connect Wallet to continue");
+      return;
+    }
+    try {
+      const result = await account.execute({
+        contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
+        entrypoint: "fund_project",
+        calldata: CallData.compile({
+          project_id: id,
+          amount: cairo.uint256(amount),
+          lockTime: locktime,
+        }),
+      });
+
+      const status = await myProvider.waitForTransaction(
+        result.transaction_hash
+      );
+
+      console.log(status);
+      if (status.isSuccess()) {
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // setIsCreatingPool(false);
     }
   };
 
+  function oncloseModalHandle() {
+    setIsSuccess(false);
+    const numAmount = parseFloat(amount);
+    onSubmit(numAmount, numAmount, usdEquivalent);
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
+      {isSuccess && (
+        <SuccessModal
+          onClose={oncloseModalHandle}
+          title="Escrow Funded Successfully"
+          amount={amount}
+          usdAmount={usdEquivalent}
+        />
+      )}
       <div className="fixed inset-0 bg-[#211a1d] bg-opacity-80 backdrop-blur-md"></div>
       <button
         onClick={onClose}
