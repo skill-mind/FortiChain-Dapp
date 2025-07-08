@@ -130,7 +130,8 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   };
 
   const addProject = (project: Project) => {
-    setProjects((prev) => [...prev, project]);
+    // console.log(project)
+    // setProjects((prev) => [...prev, project]);
     // toast({
     //   title: "Project added",
     //   description: "Your project has been added successfully.",

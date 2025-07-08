@@ -39,6 +39,8 @@ export default function FundModal({
   const [id] = useState(1);
   const [locktime] = useState(60);
 
+  const {writeAsync} = useContractWriteUtility("fund_project",[id,amount,locktime],FORTICHAIN_ABI);
+
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (/^\d*\.?\d*$/.test(value) || value === "") {
@@ -56,37 +58,13 @@ export default function FundModal({
     }
   };
 
-  // const handleSubmit =() => {
-  //   if (amount) {
-  //     console.log(amount)
-  //     useContractWriteUtility("fund_project", [id, amount, locktime], FORTICHAIN_ABI);
-  //     oncloseModalHandle()
-  //   }
-  // };
-
   const handleSubmit = async () => {
     if (!account) {
       console.log("Connect Wallet to continue");
       return;
     }
     try {
-      const result = await account.execute({
-        contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
-        entrypoint: "fund_project",
-        calldata: CallData.compile({
-          project_id: id,
-          amount: cairo.uint256(amount),
-          lockTime: locktime,
-        }),
-      });
-
-      const status = await myProvider.waitForTransaction(
-        result.transaction_hash
-      );
-
-      console.log(status);
-      if (status.isSuccess()) {
-      }
+      writeAsync()
     } catch (err) {
       console.log(err);
     } finally {

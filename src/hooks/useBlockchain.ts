@@ -255,16 +255,19 @@ export const uploadImageToPinata = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch(`https://api.pinata.cloud/pinning//pinFileToIPFS`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${BEARER_TOKEN}`,
-    },
-    body: formData,
-  });
+  const res = await fetch(
+    `https://api.pinata.cloud/pinning//pinFileToIPFS`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${BEARER_TOKEN}`,
+      },
+      body: formData,
+    }
+  );
 
   if (!res.ok) {
-    throw new Error("Image upload to Pinata failed");
+    throw new Error("file upload to Pinata failed");
   }
 
   const data = await res.json();
