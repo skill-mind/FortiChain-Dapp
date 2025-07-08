@@ -40,6 +40,10 @@ import ReviewSubmissionPage from "./review-submission";
 import { BitbucketIcon, DocumentIcon, ImageIcon } from "@/components/svg/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { auth0Config } from "@/lib/auth0Config";
+import { FORTICHAIN_CONTRACT_ADDRESS, uploadImageToPinata, uploadJSONToPinata } from "@/hooks/useBlockchain";
+import { useAccount } from "@starknet-react/core";
+import { byteArray, CallData } from "starknet";
+import { myProvider } from "@/lib/utils";
 
 const availableTags = [
   { value: "defi", label: "DeFi" },
@@ -85,17 +89,17 @@ export function RegisterProject() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
-
+  const {account} = useAccount() 
   const [formData, setFormData] = useState({
-    name: "Secure Chain",
+    name: "",
     description:
-      "A decentralized Web3 platform empowering users with secure, transparent, and seamless blockchain interactions. Enables DeFi services, manages digital assets, and verifies ownership—all in one intuitive interface.",
-    category: "DeFi",
-    contractAddress: "0xA1234B28893...",
-    contactInfo: "securechain@gmail.com",
-    repository: "https://github.com/repository-name",
-    gitProvider: "github",
-    amount: "$4,000.00",
+      "",
+    category: "",
+    contractAddress: "",
+    contactInfo: "",
+    repository: "",
+    gitProvider: "",
+    amount: "",
     documentFile: null as File | null,
     logoFile: null as File | null,
     documentPreview: "",
@@ -233,19 +237,19 @@ export function RegisterProject() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setSubmissionStatus("idle");
     if (currentStep === 1) {
       setCurrentStep(2);
       return;
     }
 
     if (currentStep === 2) {
-      if (!connectedProvider) {
-        setConnectionError("Please connect a Git provider before continuing.");
-        return;
-      }
+      // if (!connectedProvider) {
+      //   setConnectionError("Please connect a Git provider before continuing.");
+      //   return;
+      // }
       setShowSignatureModal(true);
       return;
     }
@@ -255,11 +259,41 @@ export function RegisterProject() {
       return;
     }
 
-    setSubmitting(true);
-    setTimeout(() => {
-      const success = Math.random() > 0.3;
 
-      if (success) {
+    if (formData.logoFile && formData.documentFile && account) {
+      const IMAGE_IPF_HASH = await uploadImageToPinata(formData.logoFile);
+      const File_IPF_HASH = await uploadImageToPinata(formData.documentFile);
+      const {amount,category,contractAddress,name,repository,contactInfo,description,gitProvider} = formData 
+      const data = {
+        amount,
+        category,
+        contractAddress,
+        document: File_IPF_HASH,
+        name,
+        repository,
+        logo: IMAGE_IPF_HASH,
+        contactInfo,
+        description,
+        gitProvider,
+      };
+      const pinata_json_data = await uploadJSONToPinata(data);
+      console.log({ IMAGE_IPF_HASH, File_IPF_HASH });
+      const result = await account.execute({
+        contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
+        entrypoint: "register_project",
+        calldata: CallData.compile({
+          project_info: byteArray.byteArrayFromString(pinata_json_data),
+          smart_contract_address: contractAddress,
+          contact: byteArray.byteArrayFromString(contactInfo),
+          signature_request: 1,
+        }),
+      });
+
+      const status = await myProvider.waitForTransaction(
+        result.transaction_hash
+      );
+
+      if (status.isSuccess()) {
         addProject({
           id: Math.random().toString(36).substring(2, 9),
           name: formData.name,
@@ -272,12 +306,8 @@ export function RegisterProject() {
           contactInfo: formData.contactInfo,
         });
         setSubmissionStatus("success");
-      } else {
-        setSubmissionStatus("error");
       }
-
-      setSubmitting(false);
-    }, 2000);
+    }
   };
 
   const handleVerification = () => {
@@ -688,7 +718,9 @@ export function RegisterProject() {
                   </p>
 
                   {connectionError && (
-                    <p className="text-sm text-red-500 mt-2">{connectionError}</p>
+                    <p className="text-sm text-red-500 mt-2">
+                      {connectionError}
+                    </p>
                   )}
 
                   <div className="flex gap-4 mt-4">
@@ -697,48 +729,60 @@ export function RegisterProject() {
                         connectedProvider === "github"
                           ? "bg-green-600 hover:bg-green-700 border-green-500"
                           : formData.gitProvider === "github"
-                            ? "bg-blue-600 hover:bg-blue-700"
-                            : "bg-[#121212] hover:bg-[#1A1A1A]"
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "bg-[#121212] hover:bg-[#1A1A1A]"
                       } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
-                      onClick={() => handleConnect('github')}
+                      onClick={() => handleConnect("github")}
                       type="button"
                       disabled={!isAuthenticated && connectedProvider !== null}
                     >
                       <Github size={18} />
-                      {connectedProvider === 'github' ? 'GitHub Connected' : 'Connect GitHub'}
-                      {connectedProvider === 'github' && <Check size={18} className="ml-1" />}
+                      {connectedProvider === "github"
+                        ? "GitHub Connected"
+                        : "Connect GitHub"}
+                      {connectedProvider === "github" && (
+                        <Check size={18} className="ml-1" />
+                      )}
                     </Button>
                     <Button
                       className={`flex-1 flex items-center justify-center gap-2 ${
                         connectedProvider === "gitlab"
                           ? "bg-green-600 hover:bg-green-700 border-green-500"
                           : formData.gitProvider === "gitlab"
-                            ? "bg-blue-600 hover:bg-blue-700"
-                            : "bg-[#121212] hover:bg-[#1A1A1A]"
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "bg-[#121212] hover:bg-[#1A1A1A]"
                       } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
-                      onClick={() => handleConnect('gitlab')}
+                      onClick={() => handleConnect("gitlab")}
                       type="button"
                       disabled={!isAuthenticated && connectedProvider !== null}
                     >
                       <GitlabIcon size={18} />
-                      {connectedProvider === 'gitlab' ? 'GitLab Connected' : 'Connect GitLab'}
-                      {connectedProvider === 'gitlab' && <Check size={18} className="ml-1" />}
+                      {connectedProvider === "gitlab"
+                        ? "GitLab Connected"
+                        : "Connect GitLab"}
+                      {connectedProvider === "gitlab" && (
+                        <Check size={18} className="ml-1" />
+                      )}
                     </Button>
                     <Button
                       className={`flex-1 flex items-center justify-center gap-2 ${
                         connectedProvider === "bitbucket"
                           ? "bg-green-600 hover:bg-green-700 border-green-500"
                           : formData.gitProvider === "bitbucket"
-                            ? "bg-blue-600 hover:bg-blue-700"
-                            : "bg-[#121212] hover:bg-[#1A1A1A]"
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "bg-[#121212] hover:bg-[#1A1A1A]"
                       } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
-                      onClick={() => handleConnect('bitbucket')}
+                      onClick={() => handleConnect("bitbucket")}
                       type="button"
                       disabled={!isAuthenticated && connectedProvider !== null}
                     >
                       <BitbucketIcon width={18} height={18} />
-                      {connectedProvider === 'bitbucket' ? 'Bitbucket Connected' : 'Connect Bitbucket'}
-                      {connectedProvider === 'bitbucket' && <Check size={18} className="ml-1" />}
+                      {connectedProvider === "bitbucket"
+                        ? "Bitbucket Connected"
+                        : "Connect Bitbucket"}
+                      {connectedProvider === "bitbucket" && (
+                        <Check size={18} className="ml-1" />
+                      )}
                     </Button>
                   </div>
 
@@ -751,12 +795,16 @@ export function RegisterProject() {
                           variant="outline"
                           className="text-gray-400 border-gray-700 hover:text-white hover:bg-gray-800"
                         >
-                          Disconnect {connectedProvider.charAt(0).toUpperCase() + connectedProvider.slice(1)}
+                          Disconnect{" "}
+                          {connectedProvider.charAt(0).toUpperCase() +
+                            connectedProvider.slice(1)}
                         </Button>
                       </div>
                       <div className="mt-6">
                         <h3 className="text-base text-white mb-2">
-                          Link to Public Repository on {connectedProvider.charAt(0).toUpperCase() + connectedProvider.slice(1)}
+                          Link to Public Repository on{" "}
+                          {connectedProvider.charAt(0).toUpperCase() +
+                            connectedProvider.slice(1)}
                         </h3>
                         <Input
                           name="repository"

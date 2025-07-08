@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Abi, Account, CallData, Contract, RpcProvider } from "starknet";
 
 export const FORTICHAIN_CONTRACT_ADDRESS =
-  "0x0353bbcf8d11dad6fd7fd2eec371142ae6a38bc3c2fab5a35a91a1796f11c56d";
+  "0x042c972719cde698a9e1497b022dbffaa0a6b18c0e853c2461b182ea8d884fe3";
 const BEARER_TOKEN = process.env.NEXT_PUBLIC_BEARER_TOKEN || "";
 
 // Utility function to perform contract read operations
@@ -255,16 +255,19 @@ export const uploadImageToPinata = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch(`https://api.pinata.cloud/pinning//pinFileToIPFS`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${BEARER_TOKEN}`,
-    },
-    body: formData,
-  });
+  const res = await fetch(
+    `https://api.pinata.cloud/pinning//pinFileToIPFS`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${BEARER_TOKEN}`,
+      },
+      body: formData,
+    }
+  );
 
   if (!res.ok) {
-    throw new Error("Image upload to Pinata failed");
+    throw new Error("file upload to Pinata failed");
   }
 
   const data = await res.json();
