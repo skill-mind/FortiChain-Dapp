@@ -5,19 +5,15 @@ import type React from "react";
 import { useContext, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
-  Bell,
   ChevronDown,
   ChevronRight,
   ArrowLeft,
   Github,
-  GitlabIcon,
   Calendar,
   Check,
   X,
   Lock,
   Search,
-  ChevronLeft,
-  Pencil,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,7 +82,7 @@ export function RegisterProject() {
   
   // Get Auth0 functions and state
   const { loginWithPopup, logout, isAuthenticated, user } = useAuth0();
-
+  const [isLoading,setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const {account} = useAccount() 
@@ -105,6 +101,7 @@ export function RegisterProject() {
     documentPreview: "",
     logoPreview: "",
     autoTopUp: true,
+    date:0
   });
 
   // Update connectedProvider when Auth0 authentication state changes
@@ -239,6 +236,7 @@ export function RegisterProject() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(false);
     setSubmissionStatus("idle");
     if (currentStep === 1) {
       setCurrentStep(2);
@@ -263,7 +261,7 @@ export function RegisterProject() {
     if (formData.logoFile && formData.documentFile && account) {
       const IMAGE_IPF_HASH = await uploadImageToPinata(formData.logoFile);
       const File_IPF_HASH = await uploadImageToPinata(formData.documentFile);
-      const {amount,category,contractAddress,name,repository,contactInfo,description,gitProvider} = formData 
+      const {amount,category,contractAddress,name,repository,contactInfo,description,gitProvider,date} = formData
       const data = {
         amount,
         category,
@@ -275,19 +273,21 @@ export function RegisterProject() {
         contactInfo,
         description,
         gitProvider,
+        date
       };
       const pinata_json_data = await uploadJSONToPinata(data);
       console.log({ IMAGE_IPF_HASH, File_IPF_HASH });
       const result = await account.execute({
         contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
-        entrypoint: "register_project",
+        entrypoint: "create_project",
         calldata: CallData.compile({
           project_info: byteArray.byteArrayFromString(pinata_json_data),
           smart_contract_address: contractAddress,
-          contact: byteArray.byteArrayFromString(contactInfo),
           signature_request: 1,
+          deadline: date,
         }),
       });
+      setIsLoading(true);
 
       const status = await myProvider.waitForTransaction(
         result.transaction_hash
@@ -308,6 +308,7 @@ export function RegisterProject() {
         setSubmissionStatus("success");
       }
     }
+    console.log(formData)
   };
 
   const handleVerification = () => {
@@ -357,6 +358,9 @@ export function RegisterProject() {
   const handleDateSelection = (newDate: Date | undefined) => {
     setDate(newDate);
     setShowCalendar(false);
+    if (newDate) {
+      setFormData((prev) => ({ ...prev, date: +newDate }));
+    }
   };
 
   const formatDateForDisplay = (date: Date | undefined) => {
@@ -398,14 +402,14 @@ export function RegisterProject() {
         </h1>
         {currentStep !== 4 && (
           <div className="flex justify-center mb-8">
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full flex-wrap sm:flex-nowrap gap-4 sm:gap-0">
               <div
                 className={`relative flex-1 ${
                   currentStep >= 1 ? "text-white" : "text-gray-500"
                 }`}
               >
                 <div
-                  className={`text-xs font-light w-44 h-10 gap-2 rounded-full border flex items-center justify-center ${
+                  className={`text-xs font-light w-full sm:w-44 h-10 gap-2 rounded-full border flex items-center justify-center ${
                     currentStep >= 1
                       ? "border-[#0000FF] text-white"
                       : "bg-transparent border-gray-700 text-gray-500"
@@ -425,7 +429,7 @@ export function RegisterProject() {
                 )}
               </div>
 
-              <div className="w-full h-[1px] bg-gray-700 mx-2"></div>
+              <div className="w-full h-[1px] bg-gray-700 mx-2 hidden sm:block"></div>
 
               <div
                 className={`relative flex-1 ${
@@ -433,7 +437,7 @@ export function RegisterProject() {
                 }`}
               >
                 <div
-                  className={`text-xs font-light w-44 h-10 gap-2 rounded-full border flex items-center justify-center ${
+                  className={`text-xs font-light w-full sm:w-44 h-10 gap-2 rounded-full border flex items-center justify-center ${
                     currentStep >= 2
                       ? "border-[#0000FF] text-white"
                       : "bg-transparent border-gray-700 text-gray-500"
@@ -453,7 +457,7 @@ export function RegisterProject() {
                 )}
               </div>
 
-              <div className="w-full h-[1px] bg-gray-700 mx-2"></div>
+              <div className="w-full h-[1px] bg-gray-700 mx-2 hidden sm:block"></div>
 
               <div
                 className={`relative flex-1 ${
@@ -461,7 +465,7 @@ export function RegisterProject() {
                 }`}
               >
                 <div
-                  className={`text-xs font-light w-44 h-10 gap-2 rounded-full border flex items-center justify-center ${
+                  className={`text-xs font-light w-full sm:w-44 h-10 gap-2 rounded-full border flex items-center justify-center ${
                     currentStep >= 3
                       ? "border-[#0000FF] text-white"
                       : "bg-transparent border-gray-700 text-gray-500"
@@ -744,46 +748,6 @@ export function RegisterProject() {
                         <Check size={18} className="ml-1" />
                       )}
                     </Button>
-                    <Button
-                      className={`flex-1 flex items-center justify-center gap-2 ${
-                        connectedProvider === "gitlab"
-                          ? "bg-green-600 hover:bg-green-700 border-green-500"
-                          : formData.gitProvider === "gitlab"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-[#121212] hover:bg-[#1A1A1A]"
-                      } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
-                      onClick={() => handleConnect("gitlab")}
-                      type="button"
-                      disabled={!isAuthenticated && connectedProvider !== null}
-                    >
-                      <GitlabIcon size={18} />
-                      {connectedProvider === "gitlab"
-                        ? "GitLab Connected"
-                        : "Connect GitLab"}
-                      {connectedProvider === "gitlab" && (
-                        <Check size={18} className="ml-1" />
-                      )}
-                    </Button>
-                    <Button
-                      className={`flex-1 flex items-center justify-center gap-2 ${
-                        connectedProvider === "bitbucket"
-                          ? "bg-green-600 hover:bg-green-700 border-green-500"
-                          : formData.gitProvider === "bitbucket"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-[#121212] hover:bg-[#1A1A1A]"
-                      } text-white border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
-                      onClick={() => handleConnect("bitbucket")}
-                      type="button"
-                      disabled={!isAuthenticated && connectedProvider !== null}
-                    >
-                      <BitbucketIcon width={18} height={18} />
-                      {connectedProvider === "bitbucket"
-                        ? "Bitbucket Connected"
-                        : "Connect Bitbucket"}
-                      {connectedProvider === "bitbucket" && (
-                        <Check size={18} className="ml-1" />
-                      )}
-                    </Button>
                   </div>
 
                   {connectedProvider && isAuthenticated && (
@@ -900,6 +864,7 @@ export function RegisterProject() {
                         className="bg-[#121212] border-gray-700 text-white pr-10"
                         value={date ? formatDateForDisplay(date) : ""}
                         readOnly
+                        
                         onClick={() => setShowCalendar(!showCalendar)}
                       />
                       <Button
@@ -909,7 +874,7 @@ export function RegisterProject() {
                         className="absolute right-0 top-0 h-full px-3"
                         onClick={() => setShowCalendar(!showCalendar)}
                       >
-                        <Calendar className="h-4 w-4 text-gray-400" />
+                        <Calendar  className="h-4 w-4 text-gray-400" />
                       </Button>
 
                       {showCalendar && (
@@ -920,7 +885,7 @@ export function RegisterProject() {
                                 {format(currentMonth, "MMMM yyyy")}
                               </h3>
                             </div>
-                           
+
                             <CalendarComponent
                               mode="single"
                               selected={date}
@@ -964,9 +929,7 @@ export function RegisterProject() {
               </div>
             )}
 
-            {currentStep === 4 && (
-              <ReviewSubmissionPage formData={formData}/>
-            )}
+            {currentStep === 4 && <ReviewSubmissionPage formData={formData} />}
 
             <div className="flex justify-between mt-8">
               {currentStep > 1 ? (
@@ -974,7 +937,12 @@ export function RegisterProject() {
                   type="button"
                   variant="outline"
                   className="bg-transparent border-gray-700 text-white"
-                  onClick={() => setCurrentStep((prev) => prev - 1)}
+                  onClick={() => {
+                    if (isLoading) {
+                      setIsLoading(false)
+                    }
+                    setCurrentStep((prev) => prev - 1)
+                  }}
                 >
                   Back
                 </Button>
@@ -984,14 +952,21 @@ export function RegisterProject() {
 
               <Button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  if (currentStep == 4) {
+                    setIsLoading(true)
+                  }
+                }}
+                className={`${isLoading?"cursor-not-allowed":""} bg-blue-600 hover:bg-blue-700 text-white`}
               >
-                {currentStep < 4
-                  ? currentStep === 3
-                    ? "Continue to Review"
-                    : "Next"
-                  : "Submit and Launch"}
+                {!isLoading &&
+                  (currentStep < 4
+                    ? currentStep === 3
+                      ? "Continue to Review"
+                      : "Next"
+                    : "Submit and Launch")}
                 {currentStep < 4 && <ChevronRight size={16} className="ml-1" />}
+                {isLoading && "submitting...."}
               </Button>
             </div>
           </form>
@@ -1026,35 +1001,12 @@ export function RegisterProject() {
                 </Button>
               </div>
             )}
-
-            {submissionStatus === "error" && (
-              <div className="flex flex-col items-center justify-center py-8">
-                <h2 className="text-xl font-bold text-white text-center mb-4">
-                  Submission Failed!
-                </h2>
-                <p className="text-gray-400 text-center text-sm mb-6">
-                  Error ID: PROJ-1
-                </p>
-                <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mb-6">
-                  <X className="w-8 h-8 text-white" />
-                </div>
-                <p className="text-white text-center mb-8">
-                  Please check your wallet and try again in a few minutes.
-                </p>
-                <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={retrySubmission}
-                >
-                  Retry Submission
-                </Button>
-              </div>
-            )}
           </>
         )}
       </Card>
 
       <Dialog open={showSignatureModal} onOpenChange={setShowSignatureModal}>
-        <DialogContent className="bg-[#1A1A1A] border-gray-800 p-6 max-w-md">
+        <DialogContent className="bg-[#1A1A1A] border-gray-800 p-6 sm:max-w-3xl overflow-scroll">
           {verificationStatus === "idle" && (
             <>
               <div className="flex justify-center mb-4">
@@ -1067,7 +1019,7 @@ export function RegisterProject() {
                 Please sign the message below to verify that you own this
                 project.
               </p>
-              <div className="bg-[#121212] border border-gray-700 rounded-md p-4 mb-6">
+              <div className="bg-[#121212] border border-gray-700 rounded-md p-4 mb-6 w-full">
                 <p className="text-gray-300 text-sm">
                   I confirm I am the owner of the project{" "}
                   <span className="font-medium text-white">

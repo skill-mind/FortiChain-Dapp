@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Abi, Account, CallData, Contract, RpcProvider } from "starknet";
 
 export const FORTICHAIN_CONTRACT_ADDRESS =
-  "0x042c972719cde698a9e1497b022dbffaa0a6b18c0e853c2461b182ea8d884fe3";
+  "0x076c1d77832ce056bd13651518b3449c1e0e54413889da31bc261ba8aca0fbb0";
 const BEARER_TOKEN = process.env.NEXT_PUBLIC_BEARER_TOKEN || "";
 
 // Utility function to perform contract read operations

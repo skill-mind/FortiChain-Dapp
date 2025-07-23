@@ -12,12 +12,15 @@ import {
 } from "@/components/ui/table";
 import type { Project } from "@/types/project";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface ProjectsTableProps {
   projects: Project[];
+  type: string
+  fundModal: () => void;
 }
 
-export function ProjectsTable({ projects }: ProjectsTableProps) {
+export function ProjectsTable({ projects, type = "view", fundModal = () => {} }: ProjectsTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
 
@@ -105,14 +108,26 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                     {/* Replace underscore for display */}
                   </span>
                 </TableCell>
-                <TableCell className="py-2 px-2 sm:px-4 text-[#0000FF]">
-                  <Link
-                    href={`/dashboard/project-owner/projects/${project.id}`}
-                    className="text-[#0000FF] hover:underline text-sm sm:text-base"
-                  >
-                    View
-                  </Link>
-                </TableCell>
+                {type == "view" && (
+                  <TableCell className="py-2 px-2 sm:px-4 text-[#0000FF]">
+                    <Link
+                      href={`/dashboard/project-owner/projects/${project.id}`}
+                      className="text-[#0000FF] hover:underline text-sm sm:text-base"
+                    >
+                      View
+                    </Link>
+                  </TableCell>
+                )}
+                {type == "fund" && (
+                  <TableCell className="py-2 px-2 sm:px-4 text-[#0000FF]">
+                    <Button
+                      onClick={fundModal}
+                      className="text-white text-sm sm:text-base"
+                    >
+                      Fund
+                    </Button>
+                  </TableCell>
+                )}
               </motion.tr>
             ))}
           </TableBody>
