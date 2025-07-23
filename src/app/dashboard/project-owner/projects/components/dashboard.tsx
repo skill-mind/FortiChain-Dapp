@@ -78,7 +78,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        <ProjectsTable projects={projects} />
+          <ProjectsTable projects={projects} type={"view"} fundModal={() => { }} />
       </div>
     </motion.div>
     </motion.div>

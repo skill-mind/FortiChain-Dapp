@@ -39,7 +39,7 @@ import { auth0Config } from "@/lib/auth0Config";
 import { FORTICHAIN_CONTRACT_ADDRESS, uploadImageToPinata, uploadJSONToPinata } from "@/hooks/useBlockchain";
 import { useAccount } from "@starknet-react/core";
 import { byteArray, CallData } from "starknet";
-import { dateToEpoch, myProvider } from "@/lib/utils";
+import { myProvider } from "@/lib/utils";
 
 const availableTags = [
   { value: "defi", label: "DeFi" },
