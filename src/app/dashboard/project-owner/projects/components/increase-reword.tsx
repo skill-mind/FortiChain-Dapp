@@ -16,6 +16,10 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ProjectsContext } from "@/context/project-context";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAccount } from "@starknet-react/core";
+import { FORTICHAIN_CONTRACT_ADDRESS } from "@/hooks/useBlockchain";
+import { cairo, CallData } from "starknet";
+import { myProvider } from "@/lib/utils";
 
 export function IncreaseReward({ id }: { id: string }) {
   const { projects, wallet, updateProject } = useContext(ProjectsContext);
@@ -26,7 +30,7 @@ export function IncreaseReward({ id }: { id: string }) {
   const [submitting, setSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
+  const {account} = useAccount()
   // Find the project by ID
   const project = projects.find((p) => p.id === id);
 
@@ -47,11 +51,23 @@ export function IncreaseReward({ id }: { id: string }) {
     setShowConfirmModal(true);
   };
 
-  const handleConfirmBoost = () => {
+  const handleConfirmBoost = async () => {
     setShowConfirmModal(false);
     setSubmitting(true);
 
-    setTimeout(() => {
+    if (!account) return;
+    const result = await account.execute({
+      contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
+      entrypoint: "add_escrow_funding",
+      calldata: CallData.compile({
+        escrow_id: cairo.uint256(id),
+        amount: cairo.uint256(additionalAmountNum),
+      }),
+    });
+
+    const status = await myProvider.waitForTransaction(result.transaction_hash);
+
+    if (status) {
       // Calculate new bounty amount
       const currentAmount = Number.parseFloat(
         project?.bountyAllocated?.replace(/,/g, "") || "0"
@@ -66,14 +82,13 @@ export function IncreaseReward({ id }: { id: string }) {
           maximumFractionDigits: 2,
         }
       );
-
       updateProject(id, {
         bountyAllocated: newTotal,
       });
 
       setSubmitting(false);
       setShowSuccessModal(true);
-    }, 1500);
+    }
   };
 
   const goBackToProject = () => {

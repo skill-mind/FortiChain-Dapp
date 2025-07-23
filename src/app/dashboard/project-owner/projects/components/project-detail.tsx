@@ -12,6 +12,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ProjectsContext } from "@/context/project-context"
 import { useRouter } from "next/navigation"
 import VulnerabilityCard from "./volnerbility-card"
+import { FORTICHAIN_CONTRACT_ADDRESS, useContractFetch, useContractWriteUtility } from "@/hooks/useBlockchain"
+import { FORTICHAIN_ABI } from "@/app/abi/fortichain-abi"
+import { useAccount } from "@starknet-react/core"
+import { cairo, CallData } from "starknet"
+import { myProvider } from "@/lib/utils"
 
 export function ProjectDetail({ id }: { id: string }) {
   const { projects, wallet, deleteProject } = useContext(ProjectsContext)
@@ -19,7 +24,27 @@ export function ProjectDetail({ id }: { id: string }) {
   const [showCloseModal, setShowCloseModal] = useState(false)
   const [closingProject, setClosingProject] = useState(false)
   const [projectClosed, setProjectClosed] = useState(false)
+  const { account } = useAccount(); 
+  const { readData,readIsLoading } = useContractFetch(FORTICHAIN_ABI, "view_project", [1]);
+  const [checkDeadine, setCheckDeadline] = useState(false)
+console.log(readData)
+  if (!readIsLoading) {
+    let m = Number(readData?.deadline);
+    let d = new Date(m)
+    let now = new Date()
+    console.log("kkk")
+    if (+d < +now) {
+      console.log("dealine pass you can delete");
+      setCheckDeadline(true);
+    }
+    // else {
+    //   setCheckDeadline(false);
+    //   console.log("deadline no reach yet");
+    // }
 
+    console.log({d,now})
+  }
+  
   // Find the project by ID or use a default one for demo
   const project = projects.find((p) => p.id === id) || {
     id: "demo",
@@ -62,14 +87,27 @@ export function ProjectDetail({ id }: { id: string }) {
       },
     ],
   }
-
-  const handleCloseProject = () => {
+  const handleCloseProject =  async () => {
     setClosingProject(true)
-    setTimeout(() => {
-      deleteProject(id)
-      setClosingProject(false)
-      setProjectClosed(true)
-    }, 2000)
+
+    if (!account) return
+    const result = await account.execute({
+      contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
+      entrypoint: "close_project",
+      calldata: CallData.compile({
+        project_id: cairo.uint256(id),
+      }),
+    });
+
+        const status = await myProvider.waitForTransaction(
+            result.transaction_hash
+        );
+    console.log(status)
+    if (status.isSuccess()) {
+      deleteProject(id);
+      setClosingProject(false);
+      setProjectClosed(true);
+    }
   }
 
   const goToDashboard = () => {
@@ -270,6 +308,7 @@ export function ProjectDetail({ id }: { id: string }) {
               Cancel
             </Button>
             <Button
+              disabled={checkDeadine?false:true}
               className="bg-red-600 hover:bg-red-700 text-white"
               onClick={handleCloseProject}
             >

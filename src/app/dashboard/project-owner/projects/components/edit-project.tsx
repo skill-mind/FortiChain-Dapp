@@ -23,6 +23,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAccount } from "@starknet-react/core";
+import { FORTICHAIN_CONTRACT_ADDRESS } from "@/hooks/useBlockchain";
+import { cairo, CallData } from "starknet";
+import { myProvider } from "@/lib/utils";
 
 const availableTags = [
   { value: "defi", label: "DeFi" },
@@ -43,14 +47,18 @@ const availableTags = [
 export function EditProject({ id }: { id: string }) {
   const { projects, wallet, updateProject } = useContext(ProjectsContext);
   const router = useRouter();
+  const { account } = useAccount(); 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
-
+  // const [amount, setAmount] = useState<string>("")
+  const [projectDeadline, setProjectDeadline] = useState({
+    date: "",
+    epochTime:0,
+  });
   // Find the project by ID
   const project = projects.find((p) => p.id === id);
   const [formData, setFormData] = useState({
@@ -80,6 +88,24 @@ export function EditProject({ id }: { id: string }) {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // const handleInputChangeAmount = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setAmount(e.target.value);
+  // };
+
+  const handleInputChangedeadline = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { value } = e.target;
+    let epochTime = new Date(value)
+    setProjectDeadline({
+      date: value,
+      epochTime: +epochTime,
+    });
   };
 
   const handleFileChange = (
@@ -116,17 +142,27 @@ export function EditProject({ id }: { id: string }) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    if (!account) return;
+    const result = await account.execute({
+      contractAddress: FORTICHAIN_CONTRACT_ADDRESS,
+      entrypoint: "edit_project",
+      calldata: CallData.compile({
+        project_id: cairo.uint256(id),
+        deadline: projectDeadline.epochTime,
+      }),
+    });
 
+    const status = await myProvider.waitForTransaction(result.transaction_hash);
     // Get tag labels from selected tag values
     const tagLabels = selectedTags.map(
       (tagValue) =>
         availableTags.find((t) => t.value === tagValue)?.label || tagValue
     );
-
-    setTimeout(() => {
+  
+    if (status) {
       updateProject(id, {
         name: formData.name,
         description: formData.description,
@@ -138,7 +174,7 @@ export function EditProject({ id }: { id: string }) {
       });
       setSubmitting(false);
       setShowSuccessModal(true);
-    }, 1000);
+    }
   };
 
   const goBackToProject = () => {
@@ -164,7 +200,31 @@ export function EditProject({ id }: { id: string }) {
       </div>
 
       <div className="bg-[#1C1618] border border-[#464043] p-4 rounded-xl">
-        <h1 className="text-center text-2xl font-bold text-white mb-8">Edit Project</h1>
+        <h1 className="text-center text-2xl font-bold text-white mb-8">
+          Edit Project
+        </h1>
+        {/* <div className="bg-[#121212] gap-5  border-gray-700 flex flex-wrap sm:flex-nowrap justify-between p-3">
+          <button
+            onClick={() => {
+              setEditType("amount");
+            }}
+            className={`${
+              editType === "amount" ? "bg-[#0000FF]" : "bg-none border"
+            } w-full font-bold capitalize py-3 `}
+          >
+            fund project
+          </button>
+          <button
+            onClick={() => {
+              setEditType("deadline");
+            }}
+            className={`${
+              editType === "deadline" ? "bg-[#0000FF]" : "bg-none border"
+            } font-bold py-3 capitalize w-full`}
+          >
+            Edit deadline
+          </button>
+        </div> */}
         {!submitting && !showSuccessModal ? (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
@@ -174,8 +234,9 @@ export function EditProject({ id }: { id: string }) {
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Enter your project name"
-                className="bg-[#121212] border-gray-700 text-white"
+                className="bg-[#121212] border-gray-700 text-white cursor-not-allowed"
                 required
+                readOnly
               />
             </div>
 
@@ -188,8 +249,9 @@ export function EditProject({ id }: { id: string }) {
                 value={formData.description}
                 onChange={handleInputChange}
                 placeholder="Describe your project..."
-                className="bg-[#121212] border-gray-700 text-white min-h-[100px]"
+                className="bg-[#121212] border-gray-700 text-white min-h-[100px] cursor-not-allowed"
                 required
+                readOnly
               />
               <div className="text-right text-xs text-gray-500">
                 {formData.description.length}/500
@@ -270,11 +332,12 @@ export function EditProject({ id }: { id: string }) {
                 Smart Contract Address
               </label>
               <Input
+                readOnly
                 name="contractAddress"
                 value={formData.contractAddress}
                 onChange={handleInputChange}
                 placeholder="Enter your smart contract address"
-                className="bg-[#121212] border-gray-700 text-white"
+                className="bg-[#121212] border-gray-700 text-white cursor-not-allowed"
               />
             </div>
 
@@ -283,22 +346,24 @@ export function EditProject({ id }: { id: string }) {
                 Contact Information (Discord / Telegram)
               </label>
               <Input
+                readOnly
                 name="contactInfo"
                 value={formData.contactInfo}
                 onChange={handleInputChange}
                 placeholder="Enter your social or email handle info"
-                className="bg-[#121212] border-gray-700 text-white"
+                className="bg-[#121212] border-gray-700 text-white cursor-not-allowed"
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm text-gray-400">Repository Link</label>
               <Input
+                readOnly
                 name="repository"
                 value={formData.repository}
                 onChange={handleInputChange}
                 placeholder="https://github.com/repository-name"
-                className="bg-[#121212] border-gray-700 text-white"
+                className="bg-[#121212] border-gray-700 text-white cursor-not-allowed"
               />
             </div>
 
@@ -328,7 +393,8 @@ export function EditProject({ id }: { id: string }) {
                   onChange={(e) => handleFileChange(e, "document")}
                 />
                 <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  disabled
+                  className="cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white"
                   onClick={() => triggerFileInput("document")}
                   type="button"
                 >
@@ -336,6 +402,32 @@ export function EditProject({ id }: { id: string }) {
                 </Button>
               </div>
             </div>
+
+            {/* {editType === "amount" && (
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400">fund project</label>
+                <Input
+                  name="fund project"
+                  value={amount}
+                  type="number"
+                  onChange={handleInputChangeAmount}
+                  placeholder="amount"
+                  className="bg-[#121212] border-gray-700 text-white"
+                />
+              </div>
+            )} */}
+
+              <div className="space-y-2">
+                <label className="text-sm text-gray-400">project deadline</label>
+                <Input
+                  name="project deadline"
+                  value={projectDeadline.date}
+                  type="date"
+                  onChange={handleInputChangedeadline}
+                  placeholder="amount"
+                  className="bg-[#121212] border-gray-700 text-white"
+                />
+              </div>
 
             <div className="flex justify-end mt-8">
               <Button

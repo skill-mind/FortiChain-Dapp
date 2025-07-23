@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Animation } from "@/motion/Animation";
 import FundModal from "../payoutComponents/FundModal";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
+import ProjectToFundModal from "../payoutComponents/selectProjecttoFund";
 
 interface ActionButtonProps {
   id: string | number;
@@ -25,13 +26,24 @@ export const ProjectOwnerActionButton: React.FC<ActionButtonProps> = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const { balance: walletBalance, symbol } = useTokenBalance(); // Uses default STRK token
-
+  const [fundModal, setFundModal] = useState(false);
   const handleClick = () => {
     setShowModal(true);
   };
 
+  const handleFundModal = () => {
+    setFundModal(true);
+    setShowModal(false)
+  };
+
   const handleClose = () => {
-    setShowModal(false);
+    if (fundModal) {
+      setFundModal(false)
+    }
+
+    if (showModal) {
+      setShowModal(false)
+    }
   };
 
   const handleSubmit = (
@@ -77,12 +89,19 @@ export const ProjectOwnerActionButton: React.FC<ActionButtonProps> = ({
         </Link>
       )}
 
-      {showModal && (
+      {fundModal && (
         <FundModal
           onClose={handleClose}
           onSubmit={handleSubmit}
           walletBalance={walletBalance}
           tokenSymbol={symbol || "STRK"}
+        />
+      )}
+
+      {showModal && (
+        <ProjectToFundModal
+          onClose={handleClose}
+          fundModal={handleFundModal}
         />
       )}
     </>
