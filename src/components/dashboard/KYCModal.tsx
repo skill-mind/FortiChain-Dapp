@@ -1078,9 +1078,9 @@ export default function KYCModal({  buttonText, buttonIcon, className }: KycModa
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`bg-[#1C1618] rounded-lg border border-[#464043] ${currentStep === "complete" ? "h-[600px] w-[538px]" : "w-full max-w-[910px]"} shadow-xl my-8`}
+                        className={`bg-[#1C1618] rounded-lg border border-[#464043] ${currentStep === "complete" ? "h-[700px] w-[538px]" : "w-full max-w-[910px]"} shadow-xl my-8`}
                     >
-                        <div className="p-3 md:p-3 max-h-[90vh] overflow-y-auto">
+                        <div className="p-3 md:p-3 max-h-[100vh] overflow-y-auto">
                             <div className="flex justify-end items-center mb-4">
                                 <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-200">
                                     <X size={24} />
