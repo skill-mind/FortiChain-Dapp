@@ -1,51 +1,57 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { ChevronDownIcon, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
+import { ReportData, uploadToPinata } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { writeContractWithStarknetJs } from "@/hooks/useBlockchain";
+import { Account, byteArray, cairo } from "starknet";
+import { useAccount } from "@starknet-react/core";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const modules = {
   toolbar: [
-    [{ header: "1" }, { header: "2" }, { font: [] }],
-    ["bold", "italic", "underline"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    [{ align: [] }],
-    ["link", "code-block"],
+    ["header", "font", "size"],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image", "video"],
+    ["clean"],
   ],
 };
+
+const formats = [
+  "header", "font", "size", "bold", "italic", "underline", "strike",
+  "blockquote", "list", "bullet", "indent", "link", "image", "video",
+  "align", "code-block"
+];
 
 type WriteAReportProps = {
   isOpen: boolean;
   onClose: () => void;
+  projectId?: number;
 };
 
-const formats = [
-  "header",
-  "font",
-  "bold",
-  "italic",
-  "underline",
-  "list",
-  "bullet",
-  "align",
-  "link",
-  "code-block",
-];
-
-export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
+export default function WriteAReport({ isOpen, onClose, projectId }: WriteAReportProps) {
   const [value, setValue] = useState("");
   const [previewMode, setPreviewMode] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false); // ✅ Track submission
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ipfsHash, setIpfsHash] = useState<string>("");
+  const [contractReportId, setContractReportId] = useState<string>("");
+  const [generatedReportId, setGeneratedReportId] = useState<string>("");
+  const [title, setTitle] = useState("");
+  const [project, setProject] = useState("");
 
-  const [title, setTitle] = useState(""); // ✅ Track title input
-  const [project, setProject] = useState(""); // ✅ Track project input
-
-  // Severity dropdown
   const [severityLevel] = useState([
     { id: 1, name: "Low" },
     { id: 2, name: "Medium" },
@@ -55,6 +61,7 @@ export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
   const [selectedLevel, setSelectedLevel] = useState(severityLevel[0]);
   const [showOptions, setShowOptions] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { account } = useAccount();
 
   const toggleOptions = () => {
     setShowOptions((prev) => !prev);
@@ -65,26 +72,91 @@ export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
     setShowOptions(false);
   };
 
-  // Handle form submit
-  const handleSubmit = () => {
-    if (title.trim() && project.trim() && value.trim()) {
-      setIsSubmitted(true);
-    } else {
-      alert("Please fill out all fields before submitting.");
+  const generateUniqueId = (): string => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8);
+    return `RPT-${timestamp}-${random}`.toUpperCase();
+  };
+
+  const handleSubmit = async () => {
+    if (!title.trim() || !project.trim() || !value.trim()) {
+      toast.error("Please fill out all fields before submitting.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const severityMap: { [key: string]: ReportData["severity"] } = {
+        Low: "low",
+        Medium: "high",
+        High: "high",
+        Critical: "critical",
+      };
+
+      const reportId = generateUniqueId();
+      setGeneratedReportId(reportId);
+
+      const reportData: ReportData = {
+        id: reportId,
+        name: title.trim(),
+        severity: severityMap[selectedLevel.name] || "low",
+        status: "pending",
+      };
+
+      const hash = await uploadToPinata(reportData);
+      setIpfsHash(hash);
+      toast.success(`Report uploaded to IPFS! Hash: ${hash}`);
+
+      if (account && projectId) {
+        toast.loading("Submitting to contract...");
+        
+        const contractArgs = {
+          project_id: cairo.uint256(projectId),
+          report_uri: byteArray.byteArrayFromString(hash)
+        };
+        
+        const contractResult = await writeContractWithStarknetJs(
+          account as Account,
+          "submit_report",
+          contractArgs
+        );
+        
+        if (contractResult && contractResult.result && contractResult.status) {
+          setContractReportId(reportId);
+          setIsSubmitted(true);
+          toast.dismiss();
+          toast.success(`Report submitted to blockchain successfully! Report ID: ${reportId}`);
+        } else {
+          toast.dismiss();
+          toast.error("Contract transaction failed. Please try again.");
+        }
+      } else if (account && !projectId) {
+        setIsSubmitted(true);
+        toast.success(`Report uploaded to IPFS successfully! Hash: ${hash}`);
+      } else {
+        toast.error("Please connect your wallet to submit to blockchain.");
+      }
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      toast.error("Failed to submit report. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleGoBack = () => {
-    // Reset everything if needed
     setIsSubmitted(false);
+    setIsSubmitting(false);
+    setIpfsHash("");
+    setContractReportId("");
+    setGeneratedReportId("");
     setTitle("");
     setProject("");
     setValue("");
     setPreviewMode(false);
     setSelectedLevel(severityLevel[0]);
   };
-
-  // Click outside to close dropdown
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -272,9 +344,17 @@ export default function WriteAReport({ isOpen, onClose }: WriteAReportProps) {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="bg-[#0000FF] text-white text-[16px] font-[400] py-2 px-4 rounded-md hover:bg-[#7272f5] transition"
+                  disabled={isSubmitting}
+                  className="bg-[#0000FF] text-white text-[16px] font-[400] py-2 px-4 rounded-md hover:bg-[#7272f5] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  Submit Report
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Uploading to IPFS...
+                    </>
+                  ) : (
+                    "Submit Report"
+                  )}
                 </button>
               </motion.div>
             </motion.div>
