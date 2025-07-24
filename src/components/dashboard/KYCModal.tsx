@@ -83,8 +83,25 @@ export default function KYCModal({  buttonText, buttonIcon, className }: KycModa
     // Validation errors
     const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
-    const countries = ['Nigeria', 'France', 'South Africa', 'China', 'Japan'];
-    const documentTypes = ["Driver's License", "Voter's Card", "National Identity Number"];
+    const countries = [
+        'United States',
+        'China',
+        'Singapore',
+        'Switzerland',
+        'Germany',
+        'Canada',
+        'United Kingdom',
+        'India',
+        'South Korea',
+        'Israel',
+        'United Arab Emirates',
+        'France',
+        'Australia',
+        'Japan',
+        'Netherlands',
+        'Nigeria'
+    ];
+    const documentTypes = ["Driver's License", "Voter's Card", "National Identity Number", "International Passport"];
     const techOptions = ['Security', 'DeFi', 'Cloud', 'NFTs', 'Storage'];
     const programmingLanguages = ["Rust", "Cairo", "Solidity", "Python", "JavaScript", "TypeScript"];
 
@@ -1061,7 +1078,7 @@ export default function KYCModal({  buttonText, buttonIcon, className }: KycModa
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`bg-[#1C1618] rounded-lg border border-[#464043] ${currentStep === "complete" ? "h-[481px] w-[538px]" : "w-full max-w-[910px]"} shadow-xl my-8`}
+                        className={`bg-[#1C1618] rounded-lg border border-[#464043] ${currentStep === "complete" ? "h-[600px] w-[538px]" : "w-full max-w-[910px]"} shadow-xl my-8`}
                     >
                         <div className="p-3 md:p-3 max-h-[90vh] overflow-y-auto">
                             <div className="flex justify-end items-center mb-4">
