@@ -5,14 +5,32 @@ type TagInputProps = {
   label?: string;
   options: string[];
   placeholder?: string;
+  selectedTags?: string[];
+  onTagsChange?: (tags: string[]) => void;
 };
 
-export default function TagInput({ label, options, placeholder }: TagInputProps) {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+export default function TagInput({ 
+  label, 
+  options, 
+  placeholder, 
+  selectedTags: externalSelectedTags,
+  onTagsChange 
+}: TagInputProps) {
+  const [internalSelectedTags, setInternalSelectedTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null); // 🔹 Add wrapper ref
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const selectedTags = externalSelectedTags !== undefined ? externalSelectedTags : internalSelectedTags;
+  const setSelectedTags = (newTags: string[] | ((prev: string[]) => string[])) => {
+    const tags = typeof newTags === 'function' ? newTags(selectedTags) : newTags;
+    if (onTagsChange) {
+      onTagsChange(tags);
+    } else {
+      setInternalSelectedTags(tags);
+    }
+  };
 
   const addTag = (tag: string) => {
     if (tag && !selectedTags.includes(tag)) {
@@ -28,7 +46,7 @@ export default function TagInput({ label, options, placeholder }: TagInputProps)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    setShowDropdown(true); // 🔹 Show dropdown when typing
+    setShowDropdown(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -40,7 +58,7 @@ export default function TagInput({ label, options, placeholder }: TagInputProps)
       removeTag(selectedTags[selectedTags.length - 1]);
     }
     if (e.key === "Escape") {
-      setShowDropdown(false); // 🔹 Close dropdown on Escape
+      setShowDropdown(false);
     }
   };
 
@@ -50,7 +68,6 @@ export default function TagInput({ label, options, placeholder }: TagInputProps)
       !selectedTags.includes(option)
   );
 
-  // 🔹 Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -68,7 +85,7 @@ export default function TagInput({ label, options, placeholder }: TagInputProps)
   }, []);
 
   return (
-    <div className="w-full" ref={wrapperRef}> {/* 🔹 Add wrapperRef here */}
+    <div className="w-full" ref={wrapperRef}>
       {label && (
         <label className="block text-sm text-gray-300 mb-2">{label}</label>
       )}
