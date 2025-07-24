@@ -951,7 +951,7 @@ export default function KYCModal({  buttonText, buttonIcon, className }: KycModa
 
     const renderComplete = () => {
         return (
-            <div className="text-center w-full py-8">
+            <div className="text-center w-full h-full py-8">
                 <h2 className="text-2xl font-semibold text-white mb-4">KYC Submission Complete!</h2>
 
                 <p className="text-gray-300 mb-1">
