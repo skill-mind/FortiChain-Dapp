@@ -43,7 +43,7 @@ export async function uploadToPinata(reportData: ReportData): Promise<string> {
   const pinataSecretApiKey = process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY;
 
   if (!pinataApiKey || !pinataSecretApiKey) {
-    throw new Error('Pinata API keys are not configured');
+    throw new Error("Pinata API keys are not configured");
   }
 
   const data = {
@@ -65,25 +65,58 @@ export async function uploadToPinata(reportData: ReportData): Promise<string> {
   };
 
   try {
-    const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        pinata_api_key: pinataApiKey,
-        pinata_secret_api_key: pinataSecretApiKey,
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          pinata_api_key: pinataApiKey,
+          pinata_secret_api_key: pinataSecretApiKey,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(`Pinata upload failed: ${errorData.error || response.statusText}`);
+      throw new Error(
+        `Pinata upload failed: ${errorData.error || response.statusText}`
+      );
     }
 
     const result = await response.json();
     return result.IpfsHash;
   } catch (error) {
-    console.error('Error uploading to Pinata:', error);
+    console.error("Error uploading to Pinata:", error);
+    throw error;
+  }
+}
+
+// Fetch project data from IPFS using hash
+export async function fetchProjectFromIPFS(ipfsHash: string): Promise<any> {
+  const pinataGatewayUrl = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL;
+  const pinataGatewayToken = process.env.NEXT_PUBLIC_PINATA_GATEWAY_TOKEN;
+
+  if (!pinataGatewayUrl) {
+    throw new Error("Pinata gateway URL is not configured");
+  }
+
+  try {
+    const url = pinataGatewayToken
+      ? `${pinataGatewayUrl}${ipfsHash}?pinataGatewayToken=${pinataGatewayToken}`
+      : `${pinataGatewayUrl}${ipfsHash}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch from IPFS: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching from IPFS:", error);
     throw error;
   }
 }

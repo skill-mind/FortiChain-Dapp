@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import React from "react";
 import { CloseProjectDialog } from "@/app/dashboard/components/project/close-project-dialog";
+import { ProjectViewDialog } from "./ProjectViewDialog";
 
 interface Project {
   id: string;
@@ -246,14 +247,7 @@ export default function ProjectTable() {
 
             {/* Action Button */}
             <div className="pt-2 border-t border-gray-700">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <button className="text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm">
-                    View Project
-                  </button>
-                </DialogTrigger>
-                <ProjectDialog project={project} />
-              </Dialog>
+              <ViewProjectButton projectId={project.id} />
             </div>
           </motion.div>
         ))}
@@ -347,14 +341,7 @@ export default function ProjectTable() {
                   </span>
                 </td>
                 <td className="py-4 px-4">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
-                        View
-                      </button>
-                    </DialogTrigger>
-                    <ProjectDialog project={project} />
-                  </Dialog>
+                  <ViewProjectButton projectId={project.id} />
                 </td>
               </motion.tr>
             ))}
@@ -362,6 +349,34 @@ export default function ProjectTable() {
         </table>
       </div>
     </div>
+  );
+}
+
+function ViewProjectButton({ projectId }: { projectId: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm"
+      >
+        View Project
+      </button>
+      <ProjectViewDialog
+        projectId={projectId}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onViewReports={() => {
+          // Handle view reports action
+          console.log("View reports for project:", projectId);
+        }}
+        onCloseProject={() => {
+          // Handle close project action
+          console.log("Close project:", projectId);
+        }}
+      />
+    </>
   );
 }
 

@@ -1,97 +1,74 @@
 "use client";
 
 import React from "react";
-
 import Image from "next/image";
 import { StatCard } from "../../components/resuables/StatsCard";
 import ProjectTable from "@/components/dashboard/projects/project-table";
-
-// Example Stats Data
-const stats = [
-  {
-    id: 1,
-    icon: (
-      <Image
-        src={"/adminIcon/project-card1icon.svg"}
-        alt={"icon"}
-        height={30}
-        width={30}
-      />
-    ),
-    value: "5",
-    label: "Total Number of Projects",
-  },
-  {
-    id: 2,
-    icon: (
-      <Image
-        src={"/adminIcon/project-card2icon.svg"}
-        alt={"icon"}
-        height={30}
-        width={30}
-      />
-    ),
-    value: "5",
-    label: "Active bounties",
-  },
-  {
-    id: 3,
-    icon: (
-      <Image
-        src={"/adminIcon/money-bag.svg"}
-        alt={"icon"}
-        height={30}
-        width={30}
-      />
-    ),
-    value: "$8,232,523.34",
-    label: "Total Bounty Paid",
-  },
-];
+import { useProjectsList } from "@/hooks/useProjectsList";
+import { useContractFetch } from "@/hooks/useBlockchain";
+import { FORTICHAIN_ABI } from "@/app/abi/fortichain-abi";
 
 const Projects = () => {
-  // Mock data - replace with actual data fetching
-  const projects = [
+  const { projects: allProjects, loading: projectsLoading } =
+    useProjectsList("in_progress");
+  const { projects: completedProjects } = useProjectsList("completed");
+
+  // Get total projects count from blockchain
+  const { readData: totalProjectsData } = useContractFetch(
+    FORTICHAIN_ABI,
+    "total_projects",
+    []
+  );
+
+  // Calculate stats
+  const totalProjects = totalProjectsData
+    ? Number(totalProjectsData)
+    : allProjects.length + completedProjects.length;
+  const activeBounties = allProjects.length;
+  const totalBountyPaid = [...allProjects, ...completedProjects]
+    .filter((p) => p.bountyPaid)
+    .reduce((sum, p) => sum + parseFloat(p.bountyPaid!.replace(/,/g, "")), 0);
+
+  // Dynamic Stats Data
+  const stats = [
     {
-      id: "1",
-      name: "SkillNet",
-      category: "DeFi",
-      bountyAllocated: "5,200.13",
-      bountyPaid: "5,124.11",
-      status: "Completed" as const,
+      id: 1,
+      icon: (
+        <Image
+          src={"/adminIcon/project-card1icon.svg"}
+          alt={"icon"}
+          height={30}
+          width={30}
+        />
+      ),
+      value: totalProjects.toString(),
+      label: "Total Number of Projects",
     },
     {
-      id: "2",
-      name: "SkillNet",
-      category: "DeFi",
-      bountyAllocated: "5,200.44",
-      bountyPaid: "N/A",
-      status: "Ongoing" as const,
+      id: 2,
+      icon: (
+        <Image
+          src={"/adminIcon/project-card2icon.svg"}
+          alt={"icon"}
+          height={30}
+          width={30}
+        />
+      ),
+      value: activeBounties.toString(),
+      label: "Active bounties",
     },
     {
-      id: "3",
-      name: "SkillNet",
-      category: "DeFi",
-      bountyAllocated: "5,200.11",
-      bountyPaid: "2,600.23",
-      status: "Closed" as const,
-    },
-    {
-      id: "4",
-      name: "SkillNet",
-      category: "DeFi",
-      bountyAllocated: "5,200.11",
-      bountyPaid: "N/A",
-      status: "Ongoing" as const,
-    },
-    ,
-    {
-      id: "4",
-      name: "SkillNet",
-      category: "DeFi",
-      bountyAllocated: "5,200.11",
-      bountyPaid: "N/A",
-      status: "Ongoing" as const,
+      id: 3,
+      icon: (
+        <Image
+          src={"/adminIcon/money-bag.svg"}
+          alt={"icon"}
+          height={30}
+          width={30}
+        />
+      ),
+      value: `$${totalBountyPaid.toLocaleString()}`,
+      label: "Total Bounty Paid",
     },
   ];
 

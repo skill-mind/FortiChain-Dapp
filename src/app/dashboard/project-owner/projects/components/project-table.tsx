@@ -13,14 +13,19 @@ import {
 import type { Project } from "@/types/project";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { ProjectViewDialog } from "@/components/dashboard/projects/ProjectViewDialog";
 
 interface ProjectsTableProps {
   projects: Project[];
-  type: string
+  type: string;
   fundModal: () => void;
 }
 
-export function ProjectsTable({ projects, type = "view", fundModal = () => {} }: ProjectsTableProps) {
+export function ProjectsTable({
+  projects,
+  type = "view",
+  fundModal = () => {},
+}: ProjectsTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
 
@@ -110,12 +115,7 @@ export function ProjectsTable({ projects, type = "view", fundModal = () => {} }:
                 </TableCell>
                 {type == "view" && (
                   <TableCell className="py-2 px-2 sm:px-4 text-[#0000FF]">
-                    <Link
-                      href={`/dashboard/project-owner/projects/${project.id}`}
-                      className="text-[#0000FF] hover:underline text-sm sm:text-base"
-                    >
-                      View
-                    </Link>
+                    <ViewProjectButton projectId={project.id} />
                   </TableCell>
                 )}
                 {type == "fund" && (
@@ -134,5 +134,33 @@ export function ProjectsTable({ projects, type = "view", fundModal = () => {} }:
         </Table>
       </div>{" "}
     </div>
+  );
+}
+
+function ViewProjectButton({ projectId }: { projectId: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="text-[#0000FF] hover:underline text-sm sm:text-base"
+      >
+        View
+      </button>
+      <ProjectViewDialog
+        projectId={projectId}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onViewReports={() => {
+          // Handle view reports action
+          console.log("View reports for project:", projectId);
+        }}
+        onCloseProject={() => {
+          // Handle close project action
+          console.log("Close project:", projectId);
+        }}
+      />
+    </>
   );
 }
