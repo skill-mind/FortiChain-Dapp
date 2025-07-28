@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import ValidatorProfileModal from "./components/validatorProfileModal";
 import ValidatorSuccessModal from "./components/validatorSuccessModal";
@@ -10,6 +10,11 @@ import SuspensionSuccessModal from "./components/SuspensionSuccessModal";
 import PendingValidatorProfileModal from "./components/viewValidatorProfileModal";
 import Image from "next/image";
 import { motion } from "framer-motion";
+
+import { getTotalValidators, getValidator } from "@/app/services/validator";
+import { approveValidator, rejectValidator } from "@/app/services/validator";
+import { fetchPinataData } from "@/app/services/pinata";
+import { useAccount } from "@starknet-react/core";
 
 interface Validator {
   id: string;
@@ -47,124 +52,179 @@ const ValidatorsDashboard: React.FC = () => {
   const [isPendingProfileModalOpen, setIsPendingProfileModalOpen] =
     useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const { account } = useAccount(); // Get connected StarkNet account
 
-  const [validators, setValidators] = useState<Validator[]>([
-    {
-      id: "0x4D123",
-      name: "Daniel Ochoja",
-      walletAddress: "0x1234...abcd",
-      reviewedProjects: 4,
-      proficiency: ["Python", "Rust", "C#"],
-      status: "Approved",
-      dateOfBirth: "1990/05/25",
-      nationality: "Nigerian",
-      phoneNumber: "+234 811 234 5678",
-      technicalExpertise: [
-        "Blockchain Security",
-        "Smart Contract Audit",
-        "Decentralized Apps",
-      ],
-      yearsOfExperience: 5,
-      linkedInUrl: "https://linkedin.com/in/danielochoja",
-      githubUrl: "https://github.com/danielochoja",
-      websiteUrl: "https://danielochoja.dev",
-      resumeUrl: "https://example.com/resume.pdf",
-      certifications: [
-        "AWS Certified Developer",
-        "Certified Blockchain Expert",
-      ],
-      identityDocumentType: "Driver's License",
-      identityDocumentBack: "/images/id-back.jpg",
-      identityDocumentFront: "/images/id-front.jpg",
-    },
-    {
-      id: "0x5E234",
-      name: "Aisha Murtala",
-      walletAddress: "0x1234...abcd",
-      reviewedProjects: 0,
-      proficiency: ["Typescript", "Solidity"],
-      status: "Pending",
-      dateOfBirth: "1992/08/15",
-      nationality: "Nigerian",
-      phoneNumber: "+234 811 987 6543",
-      technicalExpertise: ["Frontend Development", "DeFi Applications"],
-      yearsOfExperience: 3,
-      linkedInUrl: "https://linkedin.com/in/aishamurtala",
-      githubUrl: "https://github.com/aishamurtala",
-      websiteUrl: "https://aishamurtala.dev",
-      resumeUrl: "https://example.com/resume.pdf",
-      certifications: [
-        "Google Professional Developer",
-        "Meta Frontend Certification",
-      ],
-      identityDocumentType: "National ID",
-      identityDocumentBack: "/images/id-back.jpg",
-      identityDocumentFront: "/images/id-front.jpg",
-    },
-    {
-      id: "0x6F345",
-      name: "Favour Stephen",
-      walletAddress: "0x1234...abcd",
-      reviewedProjects: 0,
-      proficiency: ["Cairo", "Go", "Python"],
-      status: "Pending",
-      dateOfBirth: "1994/02/10",
-      nationality: "Nigerian",
-      phoneNumber: "+234 812 345 6789",
-      technicalExpertise: ["Backend Development", "StarkNet"],
-      yearsOfExperience: 2,
-      linkedInUrl: "https://linkedin.com/in/favourstephen",
-      githubUrl: "https://github.com/favourstephen",
-      websiteUrl: "https://favourstephen.dev",
-      resumeUrl: "https://example.com/resume.pdf",
-      certifications: ["Cairo Developer Certification"],
-      identityDocumentType: "Passport",
-      identityDocumentBack: "/images/id-back.jpg",
-      identityDocumentFront: "/images/id-front.jpg",
-    },
-    {
-      id: "0x7G456",
-      name: "Favour Stephen",
-      walletAddress: "0x1234...abcd",
-      reviewedProjects: 0,
-      proficiency: ["Cairo", "Go", "Python"],
-      status: "Rejected",
-      dateOfBirth: "1994/02/10",
-      nationality: "Nigerian",
-      phoneNumber: "+234 812 345 6789",
-      technicalExpertise: ["Backend Development", "StarkNet"],
-      yearsOfExperience: 2,
-      linkedInUrl: "https://linkedin.com/in/favourstephen",
-      githubUrl: "https://github.com/favourstephen",
-      websiteUrl: "https://favourstephen.dev",
-      resumeUrl: "https://example.com/resume.pdf",
-      certifications: ["Cairo Developer Certification"],
-      identityDocumentType: "Passport",
-      identityDocumentBack: "/images/id-back.jpg",
-      identityDocumentFront: "/images/id-front.jpg",
-    },
-    {
-      id: "0x8H567",
-      name: "Favour Stephen",
-      walletAddress: "0x1234...abcd",
-      reviewedProjects: 4,
-      proficiency: ["Cairo", "Go", "Python"],
-      status: "Approved",
-      dateOfBirth: "1994/02/10",
-      nationality: "Nigerian",
-      phoneNumber: "+234 812 345 6789",
-      technicalExpertise: ["Backend Development", "StarkNet"],
-      yearsOfExperience: 2,
-      linkedInUrl: "https://linkedin.com/in/favourstephen",
-      githubUrl: "https://github.com/favourstephen",
-      websiteUrl: "https://favourstephen.dev",
-      resumeUrl: "https://example.com/resume.pdf",
-      certifications: ["Cairo Developer Certification"],
-      identityDocumentType: "Passport",
-      identityDocumentBack: "/images/id-back.jpg",
-      identityDocumentFront: "/images/id-front.jpg",
-    },
-  ]);
+  // const [validators, setValidators] = useState<Validator[]>([
+  //   {
+  //     id: "0x4D123",
+  //     name: "Daniel Ochoja",
+  //     walletAddress: "0x1234...abcd",
+  //     reviewedProjects: 4,
+  //     proficiency: ["Python", "Rust", "C#"],
+  //     status: "Approved",
+  //     dateOfBirth: "1990/05/25",
+  //     nationality: "Nigerian",
+  //     phoneNumber: "+234 811 234 5678",
+  //     technicalExpertise: [
+  //       "Blockchain Security",
+  //       "Smart Contract Audit",
+  //       "Decentralized Apps",
+  //     ],
+  //     yearsOfExperience: 5,
+  //     linkedInUrl: "https://linkedin.com/in/danielochoja",
+  //     githubUrl: "https://github.com/danielochoja",
+  //     websiteUrl: "https://danielochoja.dev",
+  //     resumeUrl: "https://example.com/resume.pdf",
+  //     certifications: [
+  //       "AWS Certified Developer",
+  //       "Certified Blockchain Expert",
+  //     ],
+  //     identityDocumentType: "Driver's License",
+  //     identityDocumentBack: "/images/id-back.jpg",
+  //     identityDocumentFront: "/images/id-front.jpg",
+  //   },
+  //   {
+  //     id: "0x5E234",
+  //     name: "Aisha Murtala",
+  //     walletAddress: "0x1234...abcd",
+  //     reviewedProjects: 0,
+  //     proficiency: ["Typescript", "Solidity"],
+  //     status: "Pending",
+  //     dateOfBirth: "1992/08/15",
+  //     nationality: "Nigerian",
+  //     phoneNumber: "+234 811 987 6543",
+  //     technicalExpertise: ["Frontend Development", "DeFi Applications"],
+  //     yearsOfExperience: 3,
+  //     linkedInUrl: "https://linkedin.com/in/aishamurtala",
+  //     githubUrl: "https://github.com/aishamurtala",
+  //     websiteUrl: "https://aishamurtala.dev",
+  //     resumeUrl: "https://example.com/resume.pdf",
+  //     certifications: [
+  //       "Google Professional Developer",
+  //       "Meta Frontend Certification",
+  //     ],
+  //     identityDocumentType: "National ID",
+  //     identityDocumentBack: "/images/id-back.jpg",
+  //     identityDocumentFront: "/images/id-front.jpg",
+  //   },
+  //   {
+  //     id: "0x6F345",
+  //     name: "Favour Stephen",
+  //     walletAddress: "0x1234...abcd",
+  //     reviewedProjects: 0,
+  //     proficiency: ["Cairo", "Go", "Python"],
+  //     status: "Pending",
+  //     dateOfBirth: "1994/02/10",
+  //     nationality: "Nigerian",
+  //     phoneNumber: "+234 812 345 6789",
+  //     technicalExpertise: ["Backend Development", "StarkNet"],
+  //     yearsOfExperience: 2,
+  //     linkedInUrl: "https://linkedin.com/in/favourstephen",
+  //     githubUrl: "https://github.com/favourstephen",
+  //     websiteUrl: "https://favourstephen.dev",
+  //     resumeUrl: "https://example.com/resume.pdf",
+  //     certifications: ["Cairo Developer Certification"],
+  //     identityDocumentType: "Passport",
+  //     identityDocumentBack: "/images/id-back.jpg",
+  //     identityDocumentFront: "/images/id-front.jpg",
+  //   },
+  //   {
+  //     id: "0x7G456",
+  //     name: "Favour Stephen",
+  //     walletAddress: "0x1234...abcd",
+  //     reviewedProjects: 0,
+  //     proficiency: ["Cairo", "Go", "Python"],
+  //     status: "Rejected",
+  //     dateOfBirth: "1994/02/10",
+  //     nationality: "Nigerian",
+  //     phoneNumber: "+234 812 345 6789",
+  //     technicalExpertise: ["Backend Development", "StarkNet"],
+  //     yearsOfExperience: 2,
+  //     linkedInUrl: "https://linkedin.com/in/favourstephen",
+  //     githubUrl: "https://github.com/favourstephen",
+  //     websiteUrl: "https://favourstephen.dev",
+  //     resumeUrl: "https://example.com/resume.pdf",
+  //     certifications: ["Cairo Developer Certification"],
+  //     identityDocumentType: "Passport",
+  //     identityDocumentBack: "/images/id-back.jpg",
+  //     identityDocumentFront: "/images/id-front.jpg",
+  //   },
+  //   {
+  //     id: "0x8H567",
+  //     name: "Favour Stephen",
+  //     walletAddress: "0x1234...abcd",
+  //     reviewedProjects: 4,
+  //     proficiency: ["Cairo", "Go", "Python"],
+  //     status: "Approved",
+  //     dateOfBirth: "1994/02/10",
+  //     nationality: "Nigerian",
+  //     phoneNumber: "+234 812 345 6789",
+  //     technicalExpertise: ["Backend Development", "StarkNet"],
+  //     yearsOfExperience: 2,
+  //     linkedInUrl: "https://linkedin.com/in/favourstephen",
+  //     githubUrl: "https://github.com/favourstephen",
+  //     websiteUrl: "https://favourstephen.dev",
+  //     resumeUrl: "https://example.com/resume.pdf",
+  //     certifications: ["Cairo Developer Certification"],
+  //     identityDocumentType: "Passport",
+  //     identityDocumentBack: "/images/id-back.jpg",
+  //     identityDocumentFront: "/images/id-front.jpg",
+  //   },
+  // ]);
+
+  const [validators, setValidators] = useState<Validator[]>([]);
+
+  console.log("Validators:", validators);
+
+  useEffect(() => {
+    const loadValidators = async () => {
+      try {
+        const total = await getTotalValidators();
+        const validatorList: Validator[] = [];
+
+        console.log("Total validators from contract:", total);
+        if (total === 0) {
+          console.log("No validators found.");
+          return;
+        }
+
+        for (let i = 0; i < total; i++) {
+          const val = await getValidator(i);
+          console.log(`Validator ${i}:`, val); // Debug log
+          const details = await fetchPinataData(val[1].validator_data_uri);
+          console.log(`Pinata Data for ${i}:`, details); // Debug log
+
+          validatorList.push({
+            id: val[1].id.toString(),
+            name: details.name,
+            walletAddress: val[1].validator_address.toString(),
+            reviewedProjects: details.reviewedProjects || 0,
+            proficiency: details.proficiency || [],
+            status: details.status || "Pending",
+            dateOfBirth: details.dateOfBirth,
+            nationality: details.nationality,
+            phoneNumber: details.phoneNumber,
+            technicalExpertise: details.technicalExpertise || [],
+            yearsOfExperience: details.yearsOfExperience,
+            linkedInUrl: details.linkedInUrl,
+            githubUrl: details.githubUrl,
+            websiteUrl: details.websiteUrl,
+            resumeUrl: details.resumeUrl,
+            certifications: details.certifications || [],
+            identityDocumentType: details.identityDocumentType,
+            identityDocumentBack: details.identityDocumentBack,
+            identityDocumentFront: details.identityDocumentFront,
+          });
+        }
+
+        setValidators(validatorList);
+      } catch (err) {
+        console.error("Failed to load validators:", err);
+      }
+    };
+
+    loadValidators();
+  }, []);
 
   const totalValidators = validators.length;
   const pendingKYCValidators = validators.filter(
@@ -180,16 +240,22 @@ const ValidatorsDashboard: React.FC = () => {
     }
   };
 
-  const handleApproveProfile = () => {
-    if (selectedValidator) {
-      setValidators((prevValidators) =>
-        prevValidators.map((v) =>
-          v.id === selectedValidator.id ? { ...v, status: "Approved" } : v
-        )
-      );
-      setIsProfileModalOpen(false);
-      setIsPendingProfileModalOpen(false);
-      setIsSuccessModalOpen(true);
+  const handleApproveProfile = async () => {
+    if (selectedValidator && account) {
+      try {
+        await approveValidator(account as any, Number(selectedValidator.id));
+        setValidators((prevValidators) =>
+          prevValidators.map((v) =>
+            v.id === selectedValidator.id ? { ...v, status: "Approved" } : v
+          )
+        );
+        setIsProfileModalOpen(false);
+        setIsPendingProfileModalOpen(false);
+        setIsSuccessModalOpen(true);
+      } catch (err) {
+        console.error("Failed to approve validator:", err);
+        // Optionally show a toast here
+      }
     }
   };
 
@@ -205,19 +271,24 @@ const ValidatorsDashboard: React.FC = () => {
     setIsSuccessModalOpen(false);
   };
 
-  const handleConfirmReject = (reason: string) => {
-    if (selectedValidator) {
-      setValidators((prevValidators) =>
-        prevValidators.map((v) =>
-          v.id === selectedValidator.id ? { ...v, status: "Rejected" } : v
-        )
-      );
-      setIsRejectModalOpen(false);
-      setIsRejectionSuccessModalOpen(true);
-
-      console.log(
-        `Validator ${selectedValidator.id} rejected with reason: ${reason}`
-      );
+  const handleConfirmReject = async (reason: string) => {
+    if (selectedValidator && account) {
+      try {
+        await rejectValidator(account as any, Number(selectedValidator.id));
+        setValidators((prevValidators) =>
+          prevValidators.map((v) =>
+            v.id === selectedValidator.id ? { ...v, status: "Rejected" } : v
+          )
+        );
+        setIsRejectModalOpen(false);
+        setIsRejectionSuccessModalOpen(true);
+        console.log(
+          `Validator ${selectedValidator.id} rejected with reason: ${reason}`
+        );
+      } catch (err) {
+        console.error("Failed to reject validator:", err);
+        // Optionally show a toast here
+      }
     }
   };
 
@@ -254,9 +325,9 @@ const ValidatorsDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-<div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <motion.div 
+          <motion.div
             className="bg-[#110D0F] border border-[#464043] rounded-lg p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -275,7 +346,7 @@ const ValidatorsDashboard: React.FC = () => {
             <h1 className="text-4xl font-bold text-white">{totalValidators}</h1>
             <p className="text-neutral-400 mt-1">Total Number of Validators</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-[#110D0F] border border-[#464043] rounded-lg p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -283,12 +354,7 @@ const ValidatorsDashboard: React.FC = () => {
           >
             <div className="flex items-center mb-2">
               <div className="">
-                <Image
-                  src="/user-clock.svg"
-                  alt=""
-                  width={32}
-                  height={32}
-                />
+                <Image src="/user-clock.svg" alt="" width={32} height={32} />
               </div>
             </div>
             <h1 className="text-4xl font-bold text-white">
@@ -300,7 +366,7 @@ const ValidatorsDashboard: React.FC = () => {
           </motion.div>
         </div>
 
-        <motion.div 
+        <motion.div
           className="bg-[#161113] border border-[#464043] rounded-lg overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -337,10 +403,10 @@ const ValidatorsDashboard: React.FC = () => {
                     className="border-t border-[#464043] text-[14px] text-white"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ 
-                      duration: 0.5, 
+                    transition={{
+                      duration: 0.5,
                       delay: index * 0.1 + 0.4,
-                      ease: "easeOut"
+                      ease: "easeOut",
                     }}
                   >
                     <td className="px-6 py-4">{validator.name}</td>
