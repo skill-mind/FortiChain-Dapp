@@ -1,7 +1,6 @@
 import React from "react";
 import { ClipboardList, Shield, BarChart3, Wallet, Users } from "lucide-react";
 import { ActionButton } from "../../components/resuables/ActionButton";
-import { StatCard } from "../../components/resuables/StatsCard";
 import { RecentActivity } from "../../components/resuables/RecentActivity";
 import Image from "next/image";
 import infoOne from "../../../../../public/overviewIcons/infoOne.svg";
@@ -12,6 +11,7 @@ import statsTwo from "../../../../../public/overviewIcons/statsTwo.svg";
 import statsThree from "../../../../../public/overviewIcons/statsThree.svg";
 import statsFour from "../../../../../public/overviewIcons/statsFour.svg";
 import { ProjectOwnerActionButton } from "../../components/resuables/ProjectOwnerActionButton";
+import StatsCard from "@/components/dashboard/projects/StatsCard";
 
 const Overview = () => {
   const actionButtons = [
@@ -108,7 +108,7 @@ const Overview = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((stat) => (
-          <StatCard
+          <StatsCard
             key={stat.id}
             icon={stat.icon}
             value={stat.value}

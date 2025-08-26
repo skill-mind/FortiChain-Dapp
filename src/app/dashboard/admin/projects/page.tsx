@@ -2,50 +2,28 @@
 
 import React from "react";
 
-import Image from "next/image";
-import { StatCard } from "../../components/resuables/StatsCard";
 import ProjectTable from "@/components/dashboard/projects/project-table";
+import StatCard from "../../components/resuables/StatCard";
 
 // Example Stats Data
 const stats = [
   {
-    id: 1,
-    icon: (
-      <Image
-        src={"/adminIcon/project-card1icon.svg"}
-        alt={"icon"}
-        height={30}
-        width={30}
-      />
-    ),
+    icon: "/adminIcon/project-card1icon.svg",
     value: "5",
     label: "Total Number of Projects",
+    progression: "",
   },
   {
-    id: 2,
-    icon: (
-      <Image
-        src={"/adminIcon/project-card2icon.svg"}
-        alt={"icon"}
-        height={30}
-        width={30}
-      />
-    ),
+    icon: "/adminIcon/project-card2icon.svg",
     value: "5",
     label: "Active bounties",
+    progression: "",
   },
   {
-    id: 3,
-    icon: (
-      <Image
-        src={"/adminIcon/money-bag.svg"}
-        alt={"icon"}
-        height={30}
-        width={30}
-      />
-    ),
+    icon: "/adminIcon/money-bag.svg",
     value: "$8,232,523.34",
     label: "Total Bounty Paid",
+    progression: "",
   },
 ];
 
@@ -100,17 +78,12 @@ const Projects = () => {
       {/* Stats Cards */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        {stats.map((stat) => (
+        {stats.map((stat, id) => (
           <div
-            key={stat.id}
+            key={id}
             className="[&>div]:flex [&>div]:flex-col [&>div]:items-stretch [&>div]:h-full"
           >
-            <StatCard
-              key={stat.id}
-              icon={stat.icon}
-              value={stat.value}
-              label={stat.label}
-            />
+            {/* <StatCard icon={stat.icon} value={stat.value} label={stat.label} /> */}
           </div>
         ))}
         {/* <div className="bg-white rounded-lg p-4 flex flex-col justify-between h-full">

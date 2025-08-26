@@ -1,7 +1,6 @@
 import React from "react";
 // import Link from "next/link";
 import { ActionButton } from "../../components/resuables/ActionButton";
-import { StatCard } from "../../components/resuables/StatsCard";
 import {
   RecentReports,
   ValidatorRanking,
@@ -13,6 +12,7 @@ import imgOne from "../../../../../public/validatorIcons/valImgOne.svg";
 import imgTwo from "../../../../../public/validatorIcons/valImgTwo.svg";
 import imgThree from "../../../../../public/validatorIcons/valImgThree.svg";
 import imgFour from "../../../../../public/validatorIcons/valImgFour.svg";
+import StatsCard from "@/components/dashboard/projects/StatsCard";
 
 const Overview = () => {
   // Sample data for validator ranking
@@ -119,22 +119,22 @@ const Overview = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard
+        <StatsCard
           icon={<Image src={imgOne} alt={"icon"} height={30} width={30} />}
           value={15}
           label="Pending Reports"
         />
-        <StatCard
+        <StatsCard
           icon={<Image src={imgTwo} alt={"icon"} height={30} width={30} />}
           value={8}
           label="Approved Reports"
         />
-        <StatCard
+        <StatsCard
           icon={<Image src={imgThree} alt={"icon"} height={30} width={30} />}
           value={1}
           label="Disputed Reports"
         />
-        <StatCard
+        <StatsCard
           icon={<Image src={imgFour} alt={"icon"} height={30} width={30} />}
           value="$1,525.11"
           label="Total Earnings"

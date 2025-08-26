@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   BadgeDollarSign,
 } from "lucide-react";
-import { StatCard } from "../../components/resuables/StatsCard";
 import { RecentReports } from "../../components/resuables/TableComponents";
 import { Announcements } from "../../components/resuables/AnnoucmentSection";
 import Image from "next/image";
@@ -17,6 +16,7 @@ import statsFour from "../../../../../public/researcherIcon/reStatsFour.svg";
 import statsFive from "../../../../../public/researcherIcon/reStatsFive.svg";
 import hourglass from "../../../../../public/researcherIcon/hourGlass.svg";
 import calendar from "../../../../../public/researcherIcon/calendarImg.svg";
+import StatsCard from "@/components/dashboard/projects/StatsCard";
 
 const Overview = () => {
   // Data for stat cards
@@ -120,7 +120,7 @@ const Overview = () => {
       {/* Stat Cards Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {statCardsData.map((card, index) => (
-          <StatCard
+          <StatsCard
             key={index}
             icon={card.icon}
             value={card.value}

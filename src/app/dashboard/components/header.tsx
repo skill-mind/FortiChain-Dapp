@@ -100,7 +100,7 @@ const Header = () => {
                 className="flex gap-x-2 items-center py-3 px-6 transition-colors bg-[#101011] rounded-full"
               >
                 <Bell
-                  size={20}
+                  size={16}
                   className={isBellActive ? "text-black" : "text-white"}
                 />
                 <span>Notification</span>

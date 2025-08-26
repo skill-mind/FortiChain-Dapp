@@ -64,9 +64,7 @@ export const Announcements: React.FC<AnnouncementsProps> = ({
           <ChevronRight size={16} className="ml-1" />
         </button>
       </div>
-      {showNotification && (
-        <NotificationModal setIsBellActive={bellActiveHandler} />
-      )}
+      {showNotification && <NotificationModal />}
       <div className="space-y-5">
         {announcements.map((announcement, index) => (
           <Animation delay={0.2 * index} animationType="slide-up" key={index}>
