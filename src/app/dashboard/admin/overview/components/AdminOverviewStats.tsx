@@ -42,7 +42,7 @@ const dummy_stats = [
 
 function AdminOverviewStats() {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
       {dummy_stats.map((stat, id) => (
         <StatCard stat={stat} />
       ))}

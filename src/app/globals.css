@@ -169,3 +169,7 @@ body {
 .ql-toolbar button {
   font-size: 20px;
 }
+
+button:focus {
+  outline: none;
+}

@@ -9,11 +9,11 @@ function page() {
   return (
     <div className="flex flex-col gap-y-3">
       <AdminOverviewStats />
-      <div className="grid grid-cols-2 gap-x-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <RevenueChart />
         <UserGrowthChart />
       </div>
-      <div className="grid grid-cols-2 gap-x-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <ProjectSeverityDist />
         <RecentActivity />
       </div>

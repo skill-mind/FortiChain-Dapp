@@ -8,7 +8,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <ProjectsProvider>
       <div className="text-white bg-[#090909] h-screen flex flex-col text-sm">
         <Header />
-        <div className="text-white w-full flex-1 px-8 md:px-[100px] py-6 overflow-y-auto">
+        <div className="text-white w-full flex-1 px-4 md:px-[100px] py-6 overflow-y-auto">
           {children}
         </div>
       </div>
