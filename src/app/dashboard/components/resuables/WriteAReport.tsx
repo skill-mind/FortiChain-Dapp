@@ -102,6 +102,8 @@ export default function WriteAReport({
       return;
     }
 
+    
+
     setIsSubmitting(true);
 
     try {
@@ -131,7 +133,7 @@ export default function WriteAReport({
         projectId,
         account,
         hash,
-      });
+      }, 'hash');
 
       if (account && projectId) {
         toast.loading("Submitting to contract...");
@@ -146,6 +148,11 @@ export default function WriteAReport({
           "submit_report",
           contractArgs
         );
+
+
+        console.log({
+          contractResult
+        }, 'result');
 
         if (contractResult && contractResult.result && contractResult.status) {
           setContractReportId(reportId);

@@ -239,17 +239,31 @@ export async function writeContractWithStarknetJs(
 
 export const fetchContentFromIPFS = async (cid: string) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL}${cid}?pinataGatewayToken=${process.env.NEXT_PUBLIC_PINATA_GATEWAY_TOKEN}`
-    );
-    const data = await response.json();
+    const cleanCid = cid.replace(/^ipfs\//, '').replace(/^\//, '');
+        const response = await fetch(`https://gateway.pinata.cloud/ipfs/${cleanCid}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
 
-    return { ...data, cid: cid };
+    });    
+    if (!response.ok) {
+      console.error(`Pinata gateway error: ${response.status}`);
+      return null;
+    }
+    
+    const data = await response.json();
+    return { ...data, cid: cleanCid };
+    
   } catch (error) {
-    console.error(`Error fetching data for CID ${cid}:`, error);
     return null;
   }
 };
+
+
+
+
+
 
 export const uploadImageToPinata = async (file: File): Promise<string> => {
   const formData = new FormData();

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Bookmark, BookmarkCheck } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   vulnerabilityDescription,
@@ -20,7 +20,6 @@ import Image from "next/image";
 
 interface ReportDetailProps {
   reportId?: string; // New: for fetching from blockchain
-  report?: Report;   // Optional: fallback to existing prop
   isBookmarked: boolean;
   onToggleBookmark: () => void;
   onBackClick: () => void;
@@ -32,7 +31,6 @@ interface ReportDetailProps {
 
 export function ReportDetail({
   reportId,
-  report: propReport,
   isBookmarked,
   onToggleBookmark,
   onBackClick,
@@ -42,14 +40,15 @@ export function ReportDetail({
   onRejectReportClick,
 }: ReportDetailProps) {
   // Fetch report data from blockchain/IPFS if reportId is provided
-  const { reportData: fetchedReport, loading, error } = useReportData(reportId || "");
+  const {
+    reportData: fetchedReport,
+    loading,
+    error,
+  } = useReportData(reportId || "");
 
-
-  console.log(fetchedReport, "reportData", reportId)
-  
   // Use fetched data if available, otherwise fall back to prop
-  const report = fetchedReport || propReport;
-  
+  const report = fetchedReport;
+
   // Show loading state while fetching
   if (reportId && loading) {
     return (
@@ -67,19 +66,21 @@ export function ReportDetail({
       </div>
     );
   }
-  
+
   // Show error state if fetching failed
   if (reportId && error) {
     return (
       <div className="p-6">
         <div className="bg-red-900/20 border border-red-500/20 rounded-lg p-6 text-center">
-          <h3 className="text-red-400 font-semibold mb-2">Error Loading Report</h3>
+          <h3 className="text-red-400 font-semibold mb-2">
+            Error Loading Report
+          </h3>
           <p className="text-red-300">{error}</p>
         </div>
       </div>
     );
   }
-  
+
   // Return null if no report data available
   if (!report) {
     return null;
@@ -143,22 +144,28 @@ export function ReportDetail({
         <h2 className="text-xl font-semibold mb-4">
           Vulnerability Description
         </h2>
-        <p className="text-zinc-200">{report.vulnerabilityDescription || vulnerabilityDescription}</p>
+        <p className="text-zinc-200">
+          {report.vulnerabilityDescription || vulnerabilityDescription}
+        </p>
       </div>
 
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Impact of Vulnerability</h2>
-        <p className="text-zinc-200">{report.vulnerabilityImpact || vulnerabilityImpact}</p>
+        <p className="text-zinc-200">
+          {report.vulnerabilityImpact || vulnerabilityImpact}
+        </p>
       </div>
 
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Steps to reproduce</h2>
         <ol className="list-decimal pl-5 space-y-2">
-          {(report.stepsToReproduce || stepsToReproduce).map((step: string, index: number) => (
-            <li key={index} className="text-zinc-200">
-              {step}
-            </li>
-          ))}
+          {(report.stepsToReproduce || stepsToReproduce).map(
+            (step: string, index: number) => (
+              <li key={index} className="text-zinc-200">
+                {step}
+              </li>
+            )
+          )}
         </ol>
       </div>
 
@@ -190,15 +197,15 @@ export function ReportDetail({
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">
-          Mitigation Steps
-        </h2>
+        <h2 className="text-xl font-semibold mb-4">Mitigation Steps</h2>
         <ol className="list-decimal pl-5 space-y-2">
-          {(report.mitigationSteps || mitigationSteps).map((step: string, index: number) => (
-            <li key={index} className="text-zinc-200">
-              {step}
-            </li>
-          ))}
+          {(report.mitigationSteps || mitigationSteps).map(
+            (step: string, index: number) => (
+              <li key={index} className="text-zinc-200">
+                {step}
+              </li>
+            )
+          )}
         </ol>
       </div>
 

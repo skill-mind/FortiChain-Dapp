@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { FORTICHAIN_ABI } from "@/app/abi/fortichain-abi";
 import { useContractFetch, fetchContentFromIPFS } from "@/hooks/useBlockchain";
 
-// Unified report data structure
 export interface UnifiedReport {
-  // Blockchain data
   id: string;
   report_uri: string;
   researcher_address: string;
@@ -14,8 +12,6 @@ export interface UnifiedReport {
   status: string;
   created_at: number;
   updated_at: number;
-  
-  // IPFS content
   title?: string;
   description?: string;
   severity?: "Critical" | "High" | "Medium" | "Low";
@@ -57,117 +53,160 @@ export interface UseGetReportReturn {
   refetch: () => void;
 }
 
-export function useGetReport(reportId: string): UseGetReportReturn {
-  const [report, setReport] = useState<UnifiedReport | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isEmpty, setIsEmpty] = useState(false);
+const createBlockchainReport = (reportData: any, normalizedId: string) => ({
+  id: reportData.id?.toString() || normalizedId,
+  report_uri: reportData.report_uri || "",
+  researcher_address: reportData.researcher_address || "",
+  project_id: reportData.project_id?.toString() || "",
+  status: "",
+  created_at: reportData.created_at ? Number(reportData.created_at) : 0,
+  updated_at: reportData.updated_at ? Number(reportData.updated_at) : 0,
+});
 
-  // Fetch report from blockchain
+const transformIpfsContent = (
+  ipfsContent: any,
+  blockchainReport: any
+): UnifiedReport => ({
+  ...blockchainReport,
+  title: ipfsContent.reportName || "Untitled Report",
+  description: ipfsContent.description || "",
+  severity: ipfsContent.severity || "Medium",
+  cvssScore: ipfsContent.cvssScore || 0,
+  url: ipfsContent.url || "",
+  status: ipfsContent.status || "",
+  vulnerableParameter: ipfsContent.vulnerableParameter || "",
+  vulnerabilityDescription: ipfsContent.vulnerabilityDescription || "",
+  vulnerabilityImpact: ipfsContent.vulnerabilityImpact || "",
+  stepsToReproduce: ipfsContent.stepsToReproduce || [],
+  mitigationSteps: ipfsContent.mitigationSteps || [],
+  proofOfConcept: ipfsContent.proofOfConcept || [],
+  findings: ipfsContent.findings || [],
+  summary: ipfsContent.summary || "",
+  methodology: ipfsContent.methodology || "",
+  tools_used: ipfsContent.tools_used || [],
+  timeline: ipfsContent.timeline,
+  researcher_info: ipfsContent.researcher_info,
+  cid: ipfsContent.cid,
+});
+
+export function useGetReport(reportId: string | number): UseGetReportReturn {
+  const [state, setState] = useState<{
+    report: UnifiedReport | null;
+    loading: boolean;
+    error: string | null;
+    isEmpty: boolean;
+  }>({
+    report: null,
+    loading: true,
+    error: null,
+    isEmpty: false,
+  });
+
+  const normalizedId = useMemo(
+    () => (typeof reportId === "number" ? reportId.toString() : reportId),
+    [reportId]
+  );
+
   const {
     readData: reportData,
     readIsError: contractError,
     readIsLoading: contractLoading,
     readError: contractErrorDetails,
-    dataRefetch: refetchContract
-  } = useContractFetch(FORTICHAIN_ABI, "get_report", [reportId]);
+    dataRefetch: refetchContract,
+  } = useContractFetch(FORTICHAIN_ABI, "get_report", [normalizedId]);
 
-  const refetch = () => {
-    setLoading(true);
-    setError(null);
-    setIsEmpty(false);
+  const refetch = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      loading: true,
+      error: null,
+      isEmpty: false,
+    }));
     refetchContract();
-  };
+  }, [refetchContract]);
+
+  const setReportData = useCallback(
+    (
+      report: UnifiedReport | null,
+      loading: boolean,
+      error: string | null,
+      isEmpty: boolean
+    ) => {
+      setState({ report, loading, error, isEmpty });
+    },
+    []
+  );
+
+  // Memoized blockchain report to prevent unnecessary recalculations
+  const blockchainReport = useMemo(() => {
+    if (!reportData) return null;
+    return createBlockchainReport(reportData, normalizedId);
+  }, [reportData, normalizedId]);
 
   useEffect(() => {
+    if (!reportData || contractError || contractLoading) return;
+
     const fetchReportContent = async () => {
-      if (!reportData || contractError || contractLoading) {
-        return;
-      }
-
       try {
-        setLoading(true);
-        setError(null);
-
-        // Parse blockchain report data
-        const blockchainReport = {
-          id: reportData.id?.toString() || reportId,
-          report_uri: reportData.report_uri || "",
-          researcher_address: reportData.researcher_address || "",
-          project_id: reportData.project_id?.toString() || "",
-          status: reportData.status?.toString() || "",
-          created_at: reportData.created_at ? Number(reportData.created_at) : 0,
-          updated_at: reportData.updated_at ? Number(reportData.updated_at) : 0,
-        };
-
-        if (!blockchainReport.report_uri) {
-          setIsEmpty(true);
-          setLoading(false);
-          setError("Report URI not found on blockchain");
+        if (!blockchainReport?.report_uri) {
+          setReportData(
+            null,
+            false,
+            "Report URI not found on blockchain",
+            true
+          );
           return;
         }
 
-        // Fetch content from IPFS
-        const ipfsContent = await fetchContentFromIPFS(blockchainReport.report_uri);
-        
+        const ipfsContent = await fetchContentFromIPFS(
+          blockchainReport.report_uri
+        );
+
         if (!ipfsContent) {
-          setError("Failed to fetch report content from IPFS");
-          setLoading(false);
+          setReportData(
+            null,
+            false,
+            "Report content not available from IPFS",
+            true
+          );
           return;
         }
 
-        // Combine blockchain and IPFS data into unified structure
-        const unifiedReport: UnifiedReport = {
-          ...blockchainReport,
-          title: ipfsContent.title || "Untitled Report",
-          description: ipfsContent.description || "",
-          severity: ipfsContent.severity || "Medium",
-          cvssScore: ipfsContent.cvssScore || ipfsContent.cvss_score,
-          url: ipfsContent.url || ipfsContent.vulnerable_url,
-          vulnerableParameter: ipfsContent.vulnerableParameter || ipfsContent.vulnerable_parameter,
-          vulnerabilityDescription: ipfsContent.vulnerabilityDescription || ipfsContent.vulnerability_description,
-          vulnerabilityImpact: ipfsContent.vulnerabilityImpact || ipfsContent.vulnerability_impact,
-          stepsToReproduce: ipfsContent.stepsToReproduce || ipfsContent.steps_to_reproduce || [],
-          mitigationSteps: ipfsContent.mitigationSteps || ipfsContent.mitigation_steps || [],
-          proofOfConcept: ipfsContent.proofOfConcept || ipfsContent.proof_of_concept || [],
-          findings: ipfsContent.findings || [],
-          summary: ipfsContent.summary || "",
-          methodology: ipfsContent.methodology || "",
-          tools_used: ipfsContent.tools_used || [],
-          timeline: ipfsContent.timeline,
-          researcher_info: ipfsContent.researcher_info,
-          cid: ipfsContent.cid
-        };
-
-        setReport(unifiedReport);
-        setLoading(false);
-        setError(null);
-        setIsEmpty(false);
-
+        const unifiedReport = transformIpfsContent(
+          ipfsContent,
+          blockchainReport
+        );
+        setReportData(unifiedReport, false, null, false);
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        setError(errorMessage);
-        setLoading(false);
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error occurred";
+        setReportData(null, false, errorMessage, false);
       }
     };
 
     fetchReportContent();
-  }, [reportData, contractError, contractLoading, reportId]);
+  }, [
+    reportData,
+    contractError,
+    contractLoading,
+    blockchainReport,
+    setReportData,
+  ]);
 
-  // Handle contract errors
+
+
+  // Contract error handling effect
   useEffect(() => {
     if (contractError && contractErrorDetails) {
-      const errorMessage = contractErrorDetails.message || "Failed to fetch report from blockchain";
-      setError(errorMessage);
-      setLoading(false);
+      const errorMessage =
+        contractErrorDetails.message ||
+        "Failed to fetch report from blockchain";
+      setReportData(null, false, errorMessage, false);
     }
-  }, [contractError, contractErrorDetails]);
+  }, [contractError, contractErrorDetails, setReportData]);
 
   return {
-    report,
-    loading,
-    error,
-    isEmpty,
-    refetch
+    ...state,
+    refetch,
   };
 }
