@@ -3,6 +3,7 @@ import AdminOverviewStats from "./components/AdminOverviewStats";
 import RevenueChart from "./components/RevenueChart";
 import UserGrowthChart from "./components/UserGrowthChart";
 import RecentActivity from "./components/RecentActivity";
+import ProjectSeverityDist from "./components/ProjectSeverityDist";
 
 function page() {
   return (
@@ -13,7 +14,7 @@ function page() {
         <UserGrowthChart />
       </div>
       <div className="grid grid-cols-2 gap-x-3">
-        <RevenueChart />
+        <ProjectSeverityDist />
         <RecentActivity />
       </div>
     </div>
