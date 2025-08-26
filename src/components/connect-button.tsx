@@ -10,6 +10,7 @@ import { AccountTypeModal } from "./account-type-modal";
 import Link from "next/link";
 import { StarknetkitConnector, useStarknetkitConnectModal } from "starknetkit";
 import { WebWalletConnector } from "starknetkit/webwallet";
+import AddressBar from "./address-bar";
 
 type ConnectButtonVariant = "default" | "navbar";
 
@@ -102,47 +103,13 @@ export function ConnectButton({
   return (
     <div className="relative" ref={dropdownRef}>
       {isConnected && address ? (
-        <div
-          className={`relative z-40 ${
-            variant === "default" ? "mx-auto w-fit" : ""
-          }`}
-        >
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className={`flex items-center gap-2 border border-[#6B6668] text-white transition-colors ${
-              variant === "navbar"
-                ? "rounded px-4 py-2"
-                : "rounded-lg px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-5 text-base sm:text-lg md:text-xl font-semibold"
-            }`}
-            aria-label="Account menu"
-          >
-            {truncateAddress(address)}
-            <ChevronsUpDown className="w-4 h-4" />
-          </button>
-
-          {isDropdownOpen && (
-            <div
-              className={`absolute right-0 mt-2 bg-[#1d1f1c] overflow-hidden shadow-lg z-10 ${
-                variant === "default"
-                  ? "rounded-lg px-8 py-3 sm:py-4 md:py-5 text-base font-semibold w-fit"
-                  : "rounded-md w-48"
-              }`}
-            >
-              <button
-                onClick={handleDisconnect}
-                className="w-full text-left px-4 py-2 bg-[#FF3737] transition-colors"
-              >
-                <Link href={"/"}>Disconnect Wallet</Link>
-              </button>
-            </div>
-          )}
-        </div>
+        <AddressBar />
       ) : (
         <button
           onClick={handleConnect}
           className={`bg-[#0000FF] text-white hover:bg-blue-700 transition-colors ${
             variant === "navbar"
-              ? "rounded px-4 py-2"
+              ? "rounded-full px-4 py-2"
               : "rounded-lg px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-5 text-base sm:text-lg md:text-xl font-semibold"
           }`}
           aria-label="Connect wallet"

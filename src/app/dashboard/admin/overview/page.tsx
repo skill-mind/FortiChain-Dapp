@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React from "react";
 import { StatCard } from "../../components/resuables/StatsCard";
@@ -87,7 +87,7 @@ const validators = [
 
 const ValidatorsTable = () => {
   return (
-    <div className="bg-[#161113] rounded-[20px] p-6 mt-8">
+    <div className="bg-[#161113] rounded-[20px]">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-white text-[24px] font-[700]">Validators</h2>
         <div className="text-[#0000FF] hover:text-blue-400 cursor-pointer text-[18px]">
