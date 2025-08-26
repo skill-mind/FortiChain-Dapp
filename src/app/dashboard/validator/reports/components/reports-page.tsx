@@ -10,7 +10,6 @@ import { RejectReportModal } from "./modals/reject-report-modal";
 import { PayoutProcessingModal } from "./modals/payout-processing-modal";
 import { PayoutSuccessModal } from "./modals/payout-success-modal";
 import type { Report } from "../types";
-import { PayoutFailedModal } from "./modals/payout-failed-modal";
 import { RequestSentModal } from "./modals/request-sent-modal";
 import { RejectSuccesModal } from "./modals/reject-success-modal";
 
@@ -107,7 +106,6 @@ function ReportsPage() {
         />
       ) : (
         <ReportDetail
-          report={selectedReport!}
           isBookmarked={isBookmarked}
           onToggleBookmark={toggleBookmark}
           onBackClick={handleBackToReports}

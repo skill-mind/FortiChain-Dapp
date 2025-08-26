@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { writeContractWithStarknetJs } from "@/hooks/useBlockchain";
 import { Account, byteArray, cairo } from "starknet";
 import { useAccount } from "@starknet-react/core";
+import { has } from "lodash";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -30,9 +31,22 @@ const modules = {
 };
 
 const formats = [
-  "header", "font", "size", "bold", "italic", "underline", "strike",
-  "blockquote", "list", "bullet", "indent", "link", "image", "video",
-  "align", "code-block"
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "video",
+  "align",
+  "code-block",
 ];
 
 type WriteAReportProps = {
@@ -41,7 +55,11 @@ type WriteAReportProps = {
   projectId?: number;
 };
 
-export default function WriteAReport({ isOpen, onClose, projectId }: WriteAReportProps) {
+export default function WriteAReport({
+  isOpen,
+  onClose,
+  projectId,
+}: WriteAReportProps) {
   const [value, setValue] = useState("");
   const [previewMode, setPreviewMode] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -79,10 +97,12 @@ export default function WriteAReport({ isOpen, onClose, projectId }: WriteARepor
   };
 
   const handleSubmit = async () => {
-    if (!title.trim() || !project.trim() || !value.trim()) {
+    if (!title.trim()) {
       toast.error("Please fill out all fields before submitting.");
       return;
     }
+
+    
 
     setIsSubmitting(true);
 
@@ -108,26 +128,44 @@ export default function WriteAReport({ isOpen, onClose, projectId }: WriteARepor
       setIpfsHash(hash);
       toast.success(`Report uploaded to IPFS! Hash: ${hash}`);
 
+      console.log({
+        reportData,
+        projectId,
+        account,
+        hash,
+      }, 'hash');
+
       if (account && projectId) {
         toast.loading("Submitting to contract...");
-        
+
         const contractArgs = {
           project_id: cairo.uint256(projectId),
-          report_uri: byteArray.byteArrayFromString(hash)
+          report_uri: byteArray.byteArrayFromString(hash),
         };
-        
+
         const contractResult = await writeContractWithStarknetJs(
           account as Account,
           "submit_report",
           contractArgs
         );
-        
+
+
+        console.log({
+          contractResult
+        }, 'result');
+
         if (contractResult && contractResult.result && contractResult.status) {
           setContractReportId(reportId);
           setIsSubmitted(true);
           toast.dismiss();
-          toast.success(`Report submitted to blockchain successfully! Report ID: ${reportId}`);
+          toast.success(
+            `Report submitted to blockchain successfully! Report ID: ${reportId}`
+          );
         } else {
+          console.error(
+            "❌ WriteAReport: Contract transaction failed:",
+            contractResult
+          );
           toast.dismiss();
           toast.error("Contract transaction failed. Please try again.");
         }
@@ -141,7 +179,7 @@ export default function WriteAReport({ isOpen, onClose, projectId }: WriteARepor
       console.error("Error submitting report:", error);
       toast.error("Failed to submit report. Please try again.");
     } finally {
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
     }
   };
 

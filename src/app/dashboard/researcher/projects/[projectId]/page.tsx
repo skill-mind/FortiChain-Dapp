@@ -216,7 +216,7 @@ export default function ProjectDetailsPage({ params }: Props) {
       </motion.div>
 
       {/* Modals */}
-      <WriteAReport isOpen={isWriteModalOpen} onClose={handleCloseWriteModal} />
+      <WriteAReport isOpen={isWriteModalOpen} onClose={handleCloseWriteModal} projectId={projectId} />
       <CardGrid isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
     </motion.div>
   );

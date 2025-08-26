@@ -18,7 +18,11 @@ export const ReportHeader: React.FC<ReportHeaderProps> = ({
         {title}
       </div>
 
-      {status ? <StatusBadge status={status} /> : actionButton}
+      {status ? (
+        <StatusBadge className="capitalize" status={status} />
+      ) : (
+        actionButton
+      )}
     </div>
   );
 };
