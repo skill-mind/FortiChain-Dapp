@@ -61,7 +61,7 @@ export default function NotificationModal() {
   };
 
   return (
-    <DropdownMenuContent className="bg-[#090909] p-6 rounded-[8px] border border-[#1F1F1F] w-[430px] relative text-[#E2E2E2] flex flex-col text-sm h-[461px]">
+    <DropdownMenuContent className="bg-[#090909] p-6 rounded-[8px] border border-[#1F1F1F] lg:w-[430px] w-[90vw] relative text-[#E2E2E2] flex flex-col text-sm h-[461px]">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-medium">Notifications</h2>
         <button className="py-2 px-5 bg-[#1C1C1C] rounded-full">
@@ -82,10 +82,12 @@ export default function NotificationModal() {
               <h5 className="mb-1 text-[#6C6C6C] text-xs font-light">
                 Tuesday, July 1, 2025 - 8:00AM
               </h5>
-              <h3 className="text-[#E2E2E2] text-base font-medium mb-1">
+              <h3 className="text-[#E2E2E2] text-sm lg:text-base font-medium mb-1">
                 {notification.title}
               </h3>
-              <p className="text-[#6C6C6C]">{notification.description}</p>
+              <p className="text-[#6C6C6C] lg:text-sm text-xs">
+                {notification.description}
+              </p>
             </div>
           </motion.div>
         ))}
