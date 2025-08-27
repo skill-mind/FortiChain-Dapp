@@ -1,6 +1,6 @@
 import React from "react";
 
-function OverviewCard({
+function OverviewCardExpandable({
   stat,
   children,
 }: {
@@ -32,4 +32,4 @@ function OverviewCard({
   );
 }
 
-export default OverviewCard;
+export default OverviewCardExpandable;
