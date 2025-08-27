@@ -7,33 +7,40 @@ const dummy_stats = [
     label: "Total Allocated Bounty",
     value: "12",
     icon: <FolderOpen />,
-    progression: "+2 this month",
+    badgeText: "+2 this month",
   },
   {
     label: "In Progress Audit",
     value: "1",
     icon: <FileText />,
-    progression: "Requires attention",
+    badgeText: "Requires attention",
   },
   {
     label: "Completed Audit",
     value: "2",
     icon: <CircleDollarSign />,
-    progression: "Closed",
+    badgeText: "Closed",
   },
   {
     label: "Active Researchers",
     value: "2",
     icon: <CircleDollarSign />,
-    progression: "+1 this month",
+    badgeText: "+1 this month",
   },
+];
+
+const stat_badge_styles = [
+  "bg-[#153710] text-[#1BC100]",
+  "bg-[#373510] text-[#C1B700]",
+  "bg-[#10273E] text-[#0073E6]",
+  "bg-[#153710] text-[#1BC100]",
 ];
 function page() {
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
         {dummy_stats.map((stat, id) => (
-          <StatCard stat={stat} />
+          <StatCard stat={stat} badgeStyle={stat_badge_styles[id]} />
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">

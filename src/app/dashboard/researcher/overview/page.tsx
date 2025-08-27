@@ -12,27 +12,30 @@ function page() {
         stat={{
           label: "Reports Submitted",
           value: "4",
-          progression: "+2 this month",
+          badgeText: "+2 this month",
           icon: <FolderOpen />,
         }}
+        badgeStyle="text-[#1BC100] bg-[#153710]"
         children={<ReportsSubmitted />}
       />
       <OverviewCardExpandable
         stat={{
           label: "Reports Approved",
           value: "3",
-          progression: "Good",
+          badgeText: "Good",
           icon: <FolderOpen />,
         }}
+        badgeStyle="bg-[#10273E] text-[#0073E6]"
         children={<ReportsApproved />}
       />
       <OverviewCardExpandable
         stat={{
           label: "Token Earnings",
           value: "$9,650 USDC",
-          progression: "Total rewards",
+          badgeText: "Total rewards",
           icon: <CircleDollarSignIcon />,
         }}
+        badgeStyle="bg-[#320D35] text-[#BB00C1]"
         children={<TokenEarnings />}
       />
     </div>

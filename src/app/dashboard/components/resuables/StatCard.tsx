@@ -2,13 +2,15 @@ import React from "react";
 
 function StatCard({
   stat,
+  badgeStyle = "bg-[#153710] text-[#1BC100]",
 }: {
   stat: {
     label: string;
     value: string;
     icon: React.ReactNode;
-    progression: string;
+    badgeText: string;
   };
+  badgeStyle: string;
 }) {
   return (
     <div className="p-6 bg-[#101011] rounded-lg flex justify-between text-[#E2E2E2]">
@@ -17,8 +19,8 @@ function StatCard({
 
         <h2 className="text-[24px] mb-2">{stat.value}</h2>
 
-        <div className="bg-[#153710] rounded-full py-1 px-3 text-[#1BC100] text-xs">
-          {stat.progression}
+        <div className={`rounded-full py-1 px-3 w-fit  text-xs ${badgeStyle}`}>
+          {stat.badgeText}
         </div>
       </div>
 

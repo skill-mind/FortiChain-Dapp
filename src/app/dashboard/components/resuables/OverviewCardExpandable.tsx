@@ -2,14 +2,16 @@ import React from "react";
 
 function OverviewCardExpandable({
   stat,
+  badgeStyle = "text-[#1BC100] bg-[#153710]",
   children,
 }: {
   stat: {
     label: string;
     value: string;
-    progression: string;
+    badgeText: string;
     icon: React.ReactNode;
   };
+  badgeStyle: string;
   children: React.ReactNode;
 }) {
   return (
@@ -20,8 +22,10 @@ function OverviewCardExpandable({
 
           <h2 className="text-[24px] mb-2">{stat.value}</h2>
 
-          <div className="bg-[#153710] rounded-full py-1 px-3 text-[#1BC100] text-xs w-fit">
-            {stat.progression}
+          <div
+            className={` rounded-full py-1 px-3  text-xs w-fit ${badgeStyle}`}
+          >
+            {stat.badgeText}
           </div>
         </div>
 
