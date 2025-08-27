@@ -10,53 +10,35 @@ import {
 
 const dummy_users = [
   {
-    amt: 1400,
-    month: "Jan",
-    "Project Owners": 1,
-    Researchers: 2,
-    Validators: 1,
+    Reports: 2,
+    Month: "Jan",
   },
   {
-    amt: 1400,
-    month: "Feb",
-    "Project Owners": 1,
-    Researchers: 5,
-    Validators: 3,
+    Reports: 4,
+    Month: "Feb",
   },
   {
-    amt: 1506,
-    month: "Mar",
-    "Project Owners": 3,
-    Researchers: 10,
-    Validators: 4,
+    Reports: 1,
+    Month: "Mar",
   },
   {
-    amt: 989,
-    month: "Apr",
-    "Project Owners": 3,
-    Researchers: 10,
-    Validators: 4,
+    Reports: 0,
+    Month: "Apr",
   },
   {
-    amt: 1228,
-    month: "May",
-    "Project Owners": 5,
-    Researchers: 11,
-    Validators: 4,
+    Reports: 6,
+    Month: "May",
   },
   {
-    amt: 1100,
-    month: "Jun",
-    "Project Owners": 6,
-    Researchers: 8,
-    Validators: 2,
+    Reports: 1,
+    Month: "Jun",
   },
 ];
 
-function UserGrowthChart() {
+function ReportHistory() {
   return (
     <div className="w-full p-6 bg-[#101011] rounded-lg">
-      <h4 className="text-base font-medium text-white mb-6">User Growth</h4>
+      <h4 className="text-base font-medium text-white mb-6">Report History</h4>
       <div className="h-[320px] w-full [&_*]:outline-none">
         <ResponsiveContainer height="100%" width="100%">
           <BarChart
@@ -66,10 +48,10 @@ function UserGrowthChart() {
             data={dummy_users}
             height={300}
             syncMethod="index"
-            barSize={8}
+            barSize={24}
           >
-            <XAxis dataKey="month" />
-            <YAxis yAxisId="Researchers" />
+            <XAxis dataKey="Month" />
+            <YAxis yAxisId="Reports" />
             <Tooltip
               cursor={{
                 fill: "#1C1C1C",
@@ -92,21 +74,9 @@ function UserGrowthChart() {
               }}
             />
             <Bar
-              dataKey="Project Owners"
+              dataKey="Reports"
               fill="#0073E6"
-              yAxisId="Project Owners"
-              radius={2}
-            />
-            <Bar
-              dataKey="Researchers"
-              fill="#00E6B0"
-              yAxisId="Researchers"
-              radius={2}
-            />
-            <Bar
-              dataKey="Validators"
-              fill="#00C0E6"
-              yAxisId="Validators"
+              yAxisId="Reports"
               radius={2}
             />
           </BarChart>
@@ -116,4 +86,4 @@ function UserGrowthChart() {
   );
 }
 
-export default UserGrowthChart;
+export default ReportHistory;

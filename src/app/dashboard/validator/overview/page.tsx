@@ -7,7 +7,7 @@ import OverviewCardExpandable from "../../components/resuables/OverviewCardExpan
 
 function page() {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
       <OverviewCardExpandable
         stat={{
           label: "Reports Available",

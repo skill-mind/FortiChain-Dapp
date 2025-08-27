@@ -1,7 +1,16 @@
-import { redirect } from "next/navigation";
+"use client";
 
-const page = () => {
-  redirect("/dashboard/project-owner/overview");
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+const Page = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/dashboard/project-owner/overview");
+  }, [router]);
+
+  return null;
 };
 
-export default page;
+export default Page;

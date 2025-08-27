@@ -82,11 +82,15 @@ const Header = () => {
   };
 
   return (
-    <header className="flex relative gap-4 justify-between items-center w-full px-[100px] py-5 border-b-[#1F1F1F] border-b-[1px]">
+    <header className="flex relative gap-4 justify-between items-center w-full px-6 lg:px-[100px] py-3 lg:py-5 border-b-[#1F1F1F] border-b-[1px]">
       <Animation delay={0.2} animationType="slide-up">
         <div className="flex gap-x-3">
-          <img src="/brandlogo.svg" className="w-[127px] h-10" alt="" />
-          <div className="py-3 px-6 font-normal bg-[#101011] text-[#E2E2E2] rounded-full">
+          <img
+            src="/brandlogo.svg"
+            className="w-[100px] lg:w-[127px] lg:h-10"
+            alt=""
+          />
+          <div className="py-3 px-6 font-normal bg-[#101011] text-[#E2E2E2] rounded-full lg:flex hidden">
             {capitalizedTitle}
           </div>
         </div>
@@ -97,20 +101,20 @@ const Header = () => {
             <DropdownMenuTrigger asChild>
               <button
                 onClick={() => setIsBellActive(!isBellActive)}
-                className="flex gap-x-2 items-center py-3 px-6 transition-colors bg-[#101011] rounded-full"
+                className="flex gap-x-2 items-center p-3 lg:py-3 lg:px-6 transition-colors bg-[#101011] rounded-full"
               >
                 <Bell
                   size={16}
                   className={isBellActive ? "text-black" : "text-white"}
                 />
-                <span>Notification</span>
+                <span className="lg:flex hidden">Notification</span>
               </button>
             </DropdownMenuTrigger>
             <NotificationModal />
           </DropdownMenu>
 
           {/* Wallet Button */}
-          <motion.div variants={navItemVariants} className="hidden md:block">
+          <motion.div variants={navItemVariants} className="">
             <ConnectButton
               isModalOpen={isModalOpen}
               setIsModalOpen={setIsModalOpen}

@@ -7,18 +7,18 @@ function AddressBar() {
   return (
     <div className="flex items-center gap-x-[14px]">
       <div
-        className="p-[2px] rounded-full overflow-hidden w-[170px]"
+        className="p-[2px] rounded-full overflow-hidden w-fit lg:w-[170px]"
         style={{
           background: "linear-gradient(90deg, #10273E 0%, #2A67A4 100%)",
         }}
       >
-        <div className="p-2 flex items-center gap-x-[10px] bg-[#090909] rounded-full">
+        <div className="p-[6px] lg:p-2 flex items-center gap-x-[10px] bg-[#090909] rounded-full">
           <img
             src="/wallet_icons/braavos_icon.svg"
             className="w-6 h-6"
             alt=""
           />
-          <span>
+          <span className="lg:flex hidden">
             {address?.slice(0, 6)}...{address?.slice(-5)}
           </span>
         </div>

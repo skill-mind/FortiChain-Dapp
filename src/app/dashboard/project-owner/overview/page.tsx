@@ -1,128 +1,67 @@
-import React from "react";
-import { ClipboardList, Shield, BarChart3, Wallet, Users } from "lucide-react";
-import { ActionButton } from "../../components/resuables/ActionButton";
-import { RecentActivity } from "../../components/resuables/RecentActivity";
-import Image from "next/image";
-import infoOne from "../../../../../public/overviewIcons/infoOne.svg";
-import infoTwo from "../../../../../public/overviewIcons/infoTwo.svg";
-import infoThree from "../../../../../public/overviewIcons/infoThree.svg";
-import statsOne from "../../../../../public/overviewIcons/statsOne.svg";
-import statsTwo from "../../../../../public/overviewIcons/statsTwo.svg";
-import statsThree from "../../../../../public/overviewIcons/statsThree.svg";
-import statsFour from "../../../../../public/overviewIcons/statsFour.svg";
-import { ProjectOwnerActionButton } from "../../components/resuables/ProjectOwnerActionButton";
-import StatsCard from "@/components/dashboard/projects/StatsCard";
+import StatCard from "@/app/dashboard/components/resuables/StatCard";
+import { CircleDollarSign, FileText, FolderOpen } from "lucide-react";
+import ReportHistory from "./components/ReportHistory";
 
-const Overview = () => {
-  const actionButtons = [
-    {
-      id: 1,
-      icon: <Image src={infoOne} alt={"icon"} height={20} width={20} />,
-      title: "Register Project",
-      description: "Submit your smart contract for security review",
-      href: "/dashboard/project-owner/projects",
-      iconBgColor: "bg-[#0000FF]",
-    },
-    {
-      id: 2,
-      icon: <Image src={infoTwo} alt={"icon"} height={20} width={20} />,
-      title: "Fund Escrow",
-      description: "Securely deposit bounty rewards",
-      href: "/dashboard/project-owner/projects",
-      iconBgColor: "bg-[#0000FF]",
-    },
-    {
-      id: 3,
-      icon: <Image src={infoThree} alt={"icon"} height={20} width={20} />,
-      title: "View Reports",
-      description: "Track vulnerability findings in real time",
-      href: "/dashboard/project-owner/reports",
-      iconBgColor: "bg-[#0000FF]",
-    },
-  ];
-
-  const stats = [
-    {
-      id: 1,
-      icon: <Image src={statsOne} alt={"icon"} height={30} width={30} />,
-      value: 5,
-      label: "Total Number of Projects",
-    },
-    {
-      id: 2,
-      icon: <Image src={statsTwo} alt={"icon"} height={30} width={30} />,
-      value: 5,
-      label: "Total Vulnerabilities Found",
-    },
-    {
-      id: 3,
-      icon: <Image src={statsThree} alt={"icon"} height={30} width={30} />,
-      value: "$2,523.34",
-      label: "Total Bounties Paid",
-    },
-    {
-      id: 4,
-      icon: <Image src={statsFour} alt={"icon"} height={30} width={30} />,
-      value: 5,
-      label: "Active Bounties",
-    },
-  ];
-  const recentEvents = [
-    {
-      id: 1,
-      title: "Project Registered",
-      subtitle: "Your Project SkillNet has been submitted for security review",
-      timestamp: "Today 4:15pm",
-    },
-    {
-      id: 2,
-      title: "Reported Vulnerabilities",
-      subtitle: "Security reports have been submitted by researchers",
-      timestamp: "Today 2:35pm",
-    },
-    {
-      id: 3,
-      title: "Reported Vulnerabilities",
-      subtitle: "Security reports have been submitted by researchers",
-      timestamp: "Yesterday",
-    },
-  ];
-
+const dummy_stats = [
+  {
+    label: "Total Allocated Bounty",
+    value: "12",
+    icon: <FolderOpen />,
+    progression: "+2 this month",
+  },
+  {
+    label: "In Progress Audit",
+    value: "1",
+    icon: <FileText />,
+    progression: "Requires attention",
+  },
+  {
+    label: "Completed Audit",
+    value: "2",
+    icon: <CircleDollarSign />,
+    progression: "Closed",
+  },
+  {
+    label: "Active Researchers",
+    value: "2",
+    icon: <CircleDollarSign />,
+    progression: "+1 this month",
+  },
+];
+function page() {
   return (
-    <div>
-      {/* Action Buttons */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {actionButtons.map((btn) => (
-          <ProjectOwnerActionButton
-            id={btn.id}
-            key={btn.id}
-            icon={btn.icon}
-            title={btn.title}
-            description={btn.description}
-            href={btn.href}
-            iconBgColor={btn.iconBgColor}
-          />
+    <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+        {dummy_stats.map((stat, id) => (
+          <StatCard stat={stat} />
         ))}
       </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
+        <ReportHistory />
+        <div className="p-6 bg-[#101011] rounded-lg">
+          <h3>Note:</h3>
+          <p className="text-[#6C6C6C] mb-6">Quick tips to get you started.</p>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        {stats.map((stat) => (
-          <StatsCard
-            key={stat.id}
-            icon={stat.icon}
-            value={stat.value}
-            label={stat.label}
-          />
-        ))}
-      </div>
-
-      {/* Recent Activity */}
-      <div className="mb-6">
-        <RecentActivity events={recentEvents} />
+          <ul className="flex flex-col gap-y-2 list-disc ml-3 text-sm leading-6">
+            <li>Please fund the audit with USDC on Starknet chain.</li>
+            <li>
+              Security researchers and validators can proceed with the audit
+              once there's an adequate bounty amount.
+            </li>
+            <li>
+              It would be helpful to set a reasonable timeframe for the audit.
+            </li>
+            <li>
+              After the audit is completed, reports will be shared to guide the
+              developers of the audited project in making any necessary changes.
+            </li>
+            <li>You can download the audit certificate on successful audit</li>
+            <li>Make your audit smart contract github repo public</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default Overview;
+export default page;
