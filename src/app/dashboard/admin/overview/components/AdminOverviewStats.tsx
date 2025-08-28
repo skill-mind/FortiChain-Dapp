@@ -44,7 +44,11 @@ function AdminOverviewStats() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
       {dummy_stats.map((stat, id) => (
-        <StatCard stat={stat} badgeStyle="bg-[#153710] text-[#1BC100]" />
+        <StatCard
+          key={id}
+          stat={stat}
+          badgeStyle="bg-[#153710] text-[#1BC100]"
+        />
       ))}
     </div>
   );
