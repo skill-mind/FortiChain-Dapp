@@ -8,16 +8,12 @@ export default function Layout({
   const nav_items = [
     { href: "/dashboard/researcher/overview", label: "Overview" },
     {
-      href: "/dashboard/researcher/reports",
-      label: "Reports",
-    },
-    {
       href: "/dashboard/researcher/projects",
       label: "Projects",
     },
     {
       href: "/dashboard/researcher/my-reports",
-      label: "My Reports",
+      label: "My Report",
     },
     {
       href: "/dashboard/researcher/rankings",
