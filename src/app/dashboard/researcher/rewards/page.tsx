@@ -8,7 +8,7 @@ import { TransactionSuccessModal } from "@/components/dashboard/Transaction-succ
 import { WithdrawalHistory } from "@/components/dashboard/Withdrawal-history";
 import { WithdrawalHistoryModal } from "@/components/dashboard/Withdrawal-history-modal";
 import { WithdrawalRequest } from "@/components/dashboard/Withdrawal-request";
-import { StatCard } from "../../components/resuables/StatsCard";
+import StatsCard from "@/components/dashboard/projects/StatsCard";
 
 export default function RewardPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -27,7 +27,7 @@ export default function RewardPage() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Animation delay={0.2} animationType="slide-up">
-              <StatCard
+              <StatsCard
                 icon={<Wallet className="w-6 h-6 text-white" />}
                 value="2,500 STRK"
                 label="Total Rewards Earned:"
@@ -35,7 +35,7 @@ export default function RewardPage() {
             </Animation>
 
             <Animation delay={0.3} animationType="slide-up">
-              <StatCard
+              <StatsCard
                 icon={<DollarSign className="w-6 h-6 text-white" />}
                 value="150 STRK"
                 label="Pending Withdrawal"

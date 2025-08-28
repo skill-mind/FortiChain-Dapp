@@ -1,10 +1,16 @@
-import React from "react";
-import AdminDashboard from "./overview/page";
+"use client";
 
-const page = () => {
-  return <div >
-    <AdminDashboard/>
-  </div>;
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+const Page = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/dashboard/admin/overview");
+  }, [router]);
+
+  return null;
 };
 
-export default page;
+export default Page;

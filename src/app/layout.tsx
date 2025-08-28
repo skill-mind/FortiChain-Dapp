@@ -1,13 +1,8 @@
-
-
-
-import type React from "react"
-import type { Metadata } from "next"
-import "./globals.css"
-import { StructuredData } from "../components/metadata/structured-data"
+import type React from "react";
+import type { Metadata } from "next";
+import "./globals.css";
+import { StructuredData } from "../components/metadata/structured-data";
 import ClientProviders from "@/providers/client-providers";
-
-
 
 export const metadata: Metadata = {
   title: "FortiChain - Decentralized Blockchain Security Platform",
@@ -59,7 +54,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "FortiChain - Decentralized Blockchain Security Platform",
-    description: "Enhance blockchain security through automated vulnerability disclosure and bug bounty processes.",
+    description:
+      "Enhance blockchain security through automated vulnerability disclosure and bug bounty processes.",
     images: ["/twitter-image.png"],
     creator: "@fortichain",
     site: "@fortichain",
@@ -79,21 +75,21 @@ export const metadata: Metadata = {
     google: "your-google-verification-code",
     yandex: "your-yandex-verification-code",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <head>
         <StructuredData />
       </head>
-          <body className="bg-[#0F0A0AFA]">
-         <ClientProviders>{children}</ClientProviders>
-       </body>
+      <body className="bg-[#0F0A0AFA]">
+        <ClientProviders>{children}</ClientProviders>
+      </body>
     </html>
-  )
+  );
 }
