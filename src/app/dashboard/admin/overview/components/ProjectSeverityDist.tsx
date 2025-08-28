@@ -23,22 +23,23 @@ function ProjectSeverityDist() {
                 data={[
                   {
                     customRadius: 140,
-                    percent: Math.floor(
+                    percent: Math.round(
                       (totalHigh / (totalHigh + totalMedium + totalLow)) * 100
                     ),
                     value: "High",
                   },
                   {
                     customRadius: 160,
-                    percent:
-                      (totalMedium / (totalHigh + totalMedium + totalLow)) *
-                      100,
+                    percent: Math.round(
+                      (totalMedium / (totalHigh + totalMedium + totalLow)) * 100
+                    ),
                     value: "Medium",
                   },
                   {
                     customRadius: 150,
-                    percent:
-                      (totalLow / (totalHigh + totalMedium + totalLow)) * 100,
+                    percent: Math.round(
+                      (totalLow / (totalHigh + totalMedium + totalLow)) * 100
+                    ),
                     value: "Low",
                   },
                 ]}
