@@ -1,68 +1,96 @@
 "use client";
 
-import { motion } from "framer-motion"; // import framer motion
-import { SearchIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { ChevronDown, Check, Filter } from "lucide-react";
 import { ProjectCard } from "../../components/resuables/ProjectCard";
 import { projects } from "./mockData";
+import { useState } from "react";
+import Foot from "@/components/foot";
 
 const Projects = () => {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 50 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full h-auto"
-    >
-      {/* Search and Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="flex justify-between items-center w-full mb-5"
-      >
-        <div className="flex items-center py-[8px] px-[14px] rounded-[8px] bg-[#161113] border border-[#464043] gap-[8px]">
-          <SearchIcon color="#6B6668" size={20} />
-          <input
-            type="text"
-            placeholder="Search"
-            className="placeholder:text-[13px] text-[#B5B3B4] font-[500] w-full bg-transparent outline-none border-none"
-          />
-        </div>
-        <div className="flex gap-3">
-          <select
-            className="bg-transparent border outline-none rounded-[4px] py-[8px] px-[14px] text-[13px] font-[500] border-[#464043]"
-          >
-            <option className="text-black" value="">Select Languages</option>
-            <option className="text-black" value="">TypeScript</option>
-            <option className="text-black" value="">JavaScript</option>
-            <option className="text-black" value="">Solidity</option>
-            <option className="text-black" value="">Cairo</option>
-            <option className="text-black" value="">Rust</option>
-          </select>
-          <select
-            className="bg-transparent border outline-none rounded-[4px] py-[4px] px-[8px] text-[13px] font-[500] border-[#464043]"
-          >
-            <option className="text-black" value="">Select Category</option>
-            <option className="text-black" value="">Defi</option>
-            <option className="text-black" value="">Plankton</option>
-            <option className="text-black" value="">FortiChain</option>
-            <option className="text-black" value="">FortiChain Clone</option>
-          </select>
-        </div>
-      </motion.div>
+  const [filter, setFilter] = useState("Available");
+  const [open, setOpen] = useState(false);
 
-      {/* Project Cards */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
+  // Filter projects by status
+  const filteredProjects =
+    filter === "All" ? projects : projects.filter((p) => p.status === filter);
+
+  const options = ["All", "Available", "Assigned"];
+
+  return (
+    <div className="flex flex-col min-h-screen relative">
+      {/* Content */}
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="grid grid-cols-12 gap-5 w-full"
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full flex-grow h-auto"
       >
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {/* Dropdown + Filter Badge Row */}
+        <motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.7, ease: "easeOut" }}
+  className="flex items-center w-full mb-5 gap-4 justify-between md:justify-start"
+  >
+  {/* Dropdown */}
+  <div className="relative w-3/4 sm:w-[220px]">
+    <button
+      onClick={() => setOpen(!open)}
+      className="flex justify-between items-center w-full h-[40px] px-4 rounded-full bg-[#161113] border border-[#464043] text-sm text-[#B5B3B4]"
+    >
+      {filter}
+      <ChevronDown
+        className={`transition-transform ${open ? "rotate-180" : "rotate-0"}`}
+        size={16}
+      />
+    </button>
+
+    {/* Dropdown Menu */}
+    {open && (
+      <div className="absolute mt-2 w-full bg-[#161113] border border-[#464043] rounded-[8px] py-2 z-50 shadow-lg">
+        {options.map((option) => (
+          <div
+            key={option}
+            onClick={() => {
+              setFilter(option);
+              setOpen(false);
+            }}
+            className={`flex items-center justify-between px-4 py-2 cursor-pointer text-sm rounded-md ${
+              filter === option
+                ? "bg-[#1F1A1C] text-white"
+                : "text-[#B5B3B4] hover:bg-[#1F1A1C]"
+            }`}
+          >
+            {option}
+            {filter === option && <Check size={14} />}
+          </div>
         ))}
-      </motion.div>
-    </motion.section>
+      </div>
+    )}
+  </div>
+
+  {/* Active Filter Badge */}
+  <div className="flex items-center gap-2 h-[40px] px-3 rounded-full bg-[#161113] border border-[#464043] text-[#B5B3B4] text-sm font-medium">
+    <Filter size={16} className="text-[#B5B3B4]" />
+    <span className="text-xs text-[#B5B3B4]">1</span>
+  </div>
+</motion.div>
+
+
+        {/* Project Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="grid grid-cols-12 gap-5 w-full"
+        >
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </motion.div>
+      </motion.section>
+    </div>
   );
 };
 

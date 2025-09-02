@@ -9,33 +9,9 @@ type Props = {
   project: Project;
 };
 
-//  pick top two langs and normalize them to 100%
-function getTopTwoNormalized(
-  langs: Record<
-    string,
-    { percentage: number; bgColor: string; logo: string; icon: string }
-  >
-) {
-  const entries = Object.values(langs)
-    .sort((a, b) => b.percentage - a.percentage)
-    .slice(0, 2);
-
-  const total = entries.reduce((sum, l) => sum + l.percentage, 0) || 1;
-  return entries.map((l) => ({
-    ...l,
-    normalized: (l.percentage / total) * 100,
-  }));
-}
-
 export const ProjectCard: React.FC<Props> = ({ project }) => {
-  const top = getTopTwoNormalized(project.language ?? {});
-
-  // 📝Fallback for project‐level logo: if none, use first lang’s icon/bg
-  const fallback = top[0] ?? { icon: "?", bgColor: "bg-gray-700" };
-  const logoText = project.logo.text || fallback.icon;
-  const logoBg = project.logo.bgColor || fallback.bgColor;
-
   const shortenText = (text: string, max: number) => {
+    if (!text) return "";
     if (text.length <= max) return text;
     const cut = text.slice(0, max);
     const last = cut.lastIndexOf(" ");
@@ -45,117 +21,104 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   return (
     <Link
       href={`/dashboard/researcher/projects/${project.id}`}
-      className="block col-span-12 sm:col-span-6 lg:col-span-4">
+      className="block col-span-12 sm:col-span-6 lg:col-span-4"
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="bg-[#110D0F] text-white p-6 rounded-2xl border border-gray-700 w-full max-w-md">
-        {/* Logo + Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 flex items-center justify-center rounded-2xl overflow-hidden">
-            {project.logo.logo ? (
-              <Image
-                src={project.logo.logo}
-                alt={project.title}
-                width={48}
-                height={48}
-                className="object-cover"
-              />
-            ) : (
-              <div
-                className={`${logoBg} text-black font-bold p-3 rounded-full`}>
-                {logoText}
-              </div>
-            )}
-          </div>
-          <h2 className="text-xl font-semibold">{project.title}</h2>
-        </motion.div>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-sm text-gray-400 mb-6 min-h-[54px] leading-5">
-          {shortenText(project.description, 150)}
-        </motion.p>
-
-        {/* Amount & Deadline */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-          className="flex items-center gap-[13px] text-sm mb-4">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/researcherIcon/moneyBag.svg"
-              alt="Money bag"
-              width={15}
-              height={15}
-            />
-            {project.amount}
-          </div>
-          <div className="flex items-center gap-2">
-            <Image
-              src="/researcherIcon/deadLine.svg"
-              alt="Deadline"
-              width={15}
-              height={15}
-            />
-            Deadline: {project.deadline}
-          </div>
-        </motion.div>
-
-        {/* Tags */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag) => (
+        className="bg-[#110D0F] text-white p-6 rounded-2xl border border-gray-700 w-full max-w-md"
+      >
+        <div>
+          <div className="flex items-center space-x-2 mb-4">
             <span
-              key={tag}
-              className="bg-transparent border-[#464043] border text-xs py-1 px-3 rounded-full">
-              {tag}
+              className={`w-1 h-1 rounded-full ${project.status === "Completed"
+                ? "bg-green-500"
+                : project.status === "Available"
+                  ? "bg-blue-900"
+                  : "bg-gray-400"
+                }`}
+            ></span>
+            <span className="text-xs font-semibold text-gray-500">
+              {project.status}
             </span>
-          ))}
-        </motion.div>
+          </div>
 
-        {/* Progress Bar (top 2 langs) */}
-        {top.length === 2 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease: "easeOut" }}
-            className="w-full h-6 rounded-full overflow-hidden">
-            <div className="flex h-full w-full -space-x-4">
-              {top.map((lang) => (
+        </div>
+        {/* Logo + Title + Priority */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 flex items-center justify-center rounded-2xl overflow-hidden">
+              {project.logo.logo ? (
+                <Image
+                  src={project.logo.logo}
+                  alt={project.title}
+                  width={48}
+                  height={48}
+                  className="object-cover"
+                />
+              ) : (
                 <div
-                  key={lang.icon || lang.logo}
-                  className={`${lang.bgColor} flex items-center justify-between text-xs px-4 rounded-full font-bold text-white transition-all duration-500 ease-in-out`}
-                  style={{ flexBasis: `${lang.normalized}%` }}>
-                  {lang.logo ? (
-                    <Image
-                      src={lang.logo}
-                      alt={`${lang.icon} logo`}
-                      width={12}
-                      height={12}
-                      className="inline-block"
-                    />
-                  ) : (
-                    <span>{lang.icon}</span>
-                  )}
-                  <span>{Math.round(lang.normalized)}%</span>
+                  className={`${project.logo.bgColor} text-white font-bold w-12 h-12 flex items-center justify-center rounded-xl`}
+                >
+                  {project.logo.text}
                 </div>
-              ))}
+              )}
             </div>
-          </motion.div>
-        )}
+            <h2 className=" font-semibold text-sm">{project.title}</h2>
+          </div>
+
+          {/* Priority badge */}
+          <span
+            className={`px-3 py-1 rounded-full text-[9px] font-semibold whitespace-nowrap flex items-center justify-center
+    ${project.priority === "High"
+                ? "bg-[#401D1D] text-[#EF4343]"
+                : project.priority === "Medium"
+                  ? "bg-[#373510] text-[#C1B700]"
+                  : "bg-[#10273E] text-[#0073E6]" // Low
+              }`}
+          >
+            {`Priority: ${project.priority}`}
+          </span>
+
+
+        </div>
+        <div className="h-[1px] w-full bg-gray-700 mb-4"></div>
+
+        {/* Amount, Deadline, Status */}
+        <div className="flex flex-wrap items-center gap-3 text-sm mb-4">
+          {project.amount && (
+            <div className="flex items-center gap-2">
+              <Image
+                src="/researcherIcon/moneyBag.svg"
+                alt="Money bag"
+                width={15}
+                height={15}
+              />
+              {project.amount}
+            </div>
+          )}
+          <div className="flex items-center justify-between w-full gap-2">
+            {/* Left side: Deadline */}
+            <div className="flex items-center gap-2">
+              <span className="text-[#6C6C6C] text-[11px]">Deadline:</span>
+              <div className="rounded-3xl px-4 py-1 bg-[#212121] text-[11px] text-gray-300">
+                {project.deadline}
+              </div>
+            </div>
+
+            {/* Right side: Button */}
+            <Link href={`/dashboard/researcher/projects/${project.id}`}>
+              <div className="rounded-3xl px-4 py-1 bg-[#212121] text-[13px] text-gray-300 cursor-pointer hover:bg-[#333] transition">
+                View Details
+              </div>
+            </Link>
+          </div>
+
+
+        </div>
+
+
       </motion.div>
     </Link>
   );
