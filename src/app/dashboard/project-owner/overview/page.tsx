@@ -31,7 +31,7 @@ const dummy_stats = [
 
 const stat_badge_styles = [
   "bg-[#153710] text-[#1BC100]",
-  "bg-[#373510] text-[#C1B700]",
+  "bg-warning-background text-warning",
   "bg-[#10273E] text-[#0073E6]",
   "bg-[#153710] text-[#1BC100]",
 ];
