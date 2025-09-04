@@ -1,7 +1,9 @@
 import React from "react";
+import ValidatorsRanking from "../../researcher/rankings/components/ValidatorsRanking";
 
 function page() {
-  return <div>page</div>;
+  return <ValidatorsRanking />;
 }
 
 export default page;
+
