@@ -22,9 +22,7 @@ const ResearcherCard: React.FC<ResearcherCardProps> = ({ researcher, userRank })
   const isUserRank = userRank && researcher.rank === userRank;
 
   return (
-    <tr className={`border-b border-gray-800 hover:bg-gray-900/50 transition-colors ${
-      isUserRank ? 'bg-blue-500/10' : ''
-    }`}>
+    <tr className={`border-b border-gray-800 hover:b transition-colors`}>
       <td className="px-6 py-4 text-white font-medium relative">
         {researcher.rank}
      
