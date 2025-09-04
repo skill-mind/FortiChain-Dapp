@@ -9,6 +9,7 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
 .thin-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -34,6 +35,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -45,6 +47,7 @@
     transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -59,21 +62,21 @@
 .animate-slideUp {
   animation: slideUp 0.5s ease-in-out forwards;
 }
+
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer base {
@@ -104,6 +107,7 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -136,10 +140,12 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
+
 /* textEditor.css */
 
 .quill {
@@ -172,4 +178,10 @@ body {
 
 button:focus {
   outline: none;
+}
+
+.border-gradient {
+  border: 2px solid;
+  border-image-source: linear-gradient(90deg, #212121 0%, #312F2F 100%);
+  border-image-slice: 1;
 }

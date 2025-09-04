@@ -33,7 +33,7 @@ function AlertCard({
       return "bg-[#401D1D] text-[#EF4343]";
     }
     if (alert.priority === "medium") {
-      return "bg-[#373510] text-[#C1B700]";
+      return "bg-warning-background text-warning";
     }
     if (alert.priority === "low") {
       return "bg-[#10273E] text-[#0073E6]";
