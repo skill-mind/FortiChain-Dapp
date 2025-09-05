@@ -26,7 +26,7 @@ const Header = () => {
   const titleMap: Record<string, string> = {
     admin: "Admin Dashboard",
     "project-owner": "Project Owner Dashboard",
-    researcher: "Researcher Dashboard",
+    researcher: "Security Researcher Dashboard",
     validator: "Validator Dashboard",
   };
 

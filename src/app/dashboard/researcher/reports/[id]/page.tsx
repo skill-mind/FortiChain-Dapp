@@ -155,7 +155,7 @@ export default function ReportDetailPage({ params }: PageProps) {
           onClose={() => setShowProvideMoreDetailsModal(false)}
           onSubmit={(details) => {
             console.log("Additional details provided:", details);
-            // Here you would typically send the details to your backend
+            // Here you would typically send the details to your 
             // For now, we'll just log it and close the modal
             setShowProvideMoreDetailsModal(false);
           }}
