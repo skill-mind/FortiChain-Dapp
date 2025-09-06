@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { StructuredData } from "../components/metadata/structured-data";
 import ClientProviders from "@/providers/client-providers";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "FortiChain - Decentralized Blockchain Security Platform",
@@ -89,6 +90,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#0F0A0AFA]">
         <ClientProviders>{children}</ClientProviders>
+        <Toaster />
       </body>
     </html>
   );

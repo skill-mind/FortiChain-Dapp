@@ -1,0 +1,232 @@
+/* Tiptap Editor Custom Styles */
+.ProseMirror {
+  outline: none;
+  min-height: inherit;
+  color: #E2E2E2;
+  background: transparent;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #6C6C6C;
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #E2E2E2;
+  margin: 1rem 0;
+  line-height: 1.2;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #E2E2E2;
+  margin: 0.75rem 0;
+  line-height: 1.3;
+}
+
+/* Mobile responsive heading sizes */
+@media (max-width: 768px) {
+  .ProseMirror h1 {
+    font-size: 1.5rem;
+    margin: 0.75rem 0;
+  }
+  
+  .ProseMirror h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+  }
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #E2E2E2;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.ProseMirror p {
+  margin: 0.5rem 0;
+  color: #E2E2E2;
+  line-height: 1.6;
+}
+
+.ProseMirror strong {
+  font-weight: 700;
+  color: #E2E2E2;
+}
+
+.ProseMirror em {
+  font-style: italic;
+  color: #E2E2E2;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+  color: #E2E2E2;
+}
+
+.ProseMirror s {
+  text-decoration: line-through;
+  color: #E2E2E2;
+}
+
+.ProseMirror code {
+  background-color: #1C1C1C;
+  color: #E2E2E2;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.ProseMirror pre {
+  background-color: #1C1C1C;
+  color: #E2E2E2;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.ProseMirror a {
+  color: #3B82F6;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ProseMirror a:hover {
+  color: #60A5FA;
+  text-decoration: underline;
+}
+
+.ProseMirror a:visited {
+  color: #8B5CF6;
+}
+
+.ProseMirror a:active {
+  color: #1D4ED8;
+}
+
+.ProseMirror ul, .ProseMirror ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  color: #E2E2E2;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+  color: #E2E2E2;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #1F1F1F;
+  margin: 1rem 0;
+  padding-left: 1rem;
+  color: #6C6C6C;
+  font-style: italic;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  width: 100%;
+  border: 1px solid #1F1F1F;
+}
+
+.ProseMirror th, .ProseMirror td {
+  border: 1px solid #1F1F1F;
+  padding: 0.5rem;
+  text-align: left;
+  color: #E2E2E2;
+}
+
+.ProseMirror th {
+  background-color: #1C1C1C;
+  font-weight: 600;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* Focus styles */
+.ProseMirror:focus {
+  outline: none;
+}
+
+/* Selection styles */
+.ProseMirror ::selection {
+  background-color: #3B82F6;
+  color: white;
+}
+
+/* Placeholder styles */
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #6C6C6C;
+  pointer-events: none;
+  height: 0;
+}
+
+/* Button hover states */
+.rich-text-editor button:hover {
+  background-color: rgba(42, 42, 42, 0.3);
+}
+
+/* Image styling */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Code block improvements */
+.ProseMirror pre {
+  background-color: #1C1C1C;
+  color: #E2E2E2;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  border: 1px solid #2A2A2A;
+}
+
+.ProseMirror code {
+  background-color: #2A2A2A;
+  color: #E2E2E2;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  border: 1px solid #3A3A3A;
+}
+
+/* Hide scrollbar for mobile toolbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
