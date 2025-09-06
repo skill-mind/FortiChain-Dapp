@@ -51,3 +51,20 @@ export interface GetReportProps {
   showSkeleton?: boolean;
   compact?: boolean;
 }
+export interface Validator {
+  rank: number;
+  username: string;
+  address: string;
+  audits: number;
+  reputation: number;
+  earned: number;
+}
+
+export interface Researcher {
+  rank: number;
+  username: string;
+  address: string;
+  reports: number;
+  reputation: number;
+  earned: number;
+}
